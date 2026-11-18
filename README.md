@@ -30,7 +30,9 @@ respecting upper limits (preformed vitamin A, selenium, zinc, calcium, iron, sod
 
 **Food ranking.** Rank every food by any nutrient, per serving, per 100 g or per 100 kcal.
 
-**Saved days.** Kept in the browser (`localStorage`).
+**Saved days.** Stored in the artifact's shared database when the app runs as a claude.ai
+artifact. Opened standalone, the current day is remembered in `localStorage`, but saved days
+last only until the page reloads (see Known issues).
 
 ## Targets
 
@@ -84,6 +86,13 @@ node tests/smoke.js             # solve every diet pattern in headless Chromium 
   replaced with the contents of `data/foods.json` at build time, so `index.html` is fully
   self-contained.
 - `index.html` is committed so the app runs straight from the repo or from GitHub Pages.
+
+## Known issues
+
+- Standalone, saved days are held in memory only and are lost on reload; they should fall back
+  to `localStorage` like the current day does.
+- The solver stops once every nutrient target is met and doesn't top up calories, so a solved day
+  often lands under the calorie target and shows 27/28 when opened in the builder.
 
 ## Contributors
 
