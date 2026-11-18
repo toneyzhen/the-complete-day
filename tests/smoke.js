@@ -38,6 +38,36 @@ const DIETS = ["anything","pescatarian","vegetarian","vegan","paleo","whole30","
   }, DIETS);
   console.log(`upper-limit sweep: ${breaches.length} breaches`);
   breaches.forEach(b => errors.push('OVER ' + b));
+
+  // Your-own-food input is the one place user text reaches food names, which are put into
+  // HTML unescaped everywhere; meal moves rewrite plan order and meals together.
+  const unit = await page.evaluate(() => {
+    const fails = [], ok = (cond, what) => { if (!cond) fails.push(what); };
+    const zeros = () => new Array(ORDER.length).fill(0);
+    ok(!/[<>"&]/.test(cleanText('Bar<script>alert(1)</script> "x" & <img src=y onerror=z>')),
+       "cleanText leaves markup characters");
+    ok(normCustom({k: "c-x1", cls: "plant", serv: 10, n: [1, 2]}) === null, "normCustom accepts a short nutrient list");
+    ok(normCustom({k: "oats", cls: "plant", serv: 10, n: zeros()}) === null, "normCustom accepts a built-in key");
+    ok(normCustom({k: "c-x2", cls: "plant", serv: 0, n: zeros()}) === null, "normCustom accepts a 0 g serving");
+    ok(normCustom({k: "c-x3", cls: "alien", serv: 10, n: zeros()}) === null, "normCustom accepts an unknown class");
+    const f = normCustom({k: "c-x4", name: "<b>Granola</b>", cls: "plant", serv: 50, tags: "treenut bogus", n: zeros()});
+    ok(f && f.name === "Granola" && f.tags === "treenut" && f.custom, "normCustom doesn't clean a valid food");
+    const k = knownOnly({oats: 40, nosuchfood: 10, milk: "x", egg: -5});
+    ok(JSON.stringify(k) === '{"oats":40}', "knownOnly keeps unknown, non-numeric or negative entries");
+    // moving the first lunch food up one step puts it at the end of breakfast
+    plan = {oats: 40, egg: 50, salmon: 113}; meals = {oats: 0, egg: 0, salmon: 1};
+    const t = mealTokens(), i = t.indexOf("salmon");
+    t.splice(i - 1, 0, t.splice(i, 1)[0]); applyTokens(t);
+    ok(meals.salmon === 0 && Object.keys(plan).join() === "oats,egg,salmon", "moving past a meal header");
+    // the calorie trim never removes a food the user kept
+    profile = {sex: "male", age: 40, kcal: 2500};
+    const seed = {oliveoil: 10, butter: 10, walnut: 200, peanut: 200, milk: 244};
+    const p = solveDay({diet: "anything", maxFoods: 14, style: "balanced", seed, avoid: new Set()});
+    ok(Object.keys(seed).every(s => p[s] > 0), "kept foods removed by the solver");
+    return fails;
+  });
+  console.log(`unit checks: ${unit.length ? unit.join('; ') : 'ok'}`);
+  unit.forEach(u => errors.push(u));
   await browser.close();
   if (errors.length){ console.error(errors); process.exit(1); }
 })();

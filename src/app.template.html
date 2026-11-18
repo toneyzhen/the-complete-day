@@ -1257,14 +1257,16 @@ function trimKcal(p, tg){
     let best = null, bestG = 0, bestCut = 0;
     for (const k in p){
       const kc100 = BY[k].n[IDX.kcal]; if (kc100 <= 0) continue;
-      const g = Math.min(p[k], Math.max(5, BY[k].serv / 2), Math.ceil(excess / (kc100 / 100) / 5) * 5);
+      // never below half a serving, the same floor tune() uses, so a food the user kept stays
+      const g = Math.min(p[k] - BY[k].serv / 2, Math.max(5, BY[k].serv / 2),
+                         Math.ceil(excess / (kc100 / 100) / 5) * 5);
+      if (g <= 0) continue;
       const cut = kc100 * g / 100; if (cut <= bestCut) continue;
       p[k] -= g; const ok = noWorseThan(p, tg, before); p[k] += g;
       if (ok){ best = k; bestG = g; bestCut = cut; }
     }
     if (!best) return;
     p[best] -= bestG;
-    if (p[best] < 5) delete p[best];
   }
 }
 // Round portions to 5 g, or 0.5 g for foods served by the gram or two (salt is 1.5 g a serving;
@@ -1721,6 +1723,20 @@ if (!Object.keys(plan).length){
 renderPlan();
 showTab("build");
 initDb();
+// Each tab holds saved days and your own foods in memory and writes its whole copy back, so
+// without this a second open tab erases what the first one saved. Saved days are picked up in
+// place (no write, so two tabs can't ping-pong); a change to your own foods, or a cleared
+// storage, reloads to rebuild the food index. The current day itself stays last-writer-wins.
+addEventListener("storage", e => {
+  if (e.key === CUSTOM_KEY || e.key === null){ location.reload(); return; }
+  if (e.key !== "completeday") return;
+  try {
+    const s = JSON.parse(e.newValue || "null");
+    savedCache = savedCache.filter(x => !x.id.startsWith("local-"))
+      .concat(s && Array.isArray(s.saved) ? s.saved : []);
+    renderSaved(savedCache);
+  } catch (err) {}
+});
 </script>
 
 </body></html>

@@ -53,6 +53,9 @@ upper-limit breach; that sweep is what caught the rounding bugs, so extend it ra
   merged into `FOODS`/`BY` at startup. Their names pass through `cleanText` (no markup characters),
   since food names are interpolated into HTML everywhere. Any plan loaded from storage goes
   through `knownOnly`, because it may name a custom food this browser doesn't have.
+- Several tabs share that storage. A `storage` listener picks up another tab's saved days in place
+  and reloads when your own foods change; never make startup write `completeday-foods`, or two
+  open tabs will reload each other forever.
 - 28 targets = 27 counted nutrients + calories. Informational only (never a gap): EPA+DHA, fat,
   carb, sodium. Manganese's UL is advisory. The vitamin A UL counts preformed A only.
 - The current day, profile and chip settings persist in `localStorage` (key `completeday`).

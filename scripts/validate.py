@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Sanity checks on data/foods.json. Run before every build; exits non-zero on any failure.
 
+- tags, class, serving and raw flag use the known values
 - energy: Atwater estimate (4 protein + 9 fat + 4 net carb + 2 fiber) within 0.62-1.45 of kcal
 - fiber <= carbohydrate; fiber only in plant foods
 - vitamin B12 not in unfortified plant foods (tempeh and miso carry traces)
@@ -8,11 +9,20 @@
 """
 import json, pathlib, sys
 
-d = json.loads((pathlib.Path(__file__).parent.parent / "data/foods.json").read_text())
+d = json.loads((pathlib.Path(__file__).parent.parent / "data/foods.json").read_text(encoding="utf-8"))
 O = d["order"]
+# Diet patterns and allergen exclusions match these words exactly, so a typo silently
+# lets a food past a filter.
+TAGS = set("dairy egg gluten peanut treenut soy fish shellfish sesame nightshade "
+           "legume grain redmeat organ addedsugar fortified".split())
+CLS = {"plant", "dairy", "egg", "fish", "meat"}
 errs = []
 for f in d["foods"]:
     n = dict(zip(O, f["n"])); k = f["k"]; tags = f["tags"].split()
+    if set(tags) - TAGS: errs.append(f"{k}: unknown tag {' '.join(sorted(set(tags) - TAGS))}")
+    if f["cls"] not in CLS: errs.append(f"{k}: unknown class {f['cls']}")
+    if not f["serv"] > 0: errs.append(f"{k}: serving must be over 0 g")
+    if f["raw"] not in (0, 1): errs.append(f"{k}: raw must be 0 or 1")
     if len(f["n"]) != len(O): errs.append(f"{k}: expected {len(O)} values")
     if any(v < 0 for v in f["n"]): errs.append(f"{k}: negative value")
     if n["fiber"] > n["carb"] + 1e-9: errs.append(f"{k}: fiber > carbohydrate")
