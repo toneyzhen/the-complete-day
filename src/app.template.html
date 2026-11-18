@@ -1,0 +1,1361 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>The Complete Day</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+:root{
+  --paper:#f2f5f1; --surface:#ffffff; --sunk:#e9ede8; --sunk2:#dfe5df;
+  --ink:#141a17; --body:#2e3833; --muted:#65706a; --faint:#8d968f;
+  --rule:#d2dad3; --rule-hard:#141a17;
+  --pine:#1d5a47; --pine-soft:#dcebe3; --on-pine:#ffffff;
+  --ochre:#8a6a17; --ochre-soft:#f3e9cd;
+  --rust:#a24d18; --rust-soft:#f7e3d5;
+  --shadow:0 1px 2px rgba(20,26,23,.06), 0 6px 18px -10px rgba(20,26,23,.22);
+  --display:'Archivo',ui-sans-serif,system-ui,sans-serif;
+  --serif:'Source Serif 4',Georgia,'Times New Roman',serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0f1412; --surface:#171e1a; --sunk:#131a17; --sunk2:#1e2622;
+  --ink:#e8eee9; --body:#c3cdc6; --muted:#8c978f; --faint:#6d7872;
+  --rule:#2a3430; --rule-hard:#5e6b64;
+  --pine:#74c3a4; --pine-soft:#1a3a30; --on-pine:#0f1412;
+  --ochre:#d8b154; --ochre-soft:#3a2f13;
+  --rust:#e28b55; --rust-soft:#3d2415;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 20px -10px rgba(0,0,0,.7);
+}}
+:root[data-theme="dark"]{
+  --paper:#0f1412; --surface:#171e1a; --sunk:#131a17; --sunk2:#1e2622;
+  --ink:#e8eee9; --body:#c3cdc6; --muted:#8c978f; --faint:#6d7872;
+  --rule:#2a3430; --rule-hard:#5e6b64;
+  --pine:#74c3a4; --pine-soft:#1a3a30; --on-pine:#0f1412;
+  --ochre:#d8b154; --ochre-soft:#3a2f13;
+  --rust:#e28b55; --rust-soft:#3d2415;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 20px -10px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--body);font-family:var(--serif);font-size:16px;
+  line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1280px;margin:0 auto;padding-inline:20px;padding-block:0 64px}
+h1,h2,h3,h4,.ui{font-family:var(--display)}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--pine);outline-offset:2px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ---------- masthead + profile ---------- */
+header.top{padding-block:30px 0}
+.brandrow{display:flex;flex-wrap:wrap;gap:18px 28px;align-items:flex-end;
+  justify-content:space-between;padding-bottom:18px;border-bottom:3px solid var(--rule-hard)}
+.brand h1{font-size:clamp(28px,4.2vw,40px);line-height:1;letter-spacing:-.025em;font-weight:700;
+  color:var(--ink);margin:0}
+.brand p{margin:7px 0 0;font-size:15px;color:var(--muted);max-width:52ch}
+.profile{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end}
+.fld{display:flex;flex-direction:column;gap:5px}
+.fld label{font-family:var(--display);font-size:10px;font-weight:600;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--faint)}
+.fld select,.fld input{background:var(--surface);border:1px solid var(--rule);border-radius:3px;
+  padding:7px 9px;font-family:var(--mono);font-size:13.5px;min-width:74px}
+.fld input{width:86px}
+
+/* ---------- tabs ---------- */
+.tabs{display:flex;gap:2px;margin-top:-1px;border-bottom:1px solid var(--rule);
+  overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{font-family:var(--display);font-size:13px;font-weight:600;letter-spacing:.03em;
+  padding:13px 17px;background:none;border:none;border-bottom:3px solid transparent;
+  color:var(--muted);white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--pine)}
+.tab:hover{color:var(--ink)}
+.panel[hidden]{display:none}
+
+/* ---------- layout ---------- */
+.split{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:22px;
+  align-items:start;padding-top:24px}
+@media (max-width:1000px){.split{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:3px;
+  box-shadow:var(--shadow)}
+.card>h3{margin:0;font-size:12px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink);padding:15px 18px;border-bottom:1px solid var(--rule)}
+.cardpad{padding:18px}
+
+/* ---------- food search ---------- */
+.searchbar{position:relative}
+.searchbar input{width:100%;background:var(--surface);border:1px solid var(--rule);
+  border-radius:3px;padding:11px 13px;font-family:var(--display);font-size:15px}
+.results{position:absolute;z-index:30;left:0;right:0;top:calc(100% + 4px);max-height:330px;
+  overflow-y:auto;background:var(--surface);border:1px solid var(--rule);border-radius:3px;
+  box-shadow:0 10px 34px -12px rgba(20,26,23,.4)}
+.results[hidden]{display:none}
+.res{display:flex;justify-content:space-between;gap:12px;align-items:baseline;width:100%;
+  padding:9px 13px;background:none;border:none;border-bottom:1px solid var(--rule);
+  text-align:left;font-family:var(--display);font-size:14px;color:var(--ink)}
+.res:hover,.res.cursor{background:var(--pine-soft)}
+.res small{font-family:var(--display);font-size:11.5px;color:var(--muted);white-space:nowrap}
+.empty{padding:26px 18px;text-align:center;color:var(--muted);font-size:15px}
+
+/* ---------- plan rows ---------- */
+.prow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px 10px;align-items:center;
+  padding:11px 18px 11px 8px;border-bottom:1px solid var(--rule);background:var(--surface)}
+.grip{touch-action:none;cursor:grab;background:none;border:none;color:var(--faint);
+  padding:6px 4px;border-radius:3px;display:flex;align-items:center}
+.grip:hover{color:var(--ink);background:var(--sunk)}
+.grip svg{display:block}
+.prow.dragging{position:relative;z-index:5;background:var(--pine-soft);box-shadow:var(--shadow)}
+.prow.dragging .grip{cursor:grabbing;color:var(--pine)}
+body.reordering{user-select:none;-webkit-user-select:none;cursor:grabbing}
+@media (max-width:520px){.prow{grid-template-columns:auto minmax(0,1fr);}
+  .prow>span:last-child{grid-column:2}}
+.prow:last-child{border-bottom:none}
+.pname{font-family:var(--display);font-size:14.5px;font-weight:500;color:var(--ink)}
+.pmeta{font-size:12px;color:var(--muted);font-family:var(--display)}
+.amt{display:flex;align-items:center;gap:0;border:1px solid var(--rule);border-radius:3px;
+  overflow:hidden;background:var(--sunk)}
+.amt button{width:30px;height:32px;background:none;border:none;color:var(--muted);
+  font-family:var(--display);font-size:16px;font-weight:600;line-height:1}
+.amt button:hover{background:var(--sunk2);color:var(--ink)}
+.amtfield{position:relative;display:flex;align-items:center;background:var(--surface);
+  border-inline:1px solid var(--rule)}
+.amt input{width:78px;height:32px;border:none;background:transparent;text-align:right;
+  padding-right:28px;font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums}
+.amtfield .u{position:absolute;right:7px;top:50%;transform:translateY(-50%);
+  font-family:var(--mono);font-size:11px;color:var(--faint);pointer-events:none}
+.amt input::-webkit-outer-spin-button,.amt input::-webkit-inner-spin-button{
+  -webkit-appearance:none;margin:0}
+.amt input[type=number]{-moz-appearance:textfield}
+.rowhint{margin:14px 18px 0;font-family:var(--display);font-size:12.5px;color:var(--muted)}
+.rowhint b{color:var(--ink);font-weight:600}
+.del{background:none;border:none;color:var(--faint);font-size:17px;line-height:1;padding:4px 6px}
+.del:hover{color:var(--rust)}
+
+/* ---------- coverage ---------- */
+.cov{position:sticky;top:12px}
+.sum{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:6px solid var(--rule-hard)}
+.sumcell{padding:13px 14px;border-right:1px solid var(--rule)}
+.sumcell:last-child{border-right:none}
+.sumcell .k{font-family:var(--display);font-size:9.5px;font-weight:600;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--faint);display:block}
+.sumcell .v{font-family:var(--mono);font-size:21px;font-weight:600;color:var(--ink);
+  font-variant-numeric:tabular-nums;line-height:1.25}
+.sumcell .v.bad{color:var(--rust)}
+.sumcell .v.good{color:var(--pine)}
+.covtools{display:flex;justify-content:space-between;align-items:center;gap:10px;
+  padding:9px 14px;border-bottom:1px solid var(--rule);background:var(--sunk)}
+.mini{font-family:var(--display);font-size:11px;font-weight:600;letter-spacing:.07em;
+  text-transform:uppercase;background:none;border:1px solid var(--rule);border-radius:100px;
+  padding:4px 11px;color:var(--muted)}
+.mini[aria-pressed="true"]{background:var(--pine);border-color:var(--pine);color:var(--on-pine)}
+.covscroll{max-height:min(58vh,640px);overflow-y:auto}
+@media (max-width:1000px){.covscroll{max-height:none}}
+.nrow{display:grid;grid-template-columns:1fr 104px 46px;gap:9px;align-items:center;
+  padding:7px 14px;border-bottom:1px solid var(--rule)}
+.nrow.gap{background:var(--rust-soft)}
+.nrow.over{background:var(--ochre-soft)}
+.nlabel{font-family:var(--display);font-size:12.5px;font-weight:500;color:var(--ink);
+  display:flex;align-items:center;gap:6px;min-width:0}
+.nlabel span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nbar{display:block;height:9px;background:var(--sunk2);border-radius:2px;
+  overflow:hidden;position:relative}
+.nbar i{position:absolute;inset:0 auto 0 0;background:var(--pine);border-radius:2px}
+.nrow.gap .nbar i{background:var(--rust)}
+.nrow.over .nbar i{background:var(--ochre)}
+.npct{font-family:var(--mono);font-size:12px;text-align:right;color:var(--muted);
+  font-variant-numeric:tabular-nums}
+.nrow.gap .npct{color:var(--rust);font-weight:600}
+.nrow.over .npct{color:var(--ochre);font-weight:600}
+.namt{display:block;margin-top:3px;font-family:var(--mono);font-size:11px;
+  color:var(--faint);font-variant-numeric:tabular-nums;text-align:right}
+.info{border:none;background:none;color:var(--faint);font-size:11px;padding:0 2px;
+  font-family:var(--display);font-weight:700}
+.info:hover{color:var(--pine)}
+.note{grid-column:1/-1;font-size:12.5px;color:var(--body);padding:4px 0 8px;
+  font-family:var(--display);line-height:1.5}
+.note p{margin:0 0 6px}
+.note .nd-does{color:var(--ink)}
+.note .nd-cav,.note .nd-lim{color:var(--muted)}
+.nd-h{font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--faint);margin:10px 0 4px}
+.nd-list{list-style:none;margin:0;padding:0}
+.nd-list li{display:flex;justify-content:space-between;gap:10px;padding:3px 0;
+  border-bottom:1px dotted var(--rule)}
+.nd-list li:last-child{border-bottom:none}
+.nd-list .mono{font-size:11.5px;color:var(--muted);white-space:nowrap}
+.nd-more{color:var(--muted)}
+.nd-none{color:var(--muted);font-style:italic}
+.nd-src{display:flex;flex-wrap:wrap;gap:5px}
+.nd-chip{font-family:var(--display);font-size:11.5px;font-weight:500;color:var(--ink);
+  background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:4px 8px;
+  text-align:left;line-height:1.3}
+.nd-chip small{display:block;font-size:10.5px;color:var(--muted)}
+.nd-chip:hover{border-color:var(--pine);background:var(--pine-soft)}
+.info[aria-expanded="true"]{color:var(--pine)}
+
+/* ---------- buttons ---------- */
+.btn{font-family:var(--display);font-size:13px;font-weight:600;letter-spacing:.02em;
+  padding:10px 16px;border-radius:3px;border:1px solid var(--pine);background:var(--pine);
+  color:var(--on-pine)}
+.btn:hover{filter:brightness(1.1)}
+.btn.ghost{background:transparent;color:var(--pine)}
+.btn.ghost:hover{background:var(--pine-soft);filter:none}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btnrow{display:flex;flex-wrap:wrap;gap:9px;padding:14px 18px;border-top:1px solid var(--rule)}
+
+/* ---------- suggestions ---------- */
+.sugfilter{display:flex;flex-direction:column;gap:8px;padding:14px 18px;
+  border-bottom:1px solid var(--rule);background:var(--sunk)}
+.sug{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:12px 18px;
+  border-bottom:1px solid var(--rule)}
+.sug:last-child{border-bottom:none}
+.sugname{font-family:var(--display);font-size:14px;font-weight:600;color:var(--ink)}
+.sugwhy{font-size:12.5px;color:var(--muted);margin-top:2px;font-family:var(--display)}
+.tagrow{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.tg{font-family:var(--display);font-size:10.5px;font-weight:600;padding:2px 6px;border-radius:2px;
+  background:var(--pine-soft);color:var(--pine);letter-spacing:.02em}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-family:var(--display);font-size:12.5px;font-weight:500;padding:6px 13px;
+  border:1px solid var(--rule);background:var(--surface);color:var(--muted);
+  border-radius:100px;transition:background .12s,border-color .12s,color .12s}
+.chip:hover{border-color:var(--pine);color:var(--pine)}
+.chip[aria-pressed="true"]{background:var(--pine);border-color:var(--pine);
+  color:var(--on-pine);font-weight:600}
+.ctl-label{font-family:var(--display);font-size:10px;font-weight:600;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--faint)}
+
+/* ---------- solve form ---------- */
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;padding:18px}
+.form .fld select,.form .fld input{width:100%}
+.solvenote{padding:0 18px 16px;font-size:13.5px;color:var(--muted);max-width:70ch}
+.solvenote b{color:var(--ink);font-weight:600}
+.avoidbox{padding:0 18px 16px;display:flex;flex-direction:column;gap:8px}
+.avoidnote{margin:2px 0 0;font-family:var(--display);font-size:12px;color:var(--faint)}
+.avoidnote.thin{color:var(--rust)}
+
+/* ---------- browse table ---------- */
+.tblwrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th{font-family:var(--display);font-size:10px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);text-align:right;padding:10px 12px;
+  border-bottom:1px solid var(--rule-hard);white-space:nowrap;background:var(--surface);
+  position:sticky;top:0;z-index:2}
+th:first-child,td:first-child{text-align:left}
+th.sortable{cursor:pointer}
+th.sortable:hover{color:var(--ink)}
+th[aria-sort]{color:var(--pine)}
+td{padding:8px 12px;border-bottom:1px solid var(--rule);text-align:right;
+  font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:12.5px}
+td:first-child{font-family:var(--display);font-size:13.5px;color:var(--ink);font-weight:500}
+td.cat{font-family:var(--display);font-size:11.5px;color:var(--muted);text-align:left}
+tbody tr:hover{background:var(--sunk)}
+.addcell button{font-family:var(--display);font-size:11px;font-weight:600;padding:3px 9px;
+  border:1px solid var(--rule);border-radius:100px;background:none;color:var(--pine)}
+.addcell button:hover{background:var(--pine-soft)}
+
+/* ---------- saved ---------- */
+.saved{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chipbtn{font-family:var(--display);font-size:12px;font-weight:500;padding:5px 11px;
+  border:1px solid var(--rule);border-radius:100px;background:var(--surface);color:var(--body);
+  display:inline-flex;align-items:center;gap:7px}
+.chipbtn:hover{border-color:var(--pine);color:var(--pine)}
+.chipbtn b{font-weight:600}
+.chipbtn .x{color:var(--faint);font-size:14px;line-height:1}
+.chipbtn .x:hover{color:var(--rust)}
+.status{font-family:var(--display);font-size:12px;color:var(--faint)}
+
+footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--rule);
+  font-family:var(--display);font-size:12.5px;color:var(--faint);max-width:76ch}
+footer b{color:var(--muted);font-weight:600}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div class="brandrow">
+    <div class="brand">
+      <h1>The Complete Day</h1>
+      <p>Build a day of whole food and watch all 28 targets fill in. No supplements &mdash;
+        every nutrient has to come from something you actually eat.</p>
+    </div>
+    <div class="profile">
+      <div class="fld"><label for="sex">Sex</label>
+        <select id="sex"><option value="male">Male</option><option value="female">Female</option></select></div>
+      <div class="fld"><label for="age">Age</label>
+        <select id="age"><option value="25">19&ndash;30</option><option value="40" selected>31&ndash;50</option>
+        <option value="60">51&ndash;70</option><option value="75">71+</option></select></div>
+      <div class="fld"><label for="kcal">Calories</label>
+        <input id="kcal" type="number" min="1200" max="5000" step="50" value="2500"></div>
+    </div>
+  </div>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tab-build" aria-controls="p-build" aria-selected="true">Build a day</button>
+    <button class="tab" role="tab" id="tab-solve" aria-controls="p-solve" aria-selected="false">Auto-solve</button>
+    <button class="tab" role="tab" id="tab-browse" aria-controls="p-browse" aria-selected="false">Food ranking</button>
+  </div>
+</header>
+
+<!-- ============================ BUILD ============================ -->
+<div class="panel" id="p-build" role="tabpanel" aria-labelledby="tab-build">
+ <div class="split">
+  <div>
+    <div class="card" style="margin-bottom:18px">
+      <h3>Today&rsquo;s food</h3>
+      <div class="cardpad" style="padding-bottom:0">
+        <div class="searchbar">
+          <input id="search" type="text" placeholder="Search __NFOODS__ foods &mdash; try sardines, kale, lentils&hellip;"
+            autocomplete="off" role="combobox" aria-expanded="false" aria-controls="results">
+          <div class="results" id="results" role="listbox" hidden></div>
+        </div>
+      </div>
+      <p class="rowhint">Amounts are in <b>servings</b> &mdash; type decimals like
+        <b>0.5</b> or <b>1.25</b>; the &minus; and + buttons step by one whole serving. Drag the <b>&#8942;&#8942;</b> handle to reorder (or focus it and
+        use the arrow keys).</p>
+      <div id="planlist"></div>
+      <div class="btnrow">
+        <button class="btn ghost" id="btn-suggest">Fix my gaps</button>
+        <button class="btn ghost" id="btn-clear">Clear day</button>
+        <button class="btn ghost" id="btn-save">Save this day</button>
+      </div>
+    </div>
+    <div class="card" id="sugcard" hidden>
+      <h3>Best single additions</h3>
+      <div class="sugfilter">
+        <span class="ctl-label" id="suglab">Don&rsquo;t suggest</span>
+        <div class="chips" role="group" aria-labelledby="suglab" id="sugchips"></div>
+      </div>
+      <div id="suglist"></div>
+    </div>
+    <div class="card" id="savedcard" style="margin-top:18px" hidden>
+      <h3>Saved days</h3>
+      <div class="cardpad"><div class="saved" id="savedlist"></div></div>
+    </div>
+  </div>
+  <div class="cov">
+    <div class="card">
+      <div class="sum">
+        <div class="sumcell"><span class="k">Targets met</span><span class="v" id="s-met">0/28</span></div>
+        <div class="sumcell"><span class="k">Calories</span><span class="v" id="s-kcal">0</span></div>
+        <div class="sumcell"><span class="k">Food weight</span><span class="v" id="s-mass">0 g</span></div>
+      </div>
+      <div class="covtools">
+        <span class="status" id="covhint">Add food to begin</span>
+        <button class="mini" id="btn-gapsfirst" aria-pressed="true">Gaps first</button>
+      </div>
+      <div class="covscroll"><div id="coverage"></div></div>
+    </div>
+  </div>
+ </div>
+</div>
+
+<!-- ============================ SOLVE ============================ -->
+<div class="panel" id="p-solve" role="tabpanel" aria-labelledby="tab-solve" hidden>
+ <div class="split">
+  <div>
+    <div class="card">
+      <h3>Constraints</h3>
+      <div class="form">
+        <div class="fld"><label for="sv-diet">Pattern</label><select id="sv-diet">
+          <optgroup label="Base">
+            <option value="anything">Anything</option>
+            <option value="pescatarian">Pescatarian</option>
+            <option value="vegetarian">Vegetarian</option>
+            <option value="vegan">Vegan</option>
+          </optgroup>
+          <optgroup label="Macro pattern">
+            <option value="keto">Keto (&le;30 g net carb)</option>
+            <option value="lowcarb">Low-carb (&le;100 g net carb)</option>
+            <option value="highprotein">High-protein (&ge;25% kcal)</option>
+            <option value="paleo">Paleo</option>
+            <option value="whole30">Whole30</option>
+            <option value="mediterranean">Mediterranean</option>
+            <option value="carnivore">Carnivore</option>
+            <option value="raw">Raw</option>
+          </optgroup></select></div>
+        <div class="fld"><label for="sv-max">Max foods</label><select id="sv-max">
+          <option>3</option><option>4</option><option>5</option><option>7</option>
+          <option selected>10</option><option>14</option></select></div>
+        <div class="fld"><label for="sv-style">Bias toward</label><select id="sv-style">
+          <option value="balanced">Balanced</option><option value="fewest">Fewest foods</option>
+          <option value="light">Least food weight</option><option value="ordinary">Ordinary groceries</option>
+        </select></div>
+        <div class="fld"><label for="sv-keep">Keep my current day</label><select id="sv-keep">
+          <option value="no">No, start fresh</option><option value="yes">Yes, build on it</option></select></div>
+      </div>
+      <div class="avoidbox">
+        <span class="ctl-label" id="avoidlab">Also avoid</span>
+        <div class="chips" role="group" aria-labelledby="avoidlab" id="avoidchips"></div>
+        <p class="avoidnote" id="poolnote"></p>
+      </div>
+      <div class="solvenote">The solver picks foods greedily by how much of the remaining gap each
+        closes per calorie, weighting nutrients by how few foods supply them at all &mdash; so
+        vitamin B12, iodine and choline pull hard. It then tunes portions until every target is met
+        or it runs out of room. It respects upper limits.</div>
+      <div class="btnrow">
+        <button class="btn" id="btn-solve">Find a complete day</button>
+        <button class="btn ghost" id="btn-solve5">Give me 5 options</button>
+      </div>
+    </div>
+    <div id="solveout" style="margin-top:18px"></div>
+  </div>
+  <div class="cov">
+    <div class="card"><h3>How hard each nutrient is</h3>
+      <div class="covscroll"><div id="scarcity"></div></div>
+    </div>
+  </div>
+ </div>
+</div>
+
+<!-- ============================ BROWSE ============================ -->
+<div class="panel" id="p-browse" role="tabpanel" aria-labelledby="tab-browse" hidden>
+  <div class="card" style="margin-top:24px">
+    <h3>Where nutrients actually come from</h3>
+    <div class="form" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
+      <div class="fld"><label for="br-nut">Rank by</label><select id="br-nut"></select></div>
+      <div class="fld"><label for="br-basis">Per</label><select id="br-basis">
+        <option value="serv">Realistic serving</option><option value="100g">100 g</option>
+        <option value="kcal">100 calories</option></select></div>
+      <div class="fld"><label for="br-cat">Category</label><select id="br-cat"></select></div>
+      <div class="fld"><label for="br-diet">Diet</label><select id="br-diet"></select></div>
+    </div>
+    <div class="tblwrap"><table id="brtable"><thead></thead><tbody></tbody></table></div>
+  </div>
+</div>
+
+<footer>
+  <b>Targets</b> are the US Dietary Reference Intakes for your selected sex and age &mdash; the RDA
+  where one exists, the Adequate Intake otherwise. <b>EPA+DHA has no DRI</b>, so it is shown for
+  information and never counted as a gap. <b>Manganese&rsquo;s</b> 11 mg upper limit is shown but not
+  enforced: whole grains, nuts and legumes routinely exceed it and dietary manganese has never been
+  shown to harm healthy people. <b>Food values</b> are USDA FoodData Central figures for the stated
+  preparation, rounded; cooking losses, soil and brand variation move real numbers by more than a few
+  percent, so treat 100% as a soft floor rather than a finish line. Iodine in seaweed varies enormously
+  &mdash; the nori figure is the Japanese food tables’ value for toasted sheets, and published
+  analyses range several-fold either side of it. Kelp is far higher and genuinely risky.
+  <b>Where a food's trace nutrient is not known with confidence it is recorded as zero</b>, not
+  guessed &mdash; so the app under-credits a food rather than over-crediting it, and a plan that
+  clears every target has margin in hand. <b>Diet patterns</b> here are food-selection rules, not
+  certifications: definitions of paleo and Whole30 vary by source, &ldquo;raw&rdquo; means the food
+  is edible as listed without cooking, and none of this speaks to how a food was produced or
+  prepared. Some patterns cannot clear every target by construction &mdash; carnivore has no
+  route to fiber or vitamin C, and no unfortified plant food contains vitamin B12 &mdash; and the
+  app will tell you so rather than pretend otherwise.
+  <b>Vitamin K counts K1 and K2 together.</b> The AI is written in K1 (phylloquinone) terms
+  because that is what intake surveys measured, but both forms are cofactors for the same
+  enzyme, so menaquinones from natto, cheese and egg yolk count toward the same target.
+  <b>Sodium is a ceiling, not a target</b>, so it is never counted as a gap: the line turns
+  amber above 2300 mg, the level the 2019 DRI review names for reducing chronic-disease risk,
+  and the AI is 1500 mg. It is also the one nutrient where blanks would have been the unsafe
+  direction, so unlike every other trace in this database it is filled in for all __NFOODS__ foods
+  from typical figures rather than left at zero. Salt added at the table is not counted unless
+  you add it &mdash; the iodized-salt entry is there for that.
+  <b>Fortified foods</b> (the fortified plant milks and juices, iodized salt, enriched bread and
+  pasta) are marked as such and use the Nutrition Facts panel of one widely sold US product each,
+  converted to per-100 g; brands differ, so check your own carton. Nutrients a label doesn&rsquo;t
+  print are taken from the unfortified version or left at zero. To plan from unfortified food only,
+  pick <b>Fortified foods</b> under &ldquo;Also avoid&rdquo; in Auto-solve.
+  This is an arithmetic tool, not medical advice.
+</footer>
+</div>
+
+<script>
+const D = /*__DATA__*/;
+const ORDER = D.order, META = D.meta, FOODS = D.foods;
+const BY = {}; FOODS.forEach(f => BY[f.k] = f);
+const IDX = {}; ORDER.forEach((n, i) => IDX[n] = i);
+const INFO = new Set(["kcal","EPADHA","fat","carb","Na"]);   // tracked, but not scored as targets
+const COUNTED = ORDER.filter(n => !INFO.has(n));        // 27 + calories = 28
+
+// The vitamin A UL covers preformed retinol (liver, egg, dairy, fish) only; provitamin A
+// carotenoids from plants have no upper limit. Without this split, eating a lot of spinach
+// falsely "maxes out" vitamin A and locks the solver out of every animal food.
+function ulAmount(f, n, grams){
+  if (n === "netcarb") return netCarbOf(f, grams);
+  if (n === "A" && f.cls === "plant") return 0;
+  return f.n[IDX[n]] * grams / 100;
+}
+function ulLoad(p, caps){
+  const out = {};
+  for (const n in Object.assign({}, limits(), caps || {})) out[n] = 0;
+  for (const k in p){ const f = BY[k]; for (const n in out) out[n] += ulAmount(f, n, p[k]); }
+  return out;
+}
+
+const ALLCLS = ["plant","dairy","egg","fish","meat"];
+// Base patterns restrict which kinds of food are allowed; the macro patterns add a rule
+// on top (a net-carb ceiling, a protein floor, or a tag exclusion).
+const DIETS = {
+  anything:     {label:"Anything",      cls:ALLCLS},
+  pescatarian:  {label:"Pescatarian",   cls:["plant","dairy","egg","fish"]},
+  vegetarian:   {label:"Vegetarian",    cls:["plant","dairy","egg"]},
+  vegan:        {label:"Vegan",         cls:["plant"]},
+  paleo:        {label:"Paleo",         cls:ALLCLS, no:["grain","legume","dairy","soy","peanut"]},
+  whole30:      {label:"Whole30",       cls:ALLCLS, no:["grain","legume","dairy","soy","peanut","addedsugar"]},
+  mediterranean:{label:"Mediterranean", cls:ALLCLS, no:["redmeat"]},
+  keto:         {label:"Keto",          cls:ALLCLS, netCarbMax:30},
+  lowcarb:      {label:"Low-carb",      cls:ALLCLS, netCarbMax:100},
+  highprotein:  {label:"High-protein",  cls:ALLCLS, proteinPct:25},
+  carnivore:    {label:"Carnivore",     cls:["dairy","egg","fish","meat"]},
+  raw:          {label:"Raw",           cls:ALLCLS, rawOnly:true},
+};
+const AVOIDABLE = [["dairy","Dairy"],["egg","Eggs"],["gluten","Gluten"],["peanut","Peanuts"],
+  ["treenut","Tree nuts"],["soy","Soy"],["fish","Fish"],["shellfish","Shellfish"],
+  ["sesame","Sesame"],["nightshade","Nightshades"],["fortified","Fortified foods"]];
+let avoid = new Set();
+const tagsOf = k => (BY[k].tags || "").split(" ").filter(Boolean);
+// Suggestion groups. Nuts and seeds share a category but not a shopping habit, so they
+// are split here: seeds are the ones that keep winning on nutrient-per-calorie.
+function groupOf(k){
+  const f = BY[k];
+  if (f.cat === "Nuts & seeds") return tagsOf(k).includes("treenut") ? "Nuts" : "Seeds";
+  return f.cat;
+}
+const GROUPS = ["Vegetables","Fruit","Grains & starches","Legumes & soy","Nuts","Seeds",
+                "Dairy","Dairy alternatives","Eggs","Seafood","Meat & poultry","Other"];
+let sugOff = new Set();
+const netCarbOf = (f, grams) => Math.max(0, f.n[IDX.carb] - f.n[IDX.fiber]) * grams / 100;
+// foods where a "normal" portion is small and potency is high
+const MAXSERV = {iodizedsalt:3, brazil:2, liver:2, chickenliver:2, nori:5, oyster:2, spirulina:2,
+  molasses:2, cocoa:3, oliveoil:3, wheatgerm:2, flax:3, chia:3, sesame:2, eggyolk:4,
+  spinach:2, chard:2, beetgreens:2, kale:2, collards:2, bokchoy:2, cabbage:2,
+  mushroom:2, uvmushroom:2, cocoa2:2,
+  porkliver:2, lambliver:1, beefkidney:2, caviar:2, eel:2, jerky:2, fishsauce:1, soysauce:1,
+  capers:2, pickle:2, amaranthleaf:2, ricebran:2, wheatbran:2, goji:2,
+  cloves:1, cinnamon:2, turmeric:2, groundginger:2, basildried:2, sage:2, oregano:2,
+  rosemary:2, cumin:2, paprika:2, cayenne:2, blackpepper:2, nutmeg:1, garlicpowder:2, onionpowder:2,
+  flaxoil:2, canolaoil:3, sunfloweroil:3, sesameoil:2, walnutoil:2, soybeanoil:3, peanutoil:3,
+  cornoil:3, grapeseedoil:3, lard:3, duckfat:3, schmaltz:3};
+const SEASONING = new Set(["iodizedsalt"]);
+const countFoods = p => Object.keys(p).filter(k => !SEASONING.has(k)).length;
+const DEFAULT_MAXSERV = 3;
+// While tuning portions, stay this far below each upper limit so that adding another food
+// later is still possible. The final plan is still checked against the real limit.
+const UL_HEADROOM = 0.88;
+const ORDINARY = new Set(["potato","sweetpot","oats","egg","milk","yogurt","cheddar","chicken",
+  "beef","salmon","tuna","sardine","spinach","broccoli","carrot","banana","orange","tomato",
+  "brownrice","wwbread","lentil","chickpea","blackbean","almond","walnut","peanut","peas",
+  "redpepper","cauliflower","mushroom","strawberry","blueberry","avocado","turkey","pork",
+  "soymilk_f","almondmilk_f","oatmilk_f","oj_f"]);
+
+let profile = {sex:"male", age:40, kcal:2500};
+let plan = {};              // foodKey -> grams
+let gapsFirst = true;
+let DB = null;
+
+/* ---------------- targets ---------------- */
+const key = () => profile.sex + ":" + profile.age;
+function targets(){ const t = Object.assign({}, D.dri[key()]); t.kcal = profile.kcal; return t; }
+function limits(){ return D.ul[key()]; }
+
+function totals(p){
+  const t = new Array(ORDER.length).fill(0);
+  for (const k in p){ const f = BY[k], g = p[k] / 100;
+    for (let i = 0; i < ORDER.length; i++) t[i] += f.n[i] * g; }
+  return t;
+}
+function pct(tot, n){ const tg = targets()[n]; return tg ? 100 * tot[IDX[n]] / tg : null; }
+function unitOf(n){ return (META[n] ? META[n].unit : "g").replace(" RAE","").replace(" DFE",""); }
+function fmt(v, n){
+  const a = Math.abs(v);
+  const s = a >= 100 ? Math.round(v) : a >= 1 ? v.toFixed(1) : v.toFixed(2);
+  return s + " " + unitOf(n);
+}
+
+/* ---------------- scarcity: how few foods supply each nutrient ---------------- */
+function supplierCount(n, keys, t){
+  if (!t[n]) return 999;
+  let c = 0;
+  keys.forEach(k => { const f = BY[k], kc = f.n[IDX.kcal]; if (!kc) return;
+    if ((f.n[IDX[n]] * 100 / kc) / t[n] >= 0.10) c++; });
+  return c;
+}
+function scarcityFor(keys){
+  const t = targets(), out = {};
+  COUNTED.forEach(n => { out[n] = 1 / Math.max(1, supplierCount(n, keys, t)); });
+  return out;
+}
+const ALLKEYS = FOODS.map(f => f.k);
+let SCARCE = scarcityFor(ALLKEYS);
+
+/* ---------------- nutrient explainers (the "i" panels) ---------------- */
+// does = what it does in the body; why = why it matters / who runs short / where it comes from.
+const DETAIL = {
+  kcal:{does:"Energy. Each gram of protein or carbohydrate gives about 4 kcal and each gram of fat about 9.",
+    why:"The one target you set yourself rather than a DRI. Sitting well under it for weeks means weight loss; well over it, weight gain."},
+  protein:{does:"Supplies amino acids to build and repair muscle, enzymes, antibodies and hormones. Nine of them cannot be made by the body and must come from food.",
+    why:"The RDA is 0.8 g per kg of body weight. Older adults and people doing strength training often do better at 1.2–1.6 g/kg."},
+  fat:{does:"Dense energy, the carrier that lets you absorb vitamins A, D, E and K, and the only source of the two essential fats, linoleic acid and ALA.",
+    why:"There is no target for total fat; the accepted range is 20–35% of calories. The kind of fat matters more than the amount."},
+  carb:{does:"The body’s preferred fuel, especially for the brain and for hard exercise. Fiber is counted inside this number.",
+    why:"The 130 g RDA covers the brain’s glucose use. Below that the body runs on ketones and makes its own glucose from protein, which is how keto works."},
+  netcarb:{does:"Carbohydrate minus fiber — the part that is digested into sugar.",
+    why:"What the keto (≤30 g) and low-carb (≤100 g) patterns cap."},
+  fiber:{does:"Plant carbohydrate you can’t digest. It feeds gut bacteria, slows how fast sugar reaches the blood, lowers LDL cholesterol and keeps you regular.",
+    why:"The target (14 g per 1,000 kcal) comes from heart-disease data. Most adults eat about half of it. Legumes, seeds, berries and whole grains are the big sources."},
+  LA:{does:"Linoleic acid, the essential omega-6 fat. It is part of every cell membrane and keeps the skin’s water barrier intact.",
+    why:"True deficiency (scaly skin, slow healing) is rare. Seeds, nuts and their oils supply plenty."},
+  ALA:{does:"Alpha-linolenic acid, the essential omega-3 fat. The body converts a small share of it into EPA and DHA.",
+    why:"The only omega-3 with a DRI. Flax, chia, hemp, walnuts and canola oil are the rich sources."},
+  EPADHA:{does:"The long-chain omega-3s concentrated in the brain and retina. They also make signalling molecules that help resolve inflammation.",
+    why:"No DRI exists. Heart guidelines suggest about 250–500 mg a day — roughly two servings of oily fish a week."},
+  Ca:{does:"Builds bones and teeth, which hold 99% of it, and is needed for every muscle contraction, nerve signal and blood clot.",
+    why:"When intake runs short, the body pulls calcium out of bone to keep blood levels steady, which weakens bone over years."},
+  Fe:{does:"The core of hemoglobin and myoglobin, which carry oxygen in blood and muscle, and of several energy-producing enzymes.",
+    why:"Running short causes anemia: tiredness, breathlessness, feeling cold. Vitamin C in the same meal helps plant iron absorb."},
+  Mg:{does:"A helper for more than 300 enzymes — making energy (ATP), DNA and protein — and a regulator of muscle, nerve and heart rhythm.",
+    why:"About half of US adults fall short. Seeds, nuts, legumes, whole grains and leafy greens are the main sources. Its upper limit applies only to supplements."},
+  P:{does:"Part of bone mineral, of ATP (the cell’s energy currency), and of DNA and cell membranes.",
+    why:"It is in nearly every protein food, so shortfalls are rare."},
+  K:{does:"The main electrolyte inside cells. It sets the electrical charge that lets nerves and muscles fire and offsets sodium’s effect on blood pressure.",
+    why:"Higher intakes go with lower blood pressure and stroke risk. Potatoes, beans, leafy greens, fruit and dairy are the big sources."},
+  Zn:{does:"Needed by hundreds of enzymes for immunity, wound healing, DNA synthesis, taste and smell, and sperm production.",
+    why:"The body stores very little, so it needs a steady supply. Oysters, red meat, shellfish, seeds and legumes lead."},
+  Cu:{does:"Works with iron to make red blood cells, and is needed for collagen, energy production and the body’s own antioxidant enzymes.",
+    why:"Liver, shellfish, nuts, seeds, cocoa and mushrooms are rich. Very high zinc intake can block its absorption."},
+  Mn:{does:"Helps enzymes that form bone, process carbohydrate and cholesterol, and neutralise free radicals inside mitochondria.",
+    why:"Whole grains, nuts, legumes, tea and spices supply far more than the target; deficiency is almost unknown."},
+  Na:{does:"The main electrolyte outside cells. It controls fluid volume and blood pressure and lets nerves and muscles fire.",
+    why:"Nearly everyone gets more than enough. Higher intakes raise blood pressure in many people, so this line is a ceiling."},
+  Se:{does:"Built into selenoproteins that protect cells from oxidative damage and switch thyroid hormone into its active form.",
+    why:"Food content follows soil content. Brazil nuts, seafood, organ meat and eggs are reliable; more than 400 mcg a day causes brittle hair and nails."},
+  I:{does:"An essential part of thyroid hormone, which sets your metabolic rate and directs brain development in pregnancy.",
+    why:"Short supply causes goiter and an underactive thyroid. Few foods carry much: seafood, dairy, eggs, seaweed and iodized salt."},
+  A:{does:"Needed for vision in low light, healthy skin and the linings of the gut and lungs, immune function and cell growth.",
+    why:"It comes ready-made from liver, dairy and eggs, or as beta-carotene from orange and dark-green plants, which the body converts as needed."},
+  C:{does:"An antioxidant needed to make collagen (skin, blood vessels, gums) and some neurotransmitters. It also boosts absorption of plant iron.",
+    why:"Humans can’t make it; a total lack causes scurvy within weeks. Peppers, citrus, kiwi, berries, guava and cabbage-family vegetables are rich."},
+  D:{does:"Lets the gut absorb calcium and phosphorus; also involved in muscle strength and immune function.",
+    why:"Sun on skin is the usual source. Food sources are few: oily fish, egg yolks and UV-exposed mushrooms."},
+  E:{does:"A fat-soluble antioxidant that protects cell membranes, and the fats carried in LDL, from oxidation.",
+    why:"Most adults fall short from food alone. Sunflower seeds, almonds, nut and seed oils and avocado lead."},
+  K1K2:{does:"Switches on the proteins that make blood clot and the ones that lock calcium into bone.",
+    why:"Leafy greens supply K1; natto, cheese and egg yolk supply K2. If you take warfarin, keep intake steady rather than avoiding it."},
+  B1:{does:"Thiamin helps turn carbohydrate into energy and keeps nerves working.",
+    why:"Heavy alcohol use raises the risk of running short. Pork, whole and enriched grains, legumes and seeds are good sources."},
+  B2:{does:"Riboflavin forms coenzymes used in energy production and in activating other B vitamins.",
+    why:"Dairy, eggs, meat, almonds and mushrooms are the main sources."},
+  B3:{does:"Niacin forms NAD, used by over 400 enzymes in energy metabolism and DNA repair.",
+    why:"The body can make some from the amino acid tryptophan. Meat, fish, peanuts and mushrooms are rich. Its upper limit applies only to supplements."},
+  B6:{does:"A helper for more than 100 enzymes, mostly in protein metabolism; needed to make neurotransmitters and hemoglobin.",
+    why:"Fish, poultry, potatoes, chickpeas, bananas and pistachios are good sources. Its upper limit concerns supplements."},
+  B9:{does:"Folate is needed to copy DNA and divide cells, and works with B12 to make red blood cells.",
+    why:"Critical just before and early in pregnancy to prevent neural-tube defects. Legumes, leafy greens, asparagus and liver lead."},
+  B12:{does:"Needed to make red blood cells, maintain the insulation around nerves, and copy DNA.",
+    why:"Only bacteria make it, so it reaches food through animal products — or through fortified foods, which are the practical vegan source (fortified soy, pea, coconut and cashew milks here). Lack causes anemia and nerve damage; absorption falls with age and with metformin or acid blockers."},
+  choline:{does:"Builds cell membranes, makes the neurotransmitter acetylcholine, and helps move fat out of the liver.",
+    why:"The body makes some, but not enough. Eggs, liver, meat, fish and soybeans are the richest sources."},
+  Mo:{does:"A helper for enzymes that break down sulfur-containing amino acids, purines and some toxins.",
+    why:"Legumes, grains and nuts provide plenty; deficiency has only been seen with long-term tube feeding."},
+};
+const NO_SOURCES = new Set(["kcal","fat","carb","netcarb","Na"]);   // "eat more of this" makes no sense
+let openNotes = new Set();
+const amountIn = (f, n, g) => n === "netcarb" ? netCarbOf(f, g) : f.n[IDX[n]] * g / 100;
+function noteHTML(n){
+  const d = DETAIL[n] || {}, m = META[n];
+  const caveat = m && m.note && m.note !== d.why ? `<p class="nd-cav">${m.note}</p>` : "";
+  // what in today's food supplies it
+  const rows = Object.keys(plan).map(k => ({k, v: amountIn(BY[k], n, plan[k])}))
+                 .filter(r => r.v > 0).sort((a, b) => b.v - a.v);
+  const total = rows.reduce((a, r) => a + r.v, 0);
+  const top = rows.slice(0, 5), rest = rows.slice(5);
+  const restV = rest.reduce((a, r) => a + r.v, 0);
+  const share = v => total ? Math.round(100 * v / total) : 0;
+  const mine = rows.length
+    ? `<ul class="nd-list">${top.map(r => `<li><span>${BY[r.k].name}</span>
+        <span class="mono">${fmt(r.v, n === "netcarb" ? "carb" : n)} · ${share(r.v)}%</span></li>`).join("")}
+        ${rest.length ? `<li class="nd-more"><span>${rest.length} other food${rest.length > 1 ? "s" : ""}</span>
+          <span class="mono">${share(restV)}%</span></li>` : ""}</ul>`
+    : `<p class="nd-none">Nothing in today’s food supplies it yet.</p>`;
+  // richest realistic servings not already in the day
+  let src = "";
+  if (!NO_SOURCES.has(n)){
+    const tg = targets()[n];
+    const best = FOODS.filter(f => !(f.k in plan) && !tagsOf(f.k).some(t => avoid.has(t)))
+      .map(f => ({f, v: f.n[IDX[n]] * f.serv / 100})).filter(x => x.v > 0)
+      .sort((a, b) => b.v - a.v).slice(0, 5);
+    if (best.length) src = `<div class="nd-h">Richest per serving — tap to add</div>
+      <div class="nd-src">${best.map(x => `<button class="nd-chip" data-addsrc="${x.f.k}"
+        title="Add 1 × ${x.f.sl} of ${x.f.name}">${x.f.name}
+        <small>${x.f.sl} · ${tg ? Math.round(100 * x.v / tg) + "%" : fmt(x.v, n)}</small></button>`).join("")}</div>`;
+  }
+  const ul = limits()[n], soft = D.softUl[n];
+  const lim = ul ? `<p class="nd-lim">Upper limit ${fmt(ul, n)}${n === "A" ? " (preformed A only)" : ""}.</p>`
+            : soft ? `<p class="nd-lim">Advisory upper limit ${fmt(soft, n)} (not enforced).</p>` : "";
+  return `${d.does ? `<p class="nd-does">${d.does}</p>` : ""}${d.why ? `<p>${d.why}</p>` : ""}${caveat}${lim}
+    <div class="nd-h">In today’s food${rows.length ? ` — ${fmt(total, n === "netcarb" ? "carb" : n)}` : ""}</div>${mine}${src}`;
+}
+
+/* ---------------- coverage panel ---------------- */
+function renderCoverage(){
+  const tot = totals(plan), tg = targets(), ul = limits(), load = ulLoad(plan);
+  let met = 0;
+  const rows = ORDER.map(n => {
+    const target = tg[n];
+    const p = target ? 100 * tot[IDX[n]] / target : null;
+    const over = ul[n] && load[n] > ul[n] * 1.001;
+    const soft = D.softUl[n] && tot[IDX[n]] > D.softUl[n];
+    const counted = COUNTED.includes(n) || n === "kcal";
+    const ok = p !== null && p >= 99.5;
+    if (counted && ok) met++;
+    return {n, p, over, soft, ok, counted, amt: tot[IDX[n]]};
+  });
+  const netcarb = Object.keys(plan).reduce((a, k) => a + netCarbOf(BY[k], plan[k]), 0);
+  rows.splice(ORDER.indexOf("carb") + 1, 0,
+    {n: "netcarb", p: null, over: false, soft: false, ok: true, counted: false, amt: netcarb});
+  const gaps = rows.filter(r => r.counted && !r.ok);
+  const sorted = gapsFirst
+    ? rows.slice().sort((a, b) => (a.counted && !a.ok ? 0 : 1) - (b.counted && !b.ok ? 0 : 1)
+        || rows.indexOf(a) - rows.indexOf(b))
+    : rows;
+
+  document.getElementById("coverage").innerHTML = sorted.map(r => {
+    const m = META[r.n] || {label:"Net carbs", unit:"g", group:"macro",
+      note:"Carbohydrate minus fiber \u2014 what the keto and low-carb patterns cap."};
+    const cls = r.over ? "over" : (r.counted && !r.ok ? "gap" : "");
+    const w = r.p === null ? 0 : Math.max(0, Math.min(100, r.p));
+    const label = r.n === "EPADHA" ? m.label + " · no DRI" : m.label;
+    const shown = r.p === null ? "—" : (r.p >= 999 ? "999+" : Math.round(r.p) + "%");
+    return `<div class="nrow ${cls}">
+      <span class="nlabel"><span>${label}</span><button class="info" data-note="${r.n}" title="About ${m.label}"
+        aria-label="About ${m.label}" aria-expanded="${openNotes.has(r.n)}">i</button></span>
+      <span><span class="nbar"><i style="width:${w}%"></i></span>
+        <span class="namt">${fmt(r.amt, r.n)}${r.soft ? " ⚠" : ""}</span></span>
+      <span class="npct">${shown}</span>
+      ${openNotes.has(r.n) ? `<div class="note" data-notefor="${r.n}">${noteHTML(r.n)}</div>` : ""}
+    </div>`;
+  }).join("");
+
+  const mass = Object.values(plan).reduce((a, b) => a + b, 0);
+  const el = id => document.getElementById(id);
+  el("s-met").textContent = met + "/28";
+  el("s-met").className = "v " + (met === 28 ? "good" : met ? "bad" : "");
+  el("s-kcal").textContent = Math.round(tot[IDX.kcal]);
+  el("s-mass").textContent = Math.round(mass) + " g";
+  el("covhint").textContent = !Object.keys(plan).length ? "Add food to begin"
+    : gaps.length ? gaps.length + " still short" : "Every target met";
+}
+
+/* ---------------- plan list ---------------- */
+const GRIP = `<svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true" fill="currentColor">
+  <circle cx="2.5" cy="3" r="1.5"/><circle cx="7.5" cy="3" r="1.5"/><circle cx="2.5" cy="8" r="1.5"/>
+  <circle cx="7.5" cy="8" r="1.5"/><circle cx="2.5" cy="13" r="1.5"/><circle cx="7.5" cy="13" r="1.5"/></svg>`;
+// The plan is an object whose key order is the display order, so reordering = rebuilding it.
+function setOrder(keys){
+  const next = {};
+  keys.forEach(k => { if (k in plan) next[k] = plan[k]; });
+  Object.keys(plan).forEach(k => { if (!(k in next)) next[k] = plan[k]; });
+  plan = next;
+}
+function renderPlan(){
+  const keys = Object.keys(plan);
+  const box = document.getElementById("planlist");
+  if (!keys.length){
+    box.innerHTML = `<p class="empty">Nothing added yet. Search above, or let
+      <b>Auto-solve</b> build a complete day for you.</p>`;
+  } else {
+    box.innerHTML = keys.map(k => {
+      const f = BY[k], g = plan[k];
+      const servs = +(g / f.serv).toFixed(2);   // up to 2 decimals, trailing zeros dropped
+      return `<div class="prow" data-k="${k}">
+        <button class="grip" data-grip="${k}" title="Drag to reorder"
+          aria-label="Reorder ${f.name}. Use the up and down arrow keys to move it.">${GRIP}</button>
+        <span><span class="pname">${f.name}</span>
+          <span class="pmeta">1 serving = ${f.sl} (${+f.serv.toFixed(1)} g) · ${Math.round(g)} g ·
+            ${Math.round(f.n[IDX.kcal]*g/100)} kcal</span></span>
+        <span style="display:flex;align-items:center;gap:7px">
+          <span class="amt">
+            <button data-step="${k}" data-dir="-1" title="One less serving (${f.serv} g)"
+              aria-label="Remove one serving of ${f.name}, ${f.serv} grams">&minus;</button>
+            <span class="amtfield"><input type="number" data-sv="${k}" value="${servs}" inputmode="decimal"
+              min="0" max="50" step="0.25" aria-label="Servings of ${f.name} (one serving is ${f.sl})"><span class="u">srv</span></span>
+            <button data-step="${k}" data-dir="1" title="One more serving (${f.serv} g)"
+              aria-label="Add one serving of ${f.name}, ${f.serv} grams">+</button>
+          </span>
+          <button class="del" data-del="${k}" aria-label="Remove ${f.name}">&times;</button>
+        </span></div>`;
+    }).join("");
+  }
+  renderCoverage();
+  persistLocal();
+}
+
+/* ---------------- search ---------------- */
+const search = document.getElementById("search"), results = document.getElementById("results");
+let cursor = -1, hits = [];
+function runSearch(){
+  const q = search.value.trim().toLowerCase();
+  if (!q){ results.hidden = true; search.setAttribute("aria-expanded","false"); return; }
+  hits = FOODS.filter(f => f.name.toLowerCase().includes(q) || f.cat.toLowerCase().includes(q)
+                          || (q.length >= 4 && (f.tags || "").includes(q)))
+              .slice(0, 40);
+  cursor = hits.length ? 0 : -1;
+  results.innerHTML = hits.length
+    ? hits.map((f,i) => `<button class="res${i === 0 ? " cursor" : ""}" data-add="${f.k}"
+        role="option" aria-selected="${i === 0}" id="res-${i}"><span>${f.name}</span>
+        <small>${f.cat} &middot; ${f.sl}</small></button>`).join("")
+    : `<p class="empty">No food matches &ldquo;${q}&rdquo;.</p>`;
+  results.hidden = false;
+  search.setAttribute("aria-expanded","true");
+  syncCursor();
+}
+function syncCursor(){
+  [...results.querySelectorAll(".res")].forEach((c, i) => {
+    c.classList.toggle("cursor", i === cursor);
+    c.setAttribute("aria-selected", String(i === cursor));
+  });
+  if (cursor >= 0) search.setAttribute("aria-activedescendant", "res-" + cursor);
+  else search.removeAttribute("aria-activedescendant");
+}
+function addFood(k, grams){
+  const f = BY[k];
+  plan[k] = (plan[k] || 0) + (grams != null ? grams : f.serv);
+  renderPlan();
+}
+search.addEventListener("input", runSearch);
+search.addEventListener("keydown", e => {
+  if (results.hidden || !hits.length) return;
+  if (e.key === "ArrowDown" || e.key === "ArrowUp"){
+    e.preventDefault();
+    cursor = (cursor + (e.key === "ArrowDown" ? 1 : -1) + hits.length) % hits.length;
+    syncCursor();
+    const el = document.getElementById("res-" + cursor);
+    if (el) el.scrollIntoView({block: "nearest"});
+  } else if (e.key === "Enter"){
+    // no arrow key needed - Enter takes the highlighted hit, or the first one
+    e.preventDefault();
+    const pick = hits[cursor >= 0 ? cursor : 0];
+    if (pick){ addFood(pick.k); search.value = ""; results.hidden = true; hits = []; cursor = -1; }
+  } else if (e.key === "Escape"){ results.hidden = true; }
+});
+document.addEventListener("click", e => {
+  if (!e.target.closest(".searchbar")) results.hidden = true;
+});
+results.addEventListener("click", e => {
+  const b = e.target.closest("[data-add]"); if (!b) return;
+  addFood(b.dataset.add); search.value = ""; results.hidden = true; search.focus();
+});
+
+/* ---------------- plan interactions ---------------- */
+document.getElementById("planlist").addEventListener("click", e => {
+  const s = e.target.closest("[data-step]"), d = e.target.closest("[data-del]");
+  if (s){
+    const k = s.dataset.step, f = BY[k];
+    plan[k] = Math.max(0, plan[k] + (+s.dataset.dir) * f.serv);
+    if (plan[k] < 0.5) delete plan[k];
+    renderPlan();
+  } else if (d){ delete plan[d.dataset.del]; renderPlan(); }
+});
+const planBox = document.getElementById("planlist");
+planBox.addEventListener("keydown", e => {
+  const g = e.target.closest("[data-grip]"); if (!g) return;
+  if (!["ArrowUp","ArrowDown","Home","End"].includes(e.key)) return;
+  e.preventDefault();
+  const keys = Object.keys(plan), i = keys.indexOf(g.dataset.grip);
+  const j = e.key === "Home" ? 0 : e.key === "End" ? keys.length - 1
+          : i + (e.key === "ArrowUp" ? -1 : 1);
+  if (j < 0 || j >= keys.length || j === i) return;
+  keys.splice(j, 0, keys.splice(i, 1)[0]);
+  setOrder(keys); renderPlan();
+  const again = planBox.querySelector(`[data-grip="${g.dataset.grip}"]`);
+  if (again) again.focus();
+});
+let drag = null;
+planBox.addEventListener("pointerdown", e => {
+  const g = e.target.closest("[data-grip]"); if (!g || e.button > 0) return;
+  e.preventDefault();
+  const row = g.closest(".prow");
+  // Listen on the document rather than capturing the pointer: moving the row in the DOM
+  // would drop a capture and end the drag after the first step.
+  drag = {row, k: g.dataset.grip, startY: e.clientY, moved: false, id: e.pointerId};
+  row.classList.add("dragging");
+  document.body.classList.add("reordering");
+});
+document.addEventListener("pointermove", e => {
+  if (!drag || e.pointerId !== drag.id) return;
+  const y = e.clientY;
+  if (Math.abs(y - drag.startY) > 3) drag.moved = true;
+  // shift the row under the pointer, then compare against the other rows' midpoints
+  const rows = [...planBox.querySelectorAll(".prow")].filter(r => r !== drag.row);
+  let before = null;
+  for (const r of rows){ const b = r.getBoundingClientRect();
+    if (y < b.top + b.height / 2){ before = r; break; } }
+  if (before !== drag.row.nextElementSibling || (before === null && drag.row.nextElementSibling)){
+    planBox.insertBefore(drag.row, before);
+  }
+  // keep the list in view while dragging near the window edges
+  if (y < 40) window.scrollBy(0, -12); else if (y > innerHeight - 40) window.scrollBy(0, 12);
+});
+function endDrag(){
+  if (!drag) return;
+  const keys = [...planBox.querySelectorAll(".prow")].map(r => r.dataset.k);
+  drag.row.classList.remove("dragging");
+  document.body.classList.remove("reordering");
+  const changed = keys.join() !== Object.keys(plan).join();
+  drag = null;
+  if (changed){ setOrder(keys); renderPlan(); }
+}
+document.addEventListener("pointerup", e => { if (drag && e.pointerId === drag.id) endDrag(); });
+document.addEventListener("pointercancel", e => { if (drag && e.pointerId === drag.id) endDrag(); });
+document.getElementById("planlist").addEventListener("change", e => {
+  const i = e.target.closest("[data-sv]"); if (!i) return;
+  const k = i.dataset.sv, f = BY[k];
+  const sv = Math.max(0, Math.min(50, parseFloat(String(i.value).replace(",", ".")) || 0));
+  const g = sv * f.serv;
+  if (g < 0.5) delete plan[k]; else plan[k] = g;   // grams stay the stored unit
+  renderPlan();
+});
+document.getElementById("coverage").addEventListener("click", e => {
+  const a = e.target.closest("[data-addsrc]");
+  if (a){ addFood(a.dataset.addsrc); return; }
+  const b = e.target.closest(".info"); if (!b) return;
+  const n = b.dataset.note;
+  if (openNotes.has(n)) openNotes.delete(n); else openNotes.add(n);
+  renderCoverage();
+  const again = document.querySelector(`#coverage [data-note="${n}"]`);
+  if (again) again.focus();
+});
+document.getElementById("btn-gapsfirst").addEventListener("click", e => {
+  gapsFirst = !gapsFirst;
+  e.currentTarget.setAttribute("aria-pressed", String(gapsFirst));
+  renderCoverage();
+});
+document.getElementById("btn-clear").addEventListener("click", () => { plan = {}; renderPlan(); });
+
+/* ---------------- suggestions ---------------- */
+function deficits(p, tg){
+  const tot = totals(p); tg = tg || targets();
+  const out = {};
+  COUNTED.forEach(n => { if (tg[n] && tot[IDX[n]] < tg[n]) out[n] = tg[n] - tot[IDX[n]]; });
+  return out;
+}
+function suggest(p, poolKeys, sc, ul, tg){
+  sc = sc || SCARCE;
+  tg = tg || targets(); ul = ul || limits();
+  const def = deficits(p, tg), tot = totals(p);
+  const names = Object.keys(def);
+  if (!names.length) return [];
+  return (poolKeys || FOODS.map(f => f.k))
+    .filter(k => !p[k] && !sugOff.has(groupOf(k))).map(k => {
+    const f = BY[k], g = f.serv / 100;
+    let score = 0; const fixes = [];
+    names.forEach(n => {
+      const add = f.n[IDX[n]] * g; if (add <= 0) return;
+      const frac = Math.min(add, def[n]) / tg[n];
+      const severity = 1 + 2.5 * (def[n] / tg[n]);   // far-from-target outranks nearly-there
+      score += frac * (0.3 + sc[n] * 6) * severity;
+      if (add >= def[n] * 0.5) fixes.push(META[n].label);
+    });
+    // disqualify anything that would breach an upper limit
+    const load = ulLoad(p, ul);
+    for (const n in ul) if (load[n] + ulAmount(f, n, f.serv) > ul[n]) score = -1;
+    return {k, score, fixes: fixes.slice(0, 4), kcal: Math.round(f.n[IDX.kcal] * g)};
+  }).filter(s => s.score > 0).sort((a, b) => b.score - a.score).slice(0, 10);
+}
+document.getElementById("sugchips").innerHTML = GROUPS.map(g =>
+  `<button class="chip" data-sugoff="${g}" aria-pressed="false">${g}</button>`).join("");
+document.getElementById("sugchips").addEventListener("click", e => {
+  const c = e.target.closest("[data-sugoff]"); if (!c) return;
+  const g = c.dataset.sugoff;
+  if (sugOff.has(g)) sugOff.delete(g); else sugOff.add(g);
+  c.setAttribute("aria-pressed", String(sugOff.has(g)));
+  persistLocal(); renderSuggestions();
+});
+function renderSuggestions(){
+  const card = document.getElementById("sugcard");
+  const list = suggest(plan, pool(document.getElementById("sv-diet").value, "balanced", avoid));
+  card.hidden = false;
+  document.getElementById("suglist").innerHTML = list.length
+    ? list.map(s => `<div class="sug">
+        <span><span class="sugname">${BY[s.k].name}</span>
+          <span class="sugwhy">1 &times; ${BY[s.k].sl} &middot; ${s.kcal} kcal</span>
+          <span class="tagrow">${s.fixes.map(x => `<span class="tg">${x}</span>`).join("")}</span></span>
+        <button class="btn ghost" data-add="${s.k}">Add</button></div>`).join("")
+    : (Object.keys(deficits(plan)).length
+        ? `<p class="empty">No food left to suggest &mdash; everything that would help is
+             switched off above, or excluded by your diet rules.</p>`
+        : `<p class="empty">Nothing left to fix &mdash; every target is met.</p>`);
+}
+document.getElementById("btn-suggest").addEventListener("click", () => {
+  renderSuggestions();
+  document.getElementById("sugcard").scrollIntoView({behavior:"smooth", block:"nearest"});
+});
+document.getElementById("suglist").addEventListener("click", e => {
+  const b = e.target.closest("[data-add]"); if (!b) return;
+  addFood(b.dataset.add);
+  renderSuggestions();
+});
+
+/* ---------------- solver ---------------- */
+function pool(diet, style, av){
+  const d = DIETS[diet] || DIETS.anything;
+  av = av || avoid;
+  let ks = FOODS.filter(f => d.cls.includes(f.cls)).map(f => f.k);
+  if (d.no)      ks = ks.filter(k => !tagsOf(k).some(t => d.no.includes(t)));
+  if (d.rawOnly) ks = ks.filter(k => BY[k].raw);
+  if (av && av.size) ks = ks.filter(k => !tagsOf(k).some(t => av.has(t)));
+  if (style === "ordinary") ks = ks.filter(k => ORDINARY.has(k));
+  return ks;
+}
+// A net-carb ceiling behaves exactly like an upper limit, so it rides the same machinery.
+function dietCaps(diet){
+  const d = DIETS[diet] || DIETS.anything;
+  return d.netCarbMax ? {netcarb: d.netCarbMax} : {};
+}
+function dietTargets(diet){
+  const d = DIETS[diet] || DIETS.anything, t = targets();
+  if (d.proteinPct) t.protein = Math.max(t.protein, d.proteinPct / 100 * t.kcal / 4);
+  return t;
+}
+function capOf(k){ return BY[k].serv * (MAXSERV[k] || DEFAULT_MAXSERV); }
+
+function solveDay(opts){
+  const {diet, maxFoods, style, seed} = opts;
+  const ks = pool(diet, style, opts.avoid), tg = dietTargets(diet),
+        ul = Object.assign({}, limits(), dietCaps(diet));
+  const sc = scarcityFor(ks);
+  let p = Object.assign({}, seed || {});
+  // Alternate: add the food that best closes the remaining gap, then re-tune portions,
+  // then look again. Tuning between picks stops the solver from adding a food for a gap
+  // that a portion increase would already have closed.
+  for (let round = 0; round < maxFoods + 2; round++){
+    if (!Object.keys(deficits(p, tg)).length) break;
+    if (countFoods(p) < maxFoods){
+      const s = suggest(p, ks, sc, ul, tg);
+      if (!s.length){ tune(p, tg, ul, sc); break; }
+      let pick = s[0];
+      if (style === "light"){
+        pick = s.slice(0, 4).sort((a, b) =>
+          b.score / BY[b.k].serv - a.score / BY[a.k].serv)[0];
+      } else if (style === "fewest"){
+        pick = s.slice(0, 3).sort((a, b) => b.fixes.length - a.fixes.length)[0];
+      }
+      p[pick.k] = BY[pick.k].serv;
+    }
+    tune(p, tg, ul, sc);
+    if (countFoods(p) >= maxFoods) break;
+  }
+  tune(p, tg, ul, sc);
+  Object.keys(p).forEach(k => { p[k] = Math.max(5, Math.round(p[k] / 5) * 5); });
+  return p;
+}
+
+function tune(p, tg, ul, sc){
+  const keys = Object.keys(p);
+  for (let it = 0; it < 400; it++){
+    const tot = totals(p);
+    // worst-covered counted nutrient
+    let worst = null, worstR = 1;
+    COUNTED.forEach(n => {
+      if (!tg[n]) return;
+      const r = tot[IDX[n]] / tg[n];
+      if (r < worstR){ worstR = r; worst = n; }
+    });
+    if (!worst) break;
+    // best food for it that has room and won't breach a UL
+    const load = ulLoad(p, ul);
+    let best = null, bestV = 0;
+    keys.forEach(k => {
+      const f = BY[k], step = Math.max(5, f.serv / 2);
+      if (p[k] + step > capOf(k)) return;
+      const per = f.n[IDX[worst]] * step / 100;
+      if (per <= 0) return;
+      for (const n in ul) if (load[n] + ulAmount(f, n, step) > ul[n] * UL_HEADROOM) return;
+      const v = per / Math.max(1, f.n[IDX.kcal] * step / 100);
+      if (v > bestV){ bestV = v; best = k; }
+    });
+    if (!best) break;
+    p[best] += Math.max(5, BY[best].serv / 2);
+    // keep calories near target by trimming the least useful food
+    const kc = totals(p)[IDX.kcal];
+    if (kc > tg.kcal * 1.04){
+      const t2 = totals(p);
+      let drop = null, dropV = Infinity;
+      keys.forEach(k => {
+        const f = BY[k], step = Math.max(5, f.serv / 2);
+        if (p[k] - step < f.serv * 0.5) return;
+        let harm = 0;
+        COUNTED.forEach(n => {
+          if (!tg[n]) return;
+          const after = t2[IDX[n]] - f.n[IDX[n]] * step / 100;
+          if (after < tg[n]) harm += (tg[n] - after) / tg[n] * (0.3 + (sc||SCARCE)[n] * 6);
+        });
+        if (harm < dropV){ dropV = harm; drop = k; }
+      });
+      if (drop) p[drop] -= Math.max(5, BY[drop].serv / 2);
+    }
+  }
+}
+function evaluate(p, diet){
+  const tot = totals(p), tg = dietTargets(diet || "anything");
+  const ul = Object.assign({}, limits(), dietCaps(diet || "anything"));
+  const short = COUNTED.filter(n => tg[n] && tot[IDX[n]] < tg[n] * 0.995);
+  const load = ulLoad(p, ul);
+  const over = Object.keys(ul).filter(n => load[n] > ul[n] * 1.001);
+  const netcarb = Object.keys(p).reduce((a, k) => a + netCarbOf(BY[k], p[k]), 0);
+  return {short, over, kcal: Math.round(tot[IDX.kcal]),
+    mass: Math.round(Object.values(p).reduce((a,b)=>a+b,0)),
+    mn: tot[IDX.Mn], fe: tot[IDX.Fe], netcarb,
+    fatPct: tot[IDX.kcal] ? 900 * tot[IDX.fat] / tot[IDX.kcal] : 0,
+    proPct: tot[IDX.kcal] ? 400 * tot[IDX.protein] / tot[IDX.kcal] : 0};
+}
+function planCard(p, i, opts){
+  const e = evaluate(p, opts && opts.diet), keys = Object.keys(p);
+  const ok = !e.short.length && !e.over.length;
+  const flags = [];
+  if (e.mn > D.softUl.Mn) flags.push(`Manganese ${Math.round(e.mn)} mg`);
+  if (e.fe > 25) flags.push(`Iron ${Math.round(e.fe)} mg`);
+  return `<div class="card" style="margin-bottom:14px">
+    <h3>${ok ? "Complete day" : "Best found"} &mdash; ${keys.length} foods</h3>
+    <div id="sv-${i}">${keys.map(k => `<div class="prow"><span>
+      <span class="pname">${BY[k].name}</span>
+      <span class="pmeta">${p[k]} g &middot; ${(p[k]/BY[k].serv).toFixed(1)} × ${BY[k].sl}</span>
+      </span><span class="mono" style="font-size:12.5px;color:var(--muted)">${
+        Math.round(BY[k].n[IDX.kcal]*p[k]/100)} kcal</span></div>`).join("")}</div>
+    <div class="sum" style="border-bottom:none;border-top:1px solid var(--rule)">
+      <div class="sumcell"><span class="k">Targets met</span>
+        <span class="v ${ok?"good":"bad"}">${28 - e.short.length}/28</span></div>
+      <div class="sumcell"><span class="k">Calories</span><span class="v">${e.kcal}</span></div>
+      <div class="sumcell"><span class="k">Weight</span><span class="v">${e.mass} g</span></div>
+    </div>
+    <div class="solvenote" style="padding-top:12px">Net carbs
+      <b>${Math.round(e.netcarb)} g</b> &middot; ${Math.round(e.proPct)}% of calories from
+      protein &middot; ${Math.round(e.fatPct)}% from fat.</div>
+    ${e.over.length ? `<div class="solvenote" style="padding-top:12px">Over the limit:
+      ${e.over.map(n => META[n] ? META[n].label : n).join(", ")}.</div>` : ""}
+    ${e.short.length ? `<div class="solvenote" style="padding-top:12px">Still short:
+      ${e.short.map(n => META[n].label).join(", ")}.${
+        e.short.includes("B12") && opts.diet === "vegan"
+          ? (opts.avoid && opts.avoid.has("fortified")
+              ? " <b>Vitamin B12 cannot be closed on a vegan diet from unfortified food</b> \u2014 no\
+ unfortified plant food contains it. Switch <b>Fortified foods</b> back on to let a fortified plant milk cover it."
+              : " <b>No food in your allowed set supplies vitamin B12.</b> On a vegan diet it has to come\
+ from a fortified food or a supplement.") : ""}${
+        e.short.length && e.short.every(n => n === "B12")
+          ? "" : " Try raising the food limit."}</div>` : ""}
+    ${flags.length ? `<div class="solvenote" style="padding-top:4px">Runs high:
+      ${flags.join(", ")}.</div>` : ""}
+    <div class="btnrow"><button class="btn" data-load='${JSON.stringify(p)}'>Open in builder</button></div>
+  </div>`;
+}
+function readSolveOpts(){
+  return {diet: document.getElementById("sv-diet").value,
+    maxFoods: +document.getElementById("sv-max").value,
+    style: document.getElementById("sv-style").value,
+    seed: document.getElementById("sv-keep").value === "yes" ? plan : null,
+    avoid: new Set(avoid)};
+}
+document.getElementById("sv-diet").addEventListener("change", () => { renderScarcity(); poolNote(); });
+document.getElementById("btn-solve").addEventListener("click", () => {
+  const o = readSolveOpts();
+  const p = solveDay(o);
+  document.getElementById("solveout").innerHTML = planCard(p, 0, o);
+});
+document.getElementById("btn-solve5").addEventListener("click", () => {
+  const o = readSolveOpts();
+  const variants = [["balanced", 0], ["fewest", 0], ["light", 0], ["ordinary", 0],
+                    ["balanced", 3], ["light", 3], ["balanced", -2]];
+  const seen = new Set(), out = [];
+  variants.forEach(([st, dMax]) => {
+    if (out.length >= 5) return;
+    const p = solveDay(Object.assign({}, o, {style: st,
+      maxFoods: Math.max(3, o.maxFoods + dMax)}));
+    const sig = Object.keys(p).sort().join("|");
+    if (seen.has(sig)) return;
+    seen.add(sig); out.push(p);
+  });
+  document.getElementById("solveout").innerHTML = out.map((p,i) => planCard(p,i,o)).join("");
+});
+document.getElementById("solveout").addEventListener("click", e => {
+  const b = e.target.closest("[data-load]"); if (!b) return;
+  plan = JSON.parse(b.dataset.load);
+  renderPlan(); showTab("build");
+  window.scrollTo({top: 0, behavior: "smooth"});
+});
+
+/* ---------------- allergen / intolerance exclusions ---------------- */
+document.getElementById("avoidchips").innerHTML = AVOIDABLE.map(([t, label]) =>
+  `<button class="chip" data-avoid="${t}" aria-pressed="false">${label}</button>`).join("");
+function poolNote(){
+  const diet = document.getElementById("sv-diet").value;
+  const n = pool(diet, "balanced", avoid).length;
+  const el = document.getElementById("poolnote");
+  el.textContent = `${n} of ${FOODS.length} foods available under these rules.`;
+  el.className = "avoidnote" + (n < 25 ? " thin" : "");
+}
+document.getElementById("avoidchips").addEventListener("click", e => {
+  const c = e.target.closest("[data-avoid]"); if (!c) return;
+  const t = c.dataset.avoid;
+  if (avoid.has(t)) avoid.delete(t); else avoid.add(t);
+  c.setAttribute("aria-pressed", String(avoid.has(t)));
+  poolNote(); renderScarcity(); persistLocal();
+});
+
+/* ---------------- scarcity sidebar ---------------- */
+function renderScarcity(){
+  const t = targets();
+  const diet = document.getElementById("sv-diet").value;
+  const keys = pool(diet, "balanced", avoid);
+  const rows = COUNTED.filter(n => t[n])
+    .map(n => ({n, c: supplierCount(n, keys, t)})).sort((a, b) => a.c - b.c);
+  const max = Math.max(...rows.map(r => r.c));
+  document.getElementById("scarcity").innerHTML = rows.map(r => `<div class="nrow ${r.c<=3?"gap":""}">
+    <span class="nlabel"><span>${META[r.n].label}</span></span>
+    <span><span class="nbar"><i style="width:${100*r.c/max}%"></i></span></span>
+    <span class="npct">${r.c}</span></div>`).join("")
+    + `<p class="note" style="padding:12px 14px;display:block">Number of the ${keys.length} foods
+       allowed by these rules that supply at least 10% of your target per 100 calories. The short bars at the top are why some diets are
+       hard to complete: few foods carry them, so the solver weights them heavily.</p>`;
+}
+
+/* ---------------- browse ---------------- */
+const brNut = document.getElementById("br-nut"), brCat = document.getElementById("br-cat");
+const RANKABLE = ORDER.filter(n => n !== "kcal");
+brNut.innerHTML = RANKABLE.map(n => `<option value="${n}">${META[n].label}</option>`).join("");
+brNut.value = "K";
+document.getElementById("br-diet").innerHTML =
+  Object.keys(DIETS).map(k => `<option value="${k}">${DIETS[k].label}</option>`).join("");
+brCat.innerHTML = `<option value="">All categories</option>` +
+  [...new Set(FOODS.map(f => f.cat))].sort().map(c => `<option>${c}</option>`).join("");
+function renderBrowse(){
+  const n = brNut.value, basis = document.getElementById("br-basis").value;
+  const cat = brCat.value, diet = document.getElementById("br-diet").value;
+  const allowed = new Set(pool(diet, "balanced", avoid)), t = targets();
+  const rows = FOODS.filter(f => allowed.has(f.k) && (!cat || f.cat === cat)).map(f => {
+    const per100 = f.n[IDX[n]];
+    const kc = f.n[IDX.kcal];
+    const v = basis === "serv" ? per100 * f.serv / 100
+            : basis === "100g" ? per100
+            : kc ? per100 * 100 / kc : 0;
+    const amtKcal = basis === "serv" ? kc * f.serv / 100 : basis === "100g" ? kc : 100;
+    return {f, v, amtKcal, pct: t[n] ? 100 * v / t[n] : 0};
+  }).sort((a, b) => b.v - a.v).slice(0, 40);
+  const unit = unitOf(n);
+  const basisLabel = basis === "serv" ? "per serving" : basis === "100g" ? "per 100 g" : "per 100 kcal";
+  document.querySelector("#brtable thead").innerHTML = `<tr>
+    <th>Food</th><th class="cat" style="text-align:left">Category</th>
+    <th>Serving</th><th>${META[n].label} ${basisLabel} (${unit})</th>
+    <th>% of your target</th><th>kcal</th><th></th></tr>`;
+  document.querySelector("#brtable tbody").innerHTML = rows.map(r => `<tr>
+    <td>${r.f.name}</td><td class="cat">${r.f.cat}</td>
+    <td>${r.f.sl}</td>
+    <td>${r.v >= 100 ? Math.round(r.v) : r.v >= 1 ? r.v.toFixed(1) : r.v.toFixed(2)}</td>
+    <td style="color:${r.pct>=50?"var(--pine)":"inherit"};font-weight:${r.pct>=50?600:400}">${
+      r.pct >= 1 ? Math.round(r.pct) + "%" : r.pct > 0 ? "<1%" : "—"}</td>
+    <td>${Math.round(r.amtKcal)}</td>
+    <td class="addcell"><button data-add="${r.f.k}">Add</button></td></tr>`).join("");
+}
+["br-nut","br-basis","br-cat","br-diet"].forEach(id =>
+  document.getElementById(id).addEventListener("change", renderBrowse));
+document.querySelector("#brtable").addEventListener("click", e => {
+  const b = e.target.closest("[data-add]"); if (!b) return;
+  addFood(b.dataset.add);
+  b.textContent = "Added"; setTimeout(() => { b.textContent = "Add"; }, 1100);
+});
+
+/* ---------------- tabs ---------------- */
+function showTab(which){
+  ["build","solve","browse"].forEach(t => {
+    document.getElementById("tab-" + t).setAttribute("aria-selected", String(t === which));
+    document.getElementById("p-" + t).hidden = t !== which;
+  });
+  if (which === "solve"){ renderScarcity(); poolNote(); }
+  if (which === "browse") renderBrowse();
+}
+["build","solve","browse"].forEach(t =>
+  document.getElementById("tab-" + t).addEventListener("click", () => showTab(t)));
+
+/* ---------------- profile ---------------- */
+["sex","age","kcal"].forEach(id => document.getElementById(id).addEventListener("change", () => {
+  profile = {sex: document.getElementById("sex").value,
+             age: +document.getElementById("age").value,
+             kcal: Math.max(1200, Math.min(5000, +document.getElementById("kcal").value || 2500))};
+  SCARCE = scarcityFor(ALLKEYS);
+  renderCoverage(); persistLocal();
+  if (!document.getElementById("p-solve").hidden) renderScarcity();
+  if (!document.getElementById("p-browse").hidden) renderBrowse();
+}));
+
+/* ---------------- persistence ---------------- */
+function persistLocal(){
+  try { localStorage.setItem("completeday", JSON.stringify({plan, profile, avoid:[...avoid], sugOff:[...sugOff]})); } catch (e) {}
+}
+function restoreLocal(){
+  try {
+    const s = JSON.parse(localStorage.getItem("completeday") || "null");
+    if (s && s.plan){ plan = s.plan; if (s.profile) profile = s.profile;
+      if (s.avoid) avoid = new Set(s.avoid);
+      if (s.sugOff) sugOff = new Set(s.sugOff); }
+  } catch (e) {}
+  document.getElementById("sex").value = profile.sex;
+  document.getElementById("age").value = String(profile.age);
+  document.getElementById("kcal").value = profile.kcal;
+}
+function renderSaved(docs){
+  const card = document.getElementById("savedcard");
+  if (!docs.length){ card.hidden = true; return; }
+  card.hidden = false;
+  document.getElementById("savedlist").innerHTML = docs.map(d =>
+    `<span class="chipbtn"><button style="all:unset;cursor:pointer" data-open="${d.id}"><b>${
+      d.name}</b> &middot; ${d.count} foods</button>
+     <button class="x" data-drop="${d.id}" aria-label="Delete ${d.name}">&times;</button></span>`).join("");
+}
+let savedCache = [];
+async function initDb(){
+  if (!window.claude || !window.claude.use) return;
+  try { DB = await window.claude.use("db"); } catch (e) { DB = null; }
+  if (!DB) return;
+  try {
+    DB.collection("plans").onSnapshot(snap => {
+      savedCache = snap.docs.map(d => {
+        const v = d.data() || {};
+        return {id: d.id, name: v.name || "Untitled", plan: v.plan || {},
+                count: Object.keys(v.plan || {}).length};
+      });
+      renderSaved(savedCache);
+    }, () => {});
+  } catch (e) {}
+}
+document.getElementById("btn-save").addEventListener("click", async () => {
+  if (!Object.keys(plan).length) return;
+  const name = prompt("Name this day", new Date().toLocaleDateString());
+  if (!name) return;
+  if (DB){
+    try { await DB.collection("plans").add({name, plan, profile, ts: Date.now()}); return; }
+    catch (e) {}
+  }
+  savedCache = savedCache.concat([{id: "local-" + Date.now(), name, plan: Object.assign({}, plan),
+    count: Object.keys(plan).length}]);
+  renderSaved(savedCache);
+});
+document.getElementById("savedlist").addEventListener("click", async e => {
+  const o = e.target.closest("[data-open]"), d = e.target.closest("[data-drop]");
+  if (o){
+    const s = savedCache.find(x => x.id === o.dataset.open);
+    if (s){ plan = Object.assign({}, s.plan); renderPlan(); }
+  } else if (d){
+    const id = d.dataset.drop;
+    if (DB && !id.startsWith("local-")){ try { await DB.doc("plans/" + id).delete(); } catch (e) {} }
+    savedCache = savedCache.filter(x => x.id !== id);
+    renderSaved(savedCache);
+  }
+});
+
+/* ---------------- boot ---------------- */
+restoreLocal();
+AVOIDABLE.forEach(([t]) => {
+  const c = document.querySelector(`[data-avoid="${t}"]`);
+  if (c) c.setAttribute("aria-pressed", String(avoid.has(t)));
+});
+GROUPS.forEach(g => {
+  const c = document.querySelector(`[data-sugoff="${g}"]`);
+  if (c) c.setAttribute("aria-pressed", String(sugOff.has(g)));
+});
+if (!Object.keys(plan).length){
+  // open in a realistic working state rather than an empty shell
+  plan = {oats:60, milk:240, egg:100, spinach:150, salmon:113, sweetpot:200, almond:28, lentil:150};
+}
+renderPlan();
+showTab("build");
+initDb();
+</script>
+
+</body></html>
