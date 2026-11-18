@@ -228,6 +228,9 @@ details[open]>.cfsum{border-bottom:1px solid var(--rule)}
 .saveform input,.cfgrid input,.cfgrid select{background:var(--surface);border:1px solid var(--rule);
   border-radius:3px;padding:8px 10px;font-family:var(--display);font-size:14px;color:var(--ink)}
 .saveform input{flex:1 1 180px;min-width:0}
+#sharefield{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.msg{margin:0 18px 14px;font-family:var(--display);font-size:13px;color:var(--muted)}
+.msg:empty{display:none}
 
 /* ---------- suggestions ---------- */
 .sugfilter{display:flex;flex-direction:column;gap:8px;padding:14px 18px;
@@ -326,6 +329,14 @@ footer b{color:var(--muted);font-weight:600}
 <div class="panel" id="p-build" role="tabpanel" aria-labelledby="tab-build">
  <div class="split">
   <div>
+    <div class="card" id="sharein" style="margin-bottom:18px" hidden>
+      <h3>Shared day</h3>
+      <p class="rowhint" id="shareintext"></p>
+      <div class="btnrow" style="border-top:none">
+        <button class="btn" id="sharein-open">Open it</button>
+        <button class="btn ghost" id="sharein-ignore">Ignore</button>
+      </div>
+    </div>
     <div class="card" style="margin-bottom:18px">
       <h3>Today&rsquo;s food</h3>
       <div class="cardpad" style="padding-bottom:0">
@@ -346,6 +357,11 @@ footer b{color:var(--muted);font-weight:600}
         <button class="btn ghost" id="btn-suggest">Fix my gaps</button>
         <button class="btn ghost" id="btn-clear">Clear day</button>
         <button class="btn ghost" id="btn-save" aria-expanded="false" aria-controls="saveform">Save this day</button>
+        <button class="btn ghost" id="btn-share">Share link</button>
+      </div>
+      <div class="saveform" id="sharebox" hidden>
+        <label for="sharefield" class="ctl-label" id="sharemsg">Link to this day</label>
+        <input id="sharefield" type="text" readonly>
       </div>
       <form class="saveform" id="saveform" hidden>
         <label for="savename" class="ctl-label">Name this day</label>
@@ -402,6 +418,18 @@ footer b{color:var(--muted);font-weight:600}
       <div class="cardpad" id="cflistwrap" hidden style="border-top:1px solid var(--rule)">
         <span class="ctl-label">My foods</span>
         <div class="saved" id="cflist" style="margin-top:8px"></div></div>
+    </div>
+    <div class="card" style="margin-top:18px">
+      <h3>Backup</h3>
+      <p class="rowhint">Saved days and your own foods live in this browser only. Download a
+        backup to keep them safe or move them to another device; restoring adds to what is here
+        and never replaces it.</p>
+      <div class="btnrow" style="border-top:none">
+        <button class="btn ghost" id="btn-backup">Download backup</button>
+        <button class="btn ghost" id="btn-restore">Restore from file</button>
+        <input type="file" id="restorefile" accept=".json,application/json" hidden>
+      </div>
+      <p class="msg" id="restoremsg" role="status"></p>
     </div>
   </div>
   <div class="cov">
@@ -460,10 +488,12 @@ footer b{color:var(--muted);font-weight:600}
         <div class="chips" role="group" aria-labelledby="avoidlab" id="avoidchips"></div>
         <p class="avoidnote" id="poolnote"></p>
       </div>
-      <div class="solvenote">The solver picks foods greedily by how much of the remaining gap each
-        closes per calorie, weighting nutrients by how few foods supply them at all &mdash; so
+      <div class="solvenote">The solver picks foods greedily by how much of the remaining gap a
+        serving of each closes, weighting nutrients by how few foods supply them at all &mdash; so
         vitamin B12, iodine and choline pull hard. It then tunes portions until every target is met
-        or it runs out of room. It respects upper limits.</div>
+        or it runs out of room, keeping portions to about two servings of any food and at most two
+        meat or fish mains a day. It respects upper limits, then brings calories to your target.
+        A complete day usually takes 9&ndash;13 foods.</div>
       <div class="btnrow">
         <button class="btn" id="btn-solve">Find a complete day</button>
         <button class="btn ghost" id="btn-solve5">Give me 5 options</button>
@@ -606,9 +636,12 @@ try {
   (Array.isArray(arr) ? arr : []).map(normCustom).filter(Boolean)
     .forEach(f => { FOODS.push(f); BY[f.k] = f; });
 } catch (e) {}
-// drop food keys this browser doesn't know (a deleted custom food, or one from another viewer)
+// Drop food keys this browser doesn't know (a deleted custom food, one from another viewer, or
+// anything in a share link or backup file) and clamp amounts to the builder's 50 servings.
+// hasOwnProperty, not BY[k]: "toString" or "constructor" would pass that test and crash rendering.
 const knownOnly = p => { const out = {};
-  for (const k in (p || {})) if (BY[k] && p[k] > 0) out[k] = +p[k];
+  if (p && typeof p === "object") for (const k in p)
+    if (Object.prototype.hasOwnProperty.call(BY, k) && +p[k] > 0) out[k] = Math.min(+p[k], 50 * BY[k].serv);
   return out; };
 // Suggestion groups. Nuts and seeds share a category but not a shopping habit, so they
 // are split here: seeds are the ones that keep winning on nutrient-per-calorie.
@@ -625,7 +658,7 @@ const netCarbOf = (f, grams) => Math.max(0, f.n[IDX.carb] - f.n[IDX.fiber]) * gr
 const MAXSERV = {iodizedsalt:3, brazil:2, liver:2, chickenliver:2, nori:5, oyster:2, spirulina:2,
   molasses:2, cocoa:3, oliveoil:3, wheatgerm:2, flax:3, chia:3, sesame:2, eggyolk:4,
   spinach:2, chard:2, beetgreens:2, kale:2, collards:2, bokchoy:2, cabbage:2,
-  mushroom:2, uvmushroom:2, cocoa2:2,
+  mushroom:2, uvmushroom:2,
   porkliver:2, lambliver:1, beefkidney:2, caviar:2, eel:2, jerky:2, fishsauce:1, soysauce:1,
   capers:2, pickle:2, amaranthleaf:2, ricebran:2, wheatbran:2, goji:2,
   cloves:1, cinnamon:2, turmeric:2, groundginger:2, basildried:2, sage:2, oregano:2,
@@ -635,6 +668,17 @@ const MAXSERV = {iodizedsalt:3, brazil:2, liver:2, chickenliver:2, nori:5, oyste
 const SEASONING = new Set(["iodizedsalt"]);
 const countFoods = p => Object.keys(p).filter(k => !SEASONING.has(k)).length;
 const DEFAULT_MAXSERV = 3;
+// How many servings of one food a day plausibly holds, by category (MAXSERV still wins for
+// potent foods). With a flat 3 the solver used all the room: 3 salmon fillets, 3 cups of
+// quinoa, 3 avocados, 3 cups of soy milk.
+const CAT_MAXSERV = {"Meat & poultry": 2, "Seafood": 2, "Grains & starches": 2, "Legumes & soy": 1.5,
+  "Fruit": 2, "Vegetables": 2, "Dairy": 2, "Dairy alternatives": 2, "Eggs": 3, "Nuts & seeds": 2,
+  "Other": 2};
+// Meat and fish mains (organ meats are eaten by the ounce, so they don't count as one). A day
+// gets at most two, one each for lunch and dinner, except under carnivore.
+const isMain = k => (BY[k].cat === "Meat & poultry" || BY[k].cat === "Seafood") && !tagsOf(k).includes("organ");
+const MAX_MAINS = 2;
+const mainsFull = (p, diet) => diet !== "carnivore" && Object.keys(p).filter(isMain).length >= MAX_MAINS;
 // While tuning portions, stay this far below each upper limit so that adding another food
 // later is still possible. The final plan is still checked against the real limit.
 const UL_HEADROOM = 0.88;
@@ -663,7 +707,6 @@ function totals(p){
     for (let i = 0; i < ORDER.length; i++) t[i] += f.n[i] * g; }
   return t;
 }
-function pct(tot, n){ const tg = targets()[n]; return tg ? 100 * tot[IDX[n]] / tg : null; }
 function unitOf(n){ return (META[n] ? META[n].unit : "g").replace(" RAE","").replace(" DFE",""); }
 function fmt(v, n){
   const a = Math.abs(v);
@@ -860,7 +903,8 @@ function setOrder(keys){
 const kcalOf = (k, g) => BY[k].n[IDX.kcal] * g / 100;
 const BREAKFASTY = /oat|cereal|granola|muesli|bread|bagel|muffin|yogurt|milk|kefir|juice|bran/i;
 // A first guess at where a food belongs; anything not obviously breakfast or a snack goes to
-// whichever of lunch and dinner has fewer calories so far.
+// lunch or dinner: a meat or fish main to whichever has fewer mains, the rest to whichever
+// has fewer calories so far.
 function guessMeal(k){
   const f = BY[k];
   if (f.cat === "Fruit" || f.cat === "Nuts & seeds") return 3;
@@ -870,15 +914,20 @@ function guessMeal(k){
 }
 // meals for every food in p: keep valid assignments from m, guess the rest
 function fillMeals(p, m){
-  const out = {}, kc = [0, 0, 0, 0];
-  for (const k in p) if (m && Number.isInteger(m[k]) && MEALS[m[k]]){ out[k] = m[k]; kc[m[k]] += kcalOf(k, p[k]); }
-  for (const k in p){
-    if (k in out) continue;
+  const out = {}, kc = [0, 0, 0, 0], mains = [0, 0, 0, 0];
+  const put = (k, i) => { out[k] = i; kc[i] += kcalOf(k, p[k]); if (isMain(k)) mains[i]++; };
+  for (const k in p) if (m && Number.isInteger(m[k]) && MEALS[m[k]]) put(k, m[k]);
+  // mains first, so the calorie balance afterwards works around them
+  const rest = Object.keys(p).filter(k => !(k in out)).sort((a, b) => isMain(b) - isMain(a));
+  for (const k of rest){
     let i = guessMeal(k);
-    if (i === null) i = kc[1] <= kc[2] ? 1 : 2;
-    out[k] = i; kc[i] += kcalOf(k, p[k]);
+    if (i === null) i = isMain(k) && mains[1] !== mains[2] ? (mains[1] < mains[2] ? 1 : 2)
+                      : kc[1] <= kc[2] ? 1 : 2;
+    put(k, i);
   }
-  return out;
+  // keep the plan's own order for display: rebuild out in p's key order
+  const ordered = {}; for (const k in p) ordered[k] = out[k];
+  return ordered;
 }
 // The list is a token sequence: "#i" opens meal i, food keys follow. Drag and arrow keys both
 // edit this sequence, then it is written back to meals + plan order in one place.
@@ -1092,6 +1141,7 @@ function suggest(p, poolKeys, sc, ul, tg){
   const def = deficits(p, tg), tot = totals(p);
   const names = Object.keys(def);
   if (!names.length) return [];
+  const load = ulLoad(p, ul);
   return (poolKeys || FOODS.map(f => f.k))
     .filter(k => !p[k] && !sugOff.has(groupOf(k))).map(k => {
     const f = BY[k], g = f.serv / 100;
@@ -1103,8 +1153,10 @@ function suggest(p, poolKeys, sc, ul, tg){
       score += frac * (0.3 + sc[n] * 6) * severity;
       if (add >= def[n] * 0.5) fixes.push(META[n].label);
     });
+    // Under a carb cap, a food that eats much of what's left of the budget crowds out every
+    // later choice (keto days used to spend all 30 g on soybeans and edamame first)
+    if (ul.netcarb) score *= Math.max(0.05, 1 - netCarbOf(f, f.serv) / Math.max(1, ul.netcarb - load.netcarb));
     // disqualify anything that would breach an upper limit
-    const load = ulLoad(p, ul);
     for (const n in ul) if (load[n] + ulAmount(f, n, f.serv) > ul[n]) score = -1;
     return {k, score, fixes: fixes.slice(0, 4), kcal: Math.round(f.n[IDX.kcal] * g)};
   }).filter(s => s.score > 0).sort((a, b) => b.score - a.score).slice(0, 10);
@@ -1166,7 +1218,7 @@ function dietTargets(diet){
   if (d.proteinPct) t.protein = Math.max(t.protein, d.proteinPct / 100 * t.kcal / 4);
   return t;
 }
-function capOf(k){ return BY[k].serv * (MAXSERV[k] || DEFAULT_MAXSERV); }
+function capOf(k){ return BY[k].serv * (MAXSERV[k] || CAT_MAXSERV[BY[k].cat] || DEFAULT_MAXSERV); }
 
 function solveDay(opts){
   const {diet, maxFoods, style, seed} = opts;
@@ -1180,7 +1232,7 @@ function solveDay(opts){
   for (let round = 0; round < maxFoods + 2; round++){
     if (!Object.keys(deficits(p, tg)).length) break;
     if (countFoods(p) < maxFoods){
-      const s = suggest(p, ks, sc, ul, tg);
+      const s = suggest(p, mainsFull(p, diet) ? ks.filter(k => !isMain(k)) : ks, sc, ul, tg);
       if (!s.length){ tune(p, tg, ul, sc); break; }
       let pick = s[0];
       if (style === "light"){
@@ -1196,7 +1248,8 @@ function solveDay(opts){
   }
   tune(p, tg, ul, sc);
   trimKcal(p, tg);
-  topUp(p, tg, ul, ks, maxFoods);
+  swapLeaner(p, tg, ul, ks, sc, diet, new Set(Object.keys(seed || {})));
+  topUp(p, tg, ul, ks, maxFoods, diet);
   roundPortions(p, ul);
   return p;
 }
@@ -1208,7 +1261,7 @@ function solveDay(opts){
 // This is the last step, so no later food needs UL_HEADROOM; keep only a sliver of margin for
 // the 5 g rounding that follows.
 const KCAL_AIM = 1.01, KCAL_MAX = 1.04, TOPUP_UL = 0.97;
-function topUp(p, tg, ul, ks, maxFoods){
+function topUp(p, tg, ul, ks, maxFoods, diet){
   const fits = (k, g) => { const load = ulLoad(p, ul);
     for (const n in ul) if (load[n] + ulAmount(BY[k], n, g) > ul[n] * TOPUP_UL) return false;
     return true; };
@@ -1216,6 +1269,7 @@ function topUp(p, tg, ul, ks, maxFoods){
   const stepFor = (k, gap) => { const f = BY[k], kc = f.n[IDX.kcal];
     return Math.min(Math.max(5, f.serv / 2), Math.ceil(gap / (kc / 100) / 5) * 5); };
   const trimmed = new Set();   // foods cut back to make room under a limit; never grown again
+  let fatsAdded = 0;
   for (let it = 0; it < 300; it++){
     const kc = totals(p)[IDX.kcal], gap = tg.kcal * KCAL_AIM - kc;
     if (gap <= 0) return;
@@ -1228,21 +1282,35 @@ function topUp(p, tg, ul, ks, maxFoods){
       const r = p[k] / capOf(k);
       if (r < bestR){ bestR = r; best = k; }
     });
-    if (!best && countFoods(p) < maxFoods){
+    const room = countFoods(p) < maxFoods;
+    if (!best && room){
       // shortcut: picks the most energy-dense ordinary food in the pool; upgrade to a
       // nutrient-aware choice if top-ups start looking odd
       const staples = ks.filter(k => !(k in p) && BY[k].n[IDX.kcal] >= 60 && !MAXSERV[k]
-        && ORDINARY.has(k))
+        && ORDINARY.has(k) && !(isMain(k) && mainsFull(p, diet)))
         .sort((a, b) => BY[b].n[IDX.kcal] * BY[b].serv - BY[a].n[IDX.kcal] * BY[a].serv);
       const add = staples.find(k => fits(k, stepFor(k, gap)));
       if (add){ p[add] = stepFor(add, gap); continue; }
     }
     if (best){ p[best] += stepFor(best, gap); continue; }
-    if (!makeRoom(p, tg, ul, trimmed)) return;
+    if (makeRoom(p, tg, ul, trimmed)) continue;
+    // Last resort, when no staple fits even after making room (keto's carb ceiling is the usual
+    // reason): a cooking fat, energy with no carbohydrate, capped at a few tablespoons by
+    // MAXSERV. At most two (three on a carb-capped pattern, which runs on fat), so a day doesn't
+    // end up with four different oils. Ordinary foods first, then olive oil, then the fats with
+    // the least carbohydrate, since under a carb cap even butter's trace can be one gram too many.
+    if (room && fatsAdded < ((DIETS[diet] || {}).netCarbMax ? 3 : 2)){
+      const carbPerKcal = k => netCarbOf(BY[k], 100) / BY[k].n[IDX.kcal];
+      const fat = ks.filter(k => !(k in p) && BY[k].n[IDX.kcal] > 0
+          && 9 * BY[k].n[IDX.fat] / BY[k].n[IDX.kcal] > 0.8)
+        .sort((a, b) => ORDINARY.has(b) - ORDINARY.has(a) || (b === "oliveoil") - (a === "oliveoil")
+          || carbPerKcal(a) - carbPerKcal(b))
+        .find(k => fits(k, stepFor(k, gap)));
+      if (fat){ p[fat] = stepFor(fat, gap); fatsAdded++; continue; }
+    }
+    return;
   }
 }
-// A limit is nearly full (often iron, after the solver leaned on soybeans and greens): cut half
-// a serving of its biggest contributor, as long as no nutrient target ends up worse off.
 // true if no nutrient target is further from met than it was in `before` (a deficits() result)
 const noWorseThan = (p, tg, before) =>
   Object.entries(deficits(p, tg)).every(([n, d]) => n in before && d <= before[n] + 1e-9);
@@ -1269,6 +1337,38 @@ function trimKcal(p, tg){
     p[best] -= bestG;
   }
 }
+// A day still over its calorie ceiling after trimKcal is calorie-bound: every portion is
+// carrying some nutrient. Try dropping one food (never one the user kept) and putting in one
+// of the best few replacements instead, re-tuned and re-trimmed; keep the swap that saves the
+// most calories without leaving any target worse off. Only runs on these few days, since
+// each pass re-solves up to ~40 variants.
+// fixed sizes, not a time budget, so a given day always solves the same way (and tests can rely on it)
+const SWAP_PASSES = 3, SWAP_CANDS = 3;
+function swapLeaner(p, tg, ul, ks, sc, diet, keep){
+  for (let pass = 0; pass < SWAP_PASSES; pass++){
+    const kcal = totals(p)[IDX.kcal];
+    if (kcal <= tg.kcal * KCAL_MAX) return;
+    const before = deficits(p, tg);
+    let best = null, bestKcal = kcal - tg.kcal * 0.02;   // a swap must save at least 2%
+    const consider = r => { const kc = totals(r)[IDX.kcal];
+      if (kc < bestKcal && noWorseThan(r, tg, before)){ best = r; bestKcal = kc; } };
+    for (const k of Object.keys(p)){
+      if (keep.has(k) || SEASONING.has(k)) continue;
+      const q = Object.assign({}, p); delete q[k];
+      consider(q);   // the food may only have been carrying calories
+      const cands = suggest(q, mainsFull(q, diet) ? ks.filter(c => !isMain(c)) : ks, sc, ul, tg)
+        .filter(s => s.k !== k).slice(0, SWAP_CANDS);
+      for (const s of cands){
+        const r = Object.assign({}, q); r[s.k] = BY[s.k].serv;
+        tune(r, tg, ul, sc); trimKcal(r, tg);
+        consider(r);
+      }
+    }
+    if (!best) return;
+    for (const k in p) delete p[k];
+    Object.assign(p, best);
+  }
+}
 // Round portions to 5 g, or 0.5 g for foods served by the gram or two (salt is 1.5 g a serving;
 // a 5 g floor put 2 g of sodium in some days). A nutrient the solver filled right up to its
 // limit can be tipped over by rounding up, so for any limit that ends up breached, round its
@@ -1287,6 +1387,8 @@ function roundPortions(p, ul){
     }
   }
 }
+// A limit is nearly full (often iron, after the solver leaned on soybeans and greens): cut half
+// a serving of its biggest contributor, as long as no nutrient target ends up worse off.
 function makeRoom(p, tg, ul, trimmed){
   const load = ulLoad(p, ul), before = deficits(p, tg);
   const noWorse = () => noWorseThan(p, tg, before);
@@ -1701,6 +1803,83 @@ document.getElementById("cflist").addEventListener("click", e => {
   saveCustom(); foodsChanged(); renderPlan();
 });
 
+/* ---------------- share links and backups ---------------- */
+// A share link carries the day in the URL fragment (after #), which browsers never send to a
+// server, so sharing uploads nothing. Links and backup files are untrusted input and go
+// through the same checks as storage: foods via normCustom, plans via knownOnly, meals via
+// cleanMeals, saved days rebuilt field by field.
+const b64enc = s => { let t = ""; new TextEncoder().encode(s).forEach(x => t += String.fromCharCode(x));
+  return btoa(t).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); };
+const b64dec = s => new TextDecoder().decode(
+  Uint8Array.from(atob(s.replace(/-/g, "+").replace(/_/g, "/")), c => c.charCodeAt(0)));
+const foodRecord = ({cat, raw, custom, ...f}) => f;   // what saveCustom stores
+const cleanMeals = m => { const out = {};
+  if (m && typeof m === "object") for (const k in m) if (Number.isInteger(m[k]) && MEALS[m[k]]) out[k] = m[k];
+  return out; };
+function importFoods(list){
+  const fresh = (Array.isArray(list) ? list : []).slice(0, 200).map(normCustom).filter(Boolean);
+  fresh.forEach(f => { FOODS.push(f); BY[f.k] = f; ALLKEYS.push(f.k); });
+  if (fresh.length){ saveCustom(); foodsChanged(); }
+  return fresh.length;
+}
+function shareURL(){
+  const used = customFoods().filter(f => f.k in plan).map(foodRecord);
+  return location.href.split("#")[0] + "#day=" + b64enc(JSON.stringify({v: 1, plan, meals, foods: used}));
+}
+function readShared(){
+  const m = location.hash.match(/^#day=([A-Za-z0-9_-]{1,20000})$/);
+  if (!m) return null;
+  try { const d = JSON.parse(b64dec(m[1])); return d && typeof d === "object" ? d : null; }
+  catch (e) { return null; }
+}
+const dropHash = () => history.replaceState(null, "", location.pathname + location.search);
+document.getElementById("btn-share").addEventListener("click", async () => {
+  if (!Object.keys(plan).length) return;
+  const box = document.getElementById("sharebox"), field = document.getElementById("sharefield"),
+        msg = document.getElementById("sharemsg");
+  field.value = shareURL(); box.hidden = false;
+  try { await navigator.clipboard.writeText(field.value);
+        msg.textContent = "Link copied. Whoever opens it gets this day; nothing is uploaded."; }
+  catch (e) { msg.textContent = "Copy this link:"; field.focus(); field.select(); }
+});
+document.getElementById("btn-backup").addEventListener("click", () => {
+  const data = {app: "the-complete-day", v: 1, exported: new Date().toISOString(), plan, meals, profile,
+    saved: savedCache.map(({id, count, ...s}) => s), foods: customFoods().map(foodRecord)};
+  const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 1)], {type: "application/json"}));
+  const a = document.createElement("a");
+  a.href = url; a.download = `complete-day-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+const restoreFile = document.getElementById("restorefile");
+document.getElementById("btn-restore").addEventListener("click", () => restoreFile.click());
+restoreFile.addEventListener("change", async () => {
+  const msg = t => { document.getElementById("restoremsg").textContent = t; };
+  const file = restoreFile.files[0]; restoreFile.value = "";
+  if (!file) return;
+  if (file.size > 2e6) return msg("That file is too large to be a backup from this app.");
+  let d; try { d = JSON.parse(await file.text()); } catch (e) { d = null; }
+  if (!d || d.app !== "the-complete-day") return msg("That isn't a backup file from The Complete Day.");
+  const nFoods = importFoods(d.foods);   // first, so saved days that use them survive knownOnly
+  // Restoring adds; it never overwrites. The backup's current day comes back as a saved day.
+  const incoming = (Array.isArray(d.saved) ? d.saved.slice(0, 500) : [])
+    .concat(d.plan ? [{name: "Current day from backup " + String(d.exported || "").slice(0, 10), plan: d.plan, meals: d.meals}] : []);
+  const seen = new Set(savedCache.map(s => s.name + JSON.stringify(knownOnly(s.plan))));
+  let nDays = 0;
+  incoming.forEach((s, i) => {
+    if (!s || typeof s !== "object") return;
+    const p = knownOnly(s.plan); if (!Object.keys(p).length) return;
+    const name = String(s.name || "Restored day").slice(0, 60), sig = name + JSON.stringify(p);
+    if (seen.has(sig)) return;
+    seen.add(sig); nDays++;
+    savedCache.push({id: `local-${Date.now()}-${i}`, name, plan: p, meals: cleanMeals(s.meals),
+      count: Object.keys(p).length});
+  });
+  renderSaved(savedCache); persistLocal();
+  msg(nDays || nFoods ? `Restored ${nDays} saved day${nDays === 1 ? "" : "s"} and ${nFoods} food${nFoods === 1 ? "" : "s"} of your own.`
+                      : "Nothing new in that file: everything in it is already here.");
+});
+
 /* ---------------- boot ---------------- */
 const addMealSel = document.getElementById("addmeal");
 addMealSel.innerHTML = MEALS.map((m, i) => `<option value="${i}">Add to ${m.toLowerCase()}</option>`).join("");
@@ -1723,6 +1902,26 @@ if (!Object.keys(plan).length){
 renderPlan();
 showTab("build");
 initDb();
+// A shared day never replaces today's without asking.
+const shared = readShared();
+if (shared){
+  // count foods this browser knows or the link brings along (its own foods aren't imported yet)
+  const brought = new Set((Array.isArray(shared.foods) ? shared.foods : []).map(normCustom).filter(Boolean).map(f => f.k));
+  const n = Object.keys(shared.plan && typeof shared.plan === "object" ? shared.plan : {})
+    .filter(k => Object.prototype.hasOwnProperty.call(BY, k) || brought.has(k)).length;
+  const box = document.getElementById("sharein");
+  document.getElementById("shareintext").textContent = n
+    ? `Someone shared a day with ${n} food${n === 1 ? "" : "s"}. Opening it replaces your current day; save yours first if you want to keep it.`
+    : "This link has a shared day, but none of its foods could be read.";
+  document.getElementById("sharein-open").hidden = !n;
+  box.hidden = false;
+  document.getElementById("sharein-open").addEventListener("click", () => {
+    importFoods(shared.foods);
+    plan = knownOnly(shared.plan); meals = cleanMeals(shared.meals);
+    renderPlan(); box.hidden = true; dropHash();
+  });
+  document.getElementById("sharein-ignore").addEventListener("click", () => { box.hidden = true; dropHash(); });
+}
 // Each tab holds saved days and your own foods in memory and writes its whole copy back, so
 // without this a second open tab erases what the first one saved. Saved days are picked up in
 // place (no write, so two tabs can't ping-pong); a change to your own foods, or a cleared

@@ -21,6 +21,6 @@ jobs:
           python build.py
           git diff --exit-code index.html || { echo "::error::index.html is stale - run python build.py and commit it"; exit 1; }
       - name: Install Playwright
-        run: npm install --no-save playwright && npx playwright install --with-deps chromium
+        run: npm install --no-save playwright@1.48.2 && npx playwright install --with-deps chromium
       - name: Solver smoke test
         run: node tests/smoke.js

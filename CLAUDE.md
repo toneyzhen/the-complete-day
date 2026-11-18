@@ -18,11 +18,13 @@ After any change:
 python3 scripts/validate.py && python3 build.py && node tests/smoke.js
 ```
 The smoke test needs Playwright (CI installs it; see `.github/workflows/ci.yml`). Calories count
-toward the 28, as in the builder. Expected results at 14 foods: 28/28 at ~101–102% kcal for every
-pattern except carnivore (~17, no route to fiber or vitamin C) and raw (26, choline is tight);
-vegan with the "fortified" exclusion gets 27 (B12). Any `OVER` line, or calories above 105%, fails.
-It also sweeps every bias × pattern at 14 and 7 foods for three profiles and fails on any
-upper-limit breach; that sweep is what caught the rounding bugs, so extend it rather than trim it.
+toward the 28, as in the builder. Expected results at 14 foods: 28/28 at 100–101% kcal using 9–13
+foods for every pattern except carnivore (~17, no route to fiber or vitamin C) and raw (24: its pool
+fills calcium early). Any `OVER` line, or calories above 105%, fails. It also sweeps every bias ×
+pattern at 14 and 7 foods for three profiles and fails on any upper-limit breach, any portion past
+`capOf`, or a third meat/fish main; that sweep is what caught the rounding bugs, so extend it
+rather than trim it. Unit checks cover name cleaning, food validation, `knownOnly` (including
+inherited names like `toString` from share links), the share-link encoding and meal moves.
 
 ## Data rules (do not relax these)
 
@@ -38,7 +40,8 @@ upper-limit breach; that sweep is what caught the rounding bugs, so extend it ra
 - Tags drive diet rules and exclusions: dairy egg gluten peanut treenut soy fish shellfish sesame
   nightshade legume grain redmeat organ addedsugar fortified. Coconut is tagged treenut (FDA).
   Anything fortified or enriched gets `fortified`.
-- Potent foods get a serving cap in `MAXSERV` in the template (livers, salt, spices, oils…).
+- Potent foods get a serving cap in `MAXSERV` in the template (livers, salt, spices, oils…);
+  everything else is capped by category in `CAT_MAXSERV` (about two servings).
 - When adding foods, cite where the numbers came from in the commit message. When checking data,
   follow `data/audit/REVIEW_INSTRUCTIONS.md`.
 
@@ -53,6 +56,9 @@ upper-limit breach; that sweep is what caught the rounding bugs, so extend it ra
   merged into `FOODS`/`BY` at startup. Their names pass through `cleanText` (no markup characters),
   since food names are interpolated into HTML everywhere. Any plan loaded from storage goes
   through `knownOnly`, because it may name a custom food this browser doesn't have.
+- Share links (`#day=` + base64url JSON) and backup files are untrusted: they only enter through
+  `importFoods` (normCustom), `knownOnly` and `cleanMeals`. A shared day never replaces the
+  current one without the user pressing "Open it"; a restore only ever adds.
 - Several tabs share that storage. A `storage` listener picks up another tab's saved days in place
   and reloads when your own foods change; never make startup write `completeday-foods`, or two
   open tabs will reload each other forever.
@@ -68,10 +74,13 @@ upper-limit breach; that sweep is what caught the rounding bugs, so extend it ra
 
 ## Open tasks (good starting points)
 
-1. Calorie-bound days (low targets, carnivore, light + high-protein, ordinary + raw) end above the
-   calorie target: `trimKcal` only cuts portions that cost no nutrient. Fixing it needs swaps
-   (replace a calorie-dense food with a leaner one that covers the same nutrients).
-2. Top-up picks the most energy-dense ordinary staple; it could choose by nutrient fit instead.
+1. Solver pipeline after the main loop: `tune` → `trimKcal` → `swapLeaner` (only on days over
+   104% kcal; fixed search size so results are deterministic) → `topUp` → `roundPortions`.
+   About 2% of days still land above 105% kcal, mostly at 1,400–1,600 kcal targets.
+2. Raw (24/28) fills calcium early; picking with a look-ahead on nearly-full limits would help.
+3. Top-up picks the most energy-dense ordinary staple; it could choose by nutrient fit instead.
+4. `src/app.template.html` is ~1,900 lines. If the solver grows further, split the JS into
+   files that `build.py` inlines, keeping the single-file output.
 
 The app is published with GitHub Pages from `main` (https://toneyzhen.github.io/the-complete-day/),
 so every push to `main` goes live; commit a rebuilt `index.html` with every src/data change.

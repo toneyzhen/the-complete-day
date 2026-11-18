@@ -26,14 +26,19 @@ servings you could add, one tap each.
   shellfish, sesame, nightshades, fortified foods
 - Biases: balanced, fewest foods, least food weight, ordinary groceries
 
-It picks foods greedily by how much of the remaining gap each closes per calorie, weighting
+It picks foods greedily by how much of the remaining gap one serving of each closes, weighting
 nutrients by how few foods in the allowed pool supply them, then tunes portions — while
 respecting upper limits (preformed vitamin A, selenium, zinc, calcium, iron, sodium and others).
+Portions stay realistic: at most about two servings of any one food (less for potent foods like
+liver or spices) and at most two meat or fish mains a day, one for lunch and one for dinner
+(carnivore excepted). Under a carb cap it avoids spending the whole budget on one food.
+
 Once the nutrients are covered it tops calories up to your target, spreading the extra across
 the foods already in the day (trimming an iron- or calcium-heavy portion to make room if a limit
-is close) or adding an ordinary staple. If whole servings overshoot, it trims whatever portion
-costs no nutrient. Portions are rounded to 5 g (0.5 g for salt, spices and the like) without
-crossing an upper limit. The result is split into meals.
+is close), adding an ordinary staple, or as a last resort a cooking fat. If the day runs over,
+it trims whatever portion costs no nutrient, then tries swapping a food for a leaner one that
+covers the same nutrients. Portions are rounded to 5 g (0.5 g for salt, spices and the like)
+without crossing an upper limit. The result is split into meals.
 
 **Food ranking.** Rank every food by any nutrient, per serving, per 100 g or per 100 kcal.
 
@@ -47,6 +52,12 @@ foods are kept in this browser only.
 **Saved days.** Stored in the artifact's shared database when the app runs as a claude.ai
 artifact. Opened standalone (including GitHub Pages), the current day and saved days are kept
 in this browser's `localStorage`.
+
+**Share links and backups.** "Share link" puts the current day, with its meals and any of your
+own foods it uses, into the link itself (after the `#`, which browsers never send to a server),
+so nothing is uploaded. Opening a link asks before it replaces your day. "Download backup" saves
+your saved days and your own foods to a file; "Restore from file" adds them back, on this or
+another device, without replacing anything. Links and files are treated as untrusted input.
 
 ## Targets
 
@@ -106,13 +117,14 @@ GitHub Actions runs all three on every push and pull request, and fails if the c
 
 ## Known issues
 
-- With a tight food limit (5 or fewer) the solver can't add staples, so calories can stay under
-  target.
-- Some days can't meet every nutrient within the calorie target from the allowed foods (low
-  targets like 1,400–1,600 kcal, carnivore, "least food weight" with high-protein, "ordinary
-  groceries" with raw). The solver trims calories only where no nutrient suffers, so these land
-  above target; it would need to swap foods for leaner ones to do better.
-- A saved day that uses one of your own foods loses that food when opened in another browser.
+- With realistic portions, a complete day usually needs 9–13 foods; with a food limit of 7 or
+  fewer it rarely closes every target, and calories can stay under target.
+- A few days still can't meet every nutrient within the calorie target from the allowed foods,
+  mostly at low targets (1,400–1,600 kcal). About 2% of a 2,880-day test sweep lands above 105%.
+- Raw reaches 24/28: its small food pool fills calcium early, which blocks the best sources of
+  fiber, vitamin A and choline.
+- A saved day that uses one of your own foods loses that food when opened in another browser,
+  unless it arrives through a share link or a backup file.
 
 ## Contributors
 

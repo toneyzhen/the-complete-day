@@ -1,5 +1,5 @@
 // Smoke test: loads index.html in headless Chromium and runs the solver for every diet pattern.
-// Needs Playwright:  npm i -D playwright && npx playwright install chromium
+// Needs Playwright:  npm i -D playwright@1.48.2 && npx playwright install chromium
 // Run:               node tests/smoke.js
 const { chromium } = require('playwright');
 const path = require('path');
@@ -30,14 +30,19 @@ const DIETS = ["anything","pescatarian","vegetarian","vegan","paleo","whole30","
       for (const style of ["balanced", "fewest", "light", "ordinary"])
         for (const maxFoods of [14, 7]) for (const diet of DIETS){
           const p = solveDay({diet, maxFoods, style, seed: null, avoid: new Set()});
-          const e = evaluate(p, diet);
-          if (e.over.length) out.push(`${sex} ${age} ${kcal} kcal, ${style}, ${maxFoods} foods, ${diet}: ${e.over}`);
+          const e = evaluate(p, diet), at = `${sex} ${age} ${kcal} kcal, ${style}, ${maxFoods} foods, ${diet}`;
+          if (e.over.length) out.push(`OVER ${at}: ${e.over}`);
+          // realistic portions: nothing past its serving cap (5 g of rounding allowed), and at
+          // most two meat or fish mains outside carnivore
+          const big = Object.keys(p).filter(k => p[k] > capOf(k) + 5);
+          if (big.length) out.push(`PORTION ${at}: ${big.map(k => `${k} ${p[k]} g`)}`);
+          if (diet !== "carnivore" && Object.keys(p).filter(isMain).length > MAX_MAINS) out.push(`MAINS ${at}`);
         }
     }
     return out;
   }, DIETS);
-  console.log(`upper-limit sweep: ${breaches.length} breaches`);
-  breaches.forEach(b => errors.push('OVER ' + b));
+  console.log(`limit/portion sweep: ${breaches.length} problems`);
+  breaches.forEach(b => errors.push(b));
 
   // Your-own-food input is the one place user text reaches food names, which are put into
   // HTML unescaped everywhere; meal moves rewrite plan order and meals together.
@@ -54,6 +59,12 @@ const DIETS = ["anything","pescatarian","vegetarian","vegan","paleo","whole30","
     ok(f && f.name === "Granola" && f.tags === "treenut" && f.custom, "normCustom doesn't clean a valid food");
     const k = knownOnly({oats: 40, nosuchfood: 10, milk: "x", egg: -5});
     ok(JSON.stringify(k) === '{"oats":40}', "knownOnly keeps unknown, non-numeric or negative entries");
+    // share links are attacker-controlled: inherited names must not pass, amounts are clamped
+    const h = knownOnly(JSON.parse('{"toString":5,"constructor":3,"__proto__":4,"oats":1e9}'));
+    ok(JSON.stringify(h) === JSON.stringify({oats: 50 * BY.oats.serv}), "knownOnly lets inherited names or huge amounts through");
+    const day = {v: 1, plan: {oats: 40, salmon: 113}, meals: {oats: 0, salmon: 2}, foods: []};
+    ok(JSON.stringify(JSON.parse(b64dec(b64enc(JSON.stringify(day))))) === JSON.stringify(day), "share link round trip");
+    ok(b64dec(b64enc("Annie’s café")) === "Annie’s café", "share link loses non-ASCII text");
     // moving the first lunch food up one step puts it at the end of breakfast
     plan = {oats: 40, egg: 50, salmon: 113}; meals = {oats: 0, egg: 0, salmon: 1};
     const t = mealTokens(), i = t.indexOf("salmon");
