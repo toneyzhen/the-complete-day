@@ -1,0 +1,12 @@
+[
+{"k":"buttermilk","name":"Buttermilk, low-fat","nutrient":"Na","current":190,"proposed":100,"severity":"high","basis":"USDA SR Legacy Milk, buttermilk, fluid, cultured, lowfat: Na ~92-105 mg/100 g (checked via triagemethod page 92.5 mg; recalled SR 105 mg). Current is ~2x too high."},
+{"k":"provolone","name":"Provolone","nutrient":"Se","current":22.5,"proposed":14.5,"severity":"high","basis":"USDA SR Legacy Cheese, provolone: Se 14.5 mcg/100 g (triagemethod page confirms; other values on that page match current)"},
+{"k":"cod","name":"Cod, cooked","nutrient":"P","current":248,"proposed":138,"severity":"medium","basis":"USDA SR Legacy 15016 Fish, cod, Atlantic, cooked, dry heat: P 138 mg (Mg 42, K 244, Na 78 match current)"},
+{"k":"catfish","name":"Catfish, farmed, cooked","nutrient":"D","current":12.5,"proposed":0.3,"severity":"high","basis":"USDA SR Legacy Fish, catfish, channel, farmed, cooked, dry heat: vitamin D ~12 IU = ~0.3 mcg per 100 g (IU entered as mcg)"},
+{"k":"whitefish","name":"Whitefish, cooked","nutrient":"A","current":36,"proposed":131,"severity":"high","basis":"USDA SR Legacy Fish, whitefish, mixed species, cooked, dry heat: vitamin A 131 mcg RAE (kcal 172, protein 24.5, fat 7.5, Se 16.2 on same page match current)"},
+{"k":"sole","name":"Sole / flounder, cooked","nutrient":"protein","current":12.4,"proposed":15.2,"severity":"medium","basis":"USDA SR Legacy 15029 Fish, flatfish (flounder and sole), cooked, dry heat: protein 15.2 g, 86 kcal (12.4 is the raw value; kcal 86 is already cooked)"},
+{"k":"sole","name":"Sole / flounder, cooked","nutrient":"fat","current":1.2,"proposed":2.4,"severity":"medium","basis":"USDA SR Legacy 15029 flatfish cooked, dry heat: fat 2.4 g (1.2 is roughly the raw value)"},
+{"k":"sole","name":"Sole / flounder, cooked","nutrient":"D","current":1.3,"proposed":3.5,"severity":"high","basis":"USDA SR Legacy 15029 flatfish cooked, dry heat: vitamin D 3.5 mcg (139 IU)"},
+{"k":"oyster","name":"Oysters, cooked","nutrient":"kcal","current":68,"proposed":102,"severity":"medium","basis":"USDA SR Legacy Mollusks, oyster, eastern, wild, cooked, moist heat: 102 kcal, protein 11.4 g, fat 3.4 g, carb 5.45 g per 100 g; current looks like a raw/farmed value, not cooked"},
+{"k":"oyster","name":"Oysters, cooked","nutrient":"protein","current":7.1,"proposed":11.4,"severity":"medium","basis":"USDA SR Legacy Mollusks, oyster, eastern, wild, cooked, moist heat: protein 11.42 g"}
+]

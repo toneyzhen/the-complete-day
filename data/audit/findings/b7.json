@@ -1,0 +1,7 @@
+[
+{"k":"duck","name":"Duck breast, cooked","nutrient":"Se","current":14,"proposed":22,"severity":"high","basis":"USDA SR Legacy Duck, domesticated, meat only, roasted (via nutriely mirror): Se 22 mcg per 100 g"},
+{"k":"duck","name":"Duck breast, cooked","nutrient":"Zn","current":1.9,"proposed":2.6,"severity":"high","basis":"USDA SR Legacy Duck, domesticated, meat only, roasted (via nutriely mirror): Zn 2.60 mg; current is 27% low"},
+{"k":"duck","name":"Duck breast, cooked","nutrient":"B6","current":0.34,"proposed":0.25,"severity":"medium","basis":"USDA SR Legacy Duck, domesticated, meat only, roasted (via nutriely mirror): B6 0.25 mg"},
+{"k":"jerky","name":"Beef jerky","nutrient":"choline","current":0,"proposed":109,"severity":"low","basis":"USDA SR Legacy 19002 Beef jerky, chopped and formed (via foodstruct): choline 109 mg per 100 g, about 20% DV; 28 g serving gives roughly 6% so borderline"},
+{"k":"elk","name":"Elk, roasted","nutrient":"Se","current":0,"proposed":13,"severity":"low","basis":"USDA SR Legacy 175302 Game meat, elk, roasted (foodstruct, rawpawiq mirrors): Se 13 mcg per 100 g, about 24% DV"}
+]

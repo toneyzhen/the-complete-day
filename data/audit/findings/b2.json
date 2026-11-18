@@ -1,0 +1,13 @@
+[
+{"k":"kimchi","name":"Kimchi","nutrient":"Na","current":747,"proposed":498,"severity":"high","basis":"USDA SR Legacy 11... Kimchi: Na 747 mg is the per-cup (150 g) figure; per 100 g is ~498 mg (kcal 15, K 151, Ca 33 in this row are already per 100 g)"},
+{"k":"nori","name":"Nori seaweed, dried","nutrient":"kcal","current":35,"proposed":300,"severity":"high","basis":"Row matches USDA Seaweed, laver, RAW (35 kcal, 5.8 g protein, 70 mg Ca); dried nori is ~300 kcal/100 g"},
+{"k":"nori","name":"Nori seaweed, dried","nutrient":"protein","current":5.8,"proposed":40,"severity":"high","basis":"Raw laver value used for dried nori; dried nori protein ~35-41 g/100 g"},
+{"k":"nori","name":"Nori seaweed, dried","nutrient":"fiber","current":0.3,"proposed":33,"severity":"high","basis":"Raw laver value used for dried nori; dried nori fiber ~30-36 g/100 g"},
+{"k":"nori","name":"Nori seaweed, dried","nutrient":"carb","current":5.1,"proposed":42,"severity":"high","basis":"Raw laver value used for dried nori; dried nori total carb ~40-45 g/100 g (mostly fiber)"},
+{"k":"mushroom","name":"White mushrooms, cooked","nutrient":"Fe","current":0.5,"proposed":1.74,"severity":"high","basis":"USDA SR Legacy 11265 Mushrooms, white, cooked, boiled, drained, without salt: Fe 1.74 mg. Row equals RAW white mushroom (kcal 22, protein 3.09, Fe 0.5)"},
+{"k":"mushroom","name":"White mushrooms, cooked","nutrient":"Zn","current":0.52,"proposed":1.15,"severity":"high","basis":"USDA boiled white mushrooms Zn ~1.1 mg; raw value used"},
+{"k":"mushroom","name":"White mushrooms, cooked","nutrient":"Se","current":9.3,"proposed":13.4,"severity":"high","basis":"USDA boiled white mushrooms Se ~13.4 mcg vs raw 9.3"},
+{"k":"mushroom","name":"White mushrooms, cooked","nutrient":"kcal","current":22,"proposed":28,"severity":"medium","basis":"USDA boiled white mushrooms 28 kcal; raw value used"},
+{"k":"mushroom","name":"White mushrooms, cooked","nutrient":"carb","current":3.3,"proposed":5.3,"severity":"medium","basis":"USDA boiled white mushrooms carb 5.29 g; raw value used"},
+{"k":"mushroom","name":"White mushrooms, cooked","nutrient":"fiber","current":1,"proposed":2.2,"severity":"medium","basis":"USDA boiled white mushrooms fiber 2.2 g; raw value used"}
+]

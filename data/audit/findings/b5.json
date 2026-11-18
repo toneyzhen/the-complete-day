@@ -1,0 +1,9 @@
+[
+{"k":"tofu","name":"Tofu, firm, calcium-set","nutrient":"Ca","current":400,"proposed":683,"severity":"high","basis":"USDA SR Legacy 16426 Tofu, raw, firm, prepared with calcium sulfate: Ca 683 mg/100 g (confirmed on foodsdatabase.com mirror); kcal 144 and protein 17.3 in the DB already match this entry"},
+{"k":"duckegg","name":"Duck egg","nutrient":"D","current":4.4,"proposed":1.7,"severity":"high","basis":"USDA SR Legacy 172189 Duck egg, whole, fresh, raw: vitamin D about 1.7 mcg/100 g (nutritionvalue.org: 1.19 mcg per 70 g); DB value is 2.6x too high"},
+{"k":"cannellini","name":"Cannellini beans, cooked","nutrient":"P","current":159,"proposed":113,"severity":"medium","basis":"USDA SR Legacy 16050 Beans, white, mature seeds, cooked, boiled, without salt: P 113 mg (K 561 matches the DB row, so same entry)"},
+{"k":"cranberrybean","name":"Cranberry (borlotti) beans, cooked","nutrient":"fiber","current":10,"proposed":8.6,"severity":"medium","basis":"USDA SR Legacy Beans, cranberry (roman), mature seeds, cooked, boiled: fiber 8.6 g/100 g (foodstruct mirror); DB is 16% high"},
+{"k":"soybean","name":"Soybeans, cooked","nutrient":"LA","current":0,"proposed":4.47,"severity":"low","basis":"USDA SR Legacy 16111 Soybeans, mature seeds, cooked, boiled: 18:2 about 4.5 g/100 g; a 172 g cup gives about 7.7 g, over 10% of the AI. DB has 0 although tofu/edamame/tempeh rows carry LA."},
+{"k":"soybean","name":"Soybeans, cooked","nutrient":"ALA","current":0,"proposed":0.6,"severity":"low","basis":"USDA SR Legacy 16111 Soybeans, cooked: 18:3 about 0.6 g/100 g; a cup gives about 1 g, near 70-90% of the ALA AI. DB has 0."},
+{"k":"peanutbutter","name":"Peanut butter","nutrient":"LA","current":0,"proposed":14,"severity":"low","basis":"USDA SR Legacy 16098 Peanut butter, smooth: 18:2 about 14 g/100 g (approx); a 32 g serving gives about 4.5 g, over 10% of the LA AI. Plain peanuts row has 15.6, so 0 is inconsistent."}
+]

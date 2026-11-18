@@ -1,0 +1,4 @@
+[
+{"k":"broccoli","name":"Broccoli, cooked","nutrient":"choline","current":19,"proposed":40.1,"severity":"high","basis":"USDA SR Legacy 169967 Broccoli, cooked, boiled, drained, without salt: choline 40.1 mg (19 is the raw value, 18.7)"},
+{"k":"beetgreens","name":"Beet greens, cooked","nutrient":"B1","current":0,"proposed":0.12,"severity":"low","basis":"USDA SR Legacy 170376 Beet greens, cooked, boiled, drained, without salt: thiamin 0.12 mg (a 144 g cup gives ~14% DRI)"}
+]

@@ -1,0 +1,9 @@
+[
+{"k":"iodizedsalt","name":"Iodized salt","nutrient":"I","current":3000,"proposed":4700,"severity":"high","basis":"ODS/FDA iodine database: iodized table salt 1/4 tsp (1.5 g) = ~71 mcg iodine, i.e. ~4,700 mcg/100 g (current is ~37% low)"},
+{"k":"avocadooil","name":"Avocado oil","nutrient":"E","current":0.5,"proposed":5.56,"severity":"high","basis":"USDA SR Legacy 04581 Oil, avocado: vitamin E (alpha-tocopherol) 5.56 mg/100 g (about 10x current)"},
+{"k":"blackpepper","name":"Black pepper","nutrient":"A","current":27,"proposed":1,"severity":"high","basis":"USDA SR Legacy 02030 Spices, pepper, black: vitamin A 27 IU = 1 mcg RAE; the IU figure appears to have been entered as mcg RAE"},
+{"k":"blackpepper","name":"Black pepper","nutrient":"E","current":1.04,"proposed":4.56,"severity":"medium","basis":"USDA SR Legacy 02030 Spices, pepper, black: vitamin E 4.56 mg/100 g"},
+{"k":"soysauce","name":"Soy sauce","nutrient":"Mg","current":43,"proposed":74,"severity":"medium","basis":"USDA SR Legacy 16117 Soy sauce made from soy and wheat (shoyu): Mg 74 mg/100 g"},
+{"k":"soysauce","name":"Soy sauce","nutrient":"P","current":110,"proposed":166,"severity":"medium","basis":"USDA SR Legacy 16117 Soy sauce made from soy and wheat (shoyu): P 166 mg/100 g"},
+{"k":"rosemary","name":"Rosemary, dried","nutrient":"K1K2","current":0,"proposed":1964,"severity":"low","basis":"USDA SR Legacy 02063 Rosemary, dried: vitamin K 1964 mcg/100 g (a 2 g serving gives ~39 mcg, >30% of AI)"}
+]
