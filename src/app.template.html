@@ -690,7 +690,7 @@ const ORDINARY = new Set(["potato","sweetpot","oats","egg","milk","yogurt","ched
 
 let profile = {sex:"male", age:40, kcal:2500};
 let plan = {};              // foodKey -> grams
-let meals = {};             // foodKey -> index into MEALS (a food sits in one meal)
+let meals = {};             // foodKey -> {meal index: grams}; the grams add up to plan[foodKey]
 let addMeal = 0;            // meal that newly added foods go into
 const MEALS = ["Breakfast","Lunch","Dinner","Snacks"];
 let gapsFirst = true;
@@ -912,33 +912,63 @@ function guessMeal(k){
       || ((f.cat === "Dairy" || f.cat === "Grains & starches") && BREAKFASTY.test(f.name))) return 0;
   return null;
 }
-// meals for every food in p: keep valid assignments from m, guess the rest
+// The same food can sit in several meals (oats at breakfast and again at lunch), so meals[k] is a
+// split: meal index -> grams. plan[k] stays the day's total for that food, which is all the
+// coverage panel, suggestions and solver need. Older data stored one meal index per food.
+const MEAL_IDS = ["0", "1", "2", "3"];
+// splits for every food in p: keep m's split (an old single index counts as the whole amount),
+// scaled to p's total if they disagree; guess a meal for the rest
 function fillMeals(p, m){
   const out = {}, kc = [0, 0, 0, 0], mains = [0, 0, 0, 0];
-  const put = (k, i) => { out[k] = i; kc[i] += kcalOf(k, p[k]); if (isMain(k)) mains[i]++; };
-  for (const k in p) if (m && Number.isInteger(m[k]) && MEALS[m[k]]) put(k, m[k]);
+  const put = (k, i, g) => { (out[k] = out[k] || {})[i] = (out[k][i] || 0) + g;
+    kc[i] += kcalOf(k, g); if (isMain(k)) mains[i]++; };
+  for (const k in p){
+    const v = m && m[k];
+    if (Number.isInteger(v) && MEALS[v]){ put(k, v, p[k]); continue; }
+    if (!v || typeof v !== "object") continue;
+    const parts = MEAL_IDS.filter(i => +v[i] > 0), sum = parts.reduce((a, i) => a + +v[i], 0);
+    parts.forEach(i => put(k, +i, +v[i] * p[k] / sum));
+  }
   // mains first, so the calorie balance afterwards works around them
   const rest = Object.keys(p).filter(k => !(k in out)).sort((a, b) => isMain(b) - isMain(a));
   for (const k of rest){
     let i = guessMeal(k);
     if (i === null) i = isMain(k) && mains[1] !== mains[2] ? (mains[1] < mains[2] ? 1 : 2)
                       : kc[1] <= kc[2] ? 1 : 2;
-    put(k, i);
+    put(k, i, p[k]);
   }
   // keep the plan's own order for display: rebuild out in p's key order
   const ordered = {}; for (const k in p) ordered[k] = out[k];
   return ordered;
 }
-// The list is a token sequence: "#i" opens meal i, food keys follow. Drag and arrow keys both
-// edit this sequence, then it is written back to meals + plan order in one place.
+// Set one meal's portion of a food (0 removes it) and keep plan[k] equal to the sum.
+function setPortion(k, i, g){
+  meals = fillMeals(plan, meals);
+  const s = Object.assign({}, meals[k]);
+  if (g >= 0.5) s[i] = g; else delete s[i];
+  const total = Object.values(s).reduce((a, b) => a + b, 0);
+  if (total >= 0.5){ plan[k] = total; meals[k] = s; } else { delete plan[k]; delete meals[k]; }
+}
+// The list is a token sequence: "#i" opens meal i, then one "food@meal" token per row. Drag and
+// arrow keys both edit this sequence, then it is written back to meals + plan order in one place.
+// A row moved into a meal that already has that food merges into it.
 function mealTokens(){
+  meals = fillMeals(plan, meals);
   const t = [];
-  MEALS.forEach((_, i) => { t.push("#" + i); for (const k in plan) if (meals[k] === i) t.push(k); });
+  MEALS.forEach((_, i) => { t.push("#" + i); for (const k in plan) if (meals[k][i] > 0) t.push(k + "@" + i); });
   return t;
 }
 function applyTokens(t){
-  let cur = 0; const keys = [];
-  t.forEach(x => { if (x[0] === "#") cur = +x.slice(1); else { keys.push(x); meals[x] = cur; } });
+  const old = fillMeals(plan, meals), next = {}, keys = [];
+  let cur = 0;
+  t.forEach(x => {
+    if (x[0] === "#"){ cur = +x.slice(1); return; }
+    const [k, from] = x.split("@"), g = old[k] && old[k][from];
+    if (!(g > 0)) return;
+    if (!next[k]){ next[k] = {}; keys.push(k); }
+    next[k][cur] = (next[k][cur] || 0) + g;
+  });
+  meals = Object.assign(old, next);
   setOrder(keys);
 }
 function mealHeader(i, kcal, empty){
@@ -956,26 +986,26 @@ function renderPlan(){
       <b>Auto-solve</b> build a complete day for you.</p>`;
   } else {
     box.innerHTML = MEALS.map((_, i) => {
-      const mk = keys.filter(k => meals[k] === i);
-      return mealHeader(i, mk.reduce((a, k) => a + kcalOf(k, plan[k]), 0), !mk.length) + mk.map(k => {
-      const f = BY[k], g = plan[k];
+      const mk = keys.filter(k => meals[k][i] > 0);
+      return mealHeader(i, mk.reduce((a, k) => a + kcalOf(k, meals[k][i]), 0), !mk.length) + mk.map(k => {
+      const f = BY[k], g = meals[k][i];
       const servs = +(g / f.serv).toFixed(2);   // up to 2 decimals, trailing zeros dropped
-      return `<div class="prow" data-k="${k}">
-        <button class="grip" data-grip="${k}" title="Drag to reorder"
+      return `<div class="prow" data-k="${k}" data-m="${i}">
+        <button class="grip" data-grip="${k}@${i}" title="Drag to reorder"
           aria-label="Move ${f.name}, now in ${MEALS[i]}. Use the up and down arrow keys to move it.">${GRIP}</button>
         <span><span class="pname">${f.name}</span>
           <span class="pmeta">1 serving = ${f.sl} (${+f.serv.toFixed(1)} g) · ${Math.round(g)} g ·
             ${Math.round(f.n[IDX.kcal]*g/100)} kcal</span></span>
         <span style="display:flex;align-items:center;gap:7px">
           <span class="amt">
-            <button data-step="${k}" data-dir="-1" title="One less serving (${f.serv} g)"
-              aria-label="Remove one serving of ${f.name}, ${f.serv} grams">&minus;</button>
-            <span class="amtfield"><input type="number" data-sv="${k}" value="${servs}" inputmode="decimal"
-              min="0" max="50" step="0.25" aria-label="Servings of ${f.name} (one serving is ${f.sl})"><span class="u">srv</span></span>
-            <button data-step="${k}" data-dir="1" title="One more serving (${f.serv} g)"
-              aria-label="Add one serving of ${f.name}, ${f.serv} grams">+</button>
+            <button data-step="-1" title="One less serving (${f.serv} g)"
+              aria-label="Remove one serving of ${f.name} at ${MEALS[i]}, ${f.serv} grams">&minus;</button>
+            <span class="amtfield"><input type="number" data-sv value="${servs}" inputmode="decimal"
+              min="0" max="50" step="0.25" aria-label="Servings of ${f.name} at ${MEALS[i]} (one serving is ${f.sl})"><span class="u">srv</span></span>
+            <button data-step="1" title="One more serving (${f.serv} g)"
+              aria-label="Add one serving of ${f.name} at ${MEALS[i]}, ${f.serv} grams">+</button>
           </span>
-          <button class="del" data-del="${k}" aria-label="Remove ${f.name}">&times;</button>
+          <button class="del" data-del aria-label="Remove ${f.name} from ${MEALS[i]}">&times;</button>
         </span></div>`;
       }).join("");
     }).join("");
@@ -1011,10 +1041,11 @@ function syncCursor(){
   if (cursor >= 0) search.setAttribute("aria-activedescendant", "res-" + cursor);
   else search.removeAttribute("aria-activedescendant");
 }
+// Adds to the meal picked next to search: a new row there, or more of the row already there.
 function addFood(k, grams){
-  const f = BY[k];
-  if (!(k in plan)) meals[k] = addMeal;
-  plan[k] = (plan[k] || 0) + (grams != null ? grams : f.serv);
+  meals = fillMeals(plan, meals);
+  const have = (meals[k] && meals[k][addMeal]) || 0;
+  setPortion(k, addMeal, have + (grams != null ? grams : BY[k].serv));
   renderPlan();
 }
 search.addEventListener("input", runSearch);
@@ -1042,14 +1073,14 @@ results.addEventListener("click", e => {
 });
 
 /* ---------------- plan interactions ---------------- */
+// Each row is one meal's portion of a food; its .prow carries data-k (food) and data-m (meal).
+const rowOf = el => { const r = el.closest(".prow"); return r && {k: r.dataset.k, m: +r.dataset.m}; };
 document.getElementById("planlist").addEventListener("click", e => {
   const s = e.target.closest("[data-step]"), d = e.target.closest("[data-del]");
-  if (s){
-    const k = s.dataset.step, f = BY[k];
-    plan[k] = Math.max(0, plan[k] + (+s.dataset.dir) * f.serv);
-    if (plan[k] < 0.5) delete plan[k];
-    renderPlan();
-  } else if (d){ delete plan[d.dataset.del]; renderPlan(); }
+  const r = (s || d) && rowOf(s || d); if (!r) return;
+  const now = meals[r.k][r.m] || 0;
+  setPortion(r.k, r.m, d ? 0 : Math.max(0, now + (+s.dataset.step) * BY[r.k].serv));
+  renderPlan();
 });
 const planBox = document.getElementById("planlist");
 planBox.addEventListener("keydown", e => {
@@ -1062,8 +1093,10 @@ planBox.addEventListener("keydown", e => {
           : i + (e.key === "ArrowUp" ? -1 : 1);
   if (j < 1 || j >= t.length || j === i) return;
   t.splice(j, 0, t.splice(i, 1)[0]);
+  // the row now belongs to the meal of the nearest header above it
+  const dest = t.slice(0, j).reverse().find(x => x[0] === "#").slice(1);
   applyTokens(t); renderPlan();
-  const again = planBox.querySelector(`[data-grip="${g.dataset.grip}"]`);
+  const again = planBox.querySelector(`[data-grip="${g.dataset.grip.split("@")[0]}@${dest}"]`);
   if (again) again.focus();
 });
 let drag = null;
@@ -1094,7 +1127,7 @@ document.addEventListener("pointermove", e => {
 function endDrag(){
   if (!drag) return;
   const t = [...planBox.querySelectorAll(".mealhd,.prow")]
-    .map(r => r.dataset.k || "#" + r.dataset.meal);
+    .map(r => r.dataset.k ? r.dataset.k + "@" + r.dataset.m : "#" + r.dataset.meal);
   drag.row.classList.remove("dragging");
   document.body.classList.remove("reordering");
   const changed = t.join() !== mealTokens().join();
@@ -1105,10 +1138,9 @@ document.addEventListener("pointerup", e => { if (drag && e.pointerId === drag.i
 document.addEventListener("pointercancel", e => { if (drag && e.pointerId === drag.id) endDrag(); });
 document.getElementById("planlist").addEventListener("change", e => {
   const i = e.target.closest("[data-sv]"); if (!i) return;
-  const k = i.dataset.sv, f = BY[k];
+  const r = rowOf(i);
   const sv = Math.max(0, Math.min(50, parseFloat(String(i.value).replace(",", ".")) || 0));
-  const g = sv * f.serv;
-  if (g < 0.5) delete plan[k]; else plan[k] = g;   // grams stay the stored unit
+  setPortion(r.k, r.m, sv * BY[r.k].serv);   // grams stay the stored unit
   renderPlan();
 });
 document.getElementById("coverage").addEventListener("click", e => {
@@ -1474,7 +1506,7 @@ function planCard(p, i, opts){
   return `<div class="card" style="margin-bottom:14px">
     <h3>${ok ? "Complete day" : "Best found"} &mdash; ${keys.length} foods</h3>
     <div id="sv-${i}">${MEALS.map((_, mi) => {
-      const mk = keys.filter(k => m[k] === mi);
+      const mk = keys.filter(k => m[k][mi] > 0);   // a solved day puts each food in one meal
       return mk.length ? mealHeader(mi, mk.reduce((a, k) => a + kcalOf(k, p[k]), 0), false)
         + mk.map(k => `<div class="prow"><span>
       <span class="pname">${BY[k].name}</span>
@@ -1715,7 +1747,7 @@ saveForm.addEventListener("submit", async e => {
   const name = saveName.value.trim();
   if (!name || !Object.keys(plan).length) return;
   showSaveForm(false);
-  const entry = {name, plan: Object.assign({}, plan), meals: Object.assign({}, meals)};
+  const entry = {name, plan: Object.assign({}, plan), meals: JSON.parse(JSON.stringify(meals))};
   if (DB){
     try { await DB.collection("plans").add(Object.assign({profile, ts: Date.now()}, entry)); return; }
     catch (e) {}
@@ -1813,8 +1845,17 @@ const b64enc = s => { let t = ""; new TextEncoder().encode(s).forEach(x => t += 
 const b64dec = s => new TextDecoder().decode(
   Uint8Array.from(atob(s.replace(/-/g, "+").replace(/_/g, "/")), c => c.charCodeAt(0)));
 const foodRecord = ({cat, raw, custom, ...f}) => f;   // what saveCustom stores
+// meals from outside: a split {meal: grams} per food, or an older single meal index; own keys of
+// known foods only, so "__proto__" in a link can't reach the result's prototype
 const cleanMeals = m => { const out = {};
-  if (m && typeof m === "object") for (const k in m) if (Number.isInteger(m[k]) && MEALS[m[k]]) out[k] = m[k];
+  if (m && typeof m === "object") for (const k in m){
+    if (!Object.prototype.hasOwnProperty.call(BY, k)) continue;
+    const v = m[k];
+    if (Number.isInteger(v) && MEALS[v]){ out[k] = v; continue; }
+    if (!v || typeof v !== "object") continue;
+    const s = {}; MEAL_IDS.forEach(i => { if (+v[i] > 0) s[i] = +v[i]; });
+    if (Object.keys(s).length) out[k] = s;
+  }
   return out; };
 function importFoods(list){
   const fresh = (Array.isArray(list) ? list : []).slice(0, 200).map(normCustom).filter(Boolean);

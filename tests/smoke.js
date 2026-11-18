@@ -65,11 +65,25 @@ const DIETS = ["anything","pescatarian","vegetarian","vegan","paleo","whole30","
     const day = {v: 1, plan: {oats: 40, salmon: 113}, meals: {oats: 0, salmon: 2}, foods: []};
     ok(JSON.stringify(JSON.parse(b64dec(b64enc(JSON.stringify(day))))) === JSON.stringify(day), "share link round trip");
     ok(b64dec(b64enc("Annie’s café")) === "Annie’s café", "share link loses non-ASCII text");
-    // moving the first lunch food up one step puts it at the end of breakfast
+    // moving the first lunch food up one step puts it at the end of breakfast (old single-index
+    // meals still load)
     plan = {oats: 40, egg: 50, salmon: 113}; meals = {oats: 0, egg: 0, salmon: 1};
-    const t = mealTokens(), i = t.indexOf("salmon");
+    const t = mealTokens(), i = t.indexOf("salmon@1");
     t.splice(i - 1, 0, t.splice(i, 1)[0]); applyTokens(t);
-    ok(meals.salmon === 0 && Object.keys(plan).join() === "oats,egg,salmon", "moving past a meal header");
+    ok(meals.salmon[0] === 113 && !meals.salmon[1] && Object.keys(plan).join() === "oats,egg,salmon",
+       "moving past a meal header");
+    // the same food in two meals: separate rows, plan[k] is the sum, removing one keeps the other,
+    // and moving one into the other's meal merges them
+    addMeal = 1; addFood("oats");
+    ok(meals.oats[0] === 40 && meals.oats[1] === BY.oats.serv && plan.oats === 40 + BY.oats.serv,
+       "adding a food already at breakfast to lunch");
+    ok(mealTokens().filter(x => x.startsWith("oats@")).length === 2, "two rows for one food");
+    const u = mealTokens(), j = u.indexOf("oats@1"), lunch = u.indexOf("#1");
+    u.splice(lunch, 0, u.splice(j, 1)[0]); applyTokens(u);   // drag lunch oats up into breakfast
+    ok(meals.oats[0] === 40 + BY.oats.serv && !meals.oats[1] && plan.oats === 40 + BY.oats.serv, "merging rows");
+    addFood("oats"); setPortion("oats", 0, 0);
+    ok(!meals.oats[0] && meals.oats[1] === BY.oats.serv && plan.oats === BY.oats.serv, "removing one meal's row");
+    addMeal = 0;
     // the calorie trim never removes a food the user kept
     profile = {sex: "male", age: 40, kcal: 2500};
     const seed = {oliveoil: 10, butter: 10, walnut: 200, peanut: 200, milk: 244};

@@ -49,9 +49,13 @@ inherited names like `toString` from share links), the share-link encoding and m
 
 - Amounts are stored in **grams** in the plan object; the builder displays and edits **servings**
   (decimals allowed). The plan object's key order is the display order (drag to reorder).
-- Meals live in a separate `meals` map (food key -> index into `MEALS`); a food sits in one meal.
-  `fillMeals` guesses a meal for any food without one, so plans from the solver or older saved
-  days need no meal data. Drag and arrow keys both edit a token list (`mealTokens`/`applyTokens`).
+- `plan[k]` is a food's total for the day; `meals[k]` splits it by meal (`{"0": 40, "1": 80}`
+  grams), so one food can sit in several meals. Change a meal's portion only through `setPortion`,
+  which keeps `plan[k]` equal to the sum. `fillMeals` normalises any input (older data stored a
+  single meal index; mismatched sums are scaled) and guesses a meal for foods without one, so
+  solver plans need no meal data. Each builder row is one `food@meal` token; drag and arrow keys
+  both edit the token list (`mealTokens`/`applyTokens`), and a row moved into a meal that already
+  has that food merges into it.
 - Your own foods (`custom: true`, keys `c-…`) live in `localStorage` key `completeday-foods` and are
   merged into `FOODS`/`BY` at startup. Their names pass through `cleanText` (no markup characters),
   since food names are interpolated into HTML everywhere. Any plan loaded from storage goes

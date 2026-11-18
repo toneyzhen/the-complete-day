@@ -10,7 +10,8 @@ No install, no server, no account.
 
 **Build a day.** Search 483 foods, add them by the serving (decimals allowed — 0.5 serving,
 1.25 servings), and drag to reorder. The day is split into breakfast, lunch, dinner and snacks,
-with calories per meal; drag a food (or use the arrow keys) to move it between meals. A coverage
+with calories per meal; drag a food (or use the arrow keys) to move it between meals. The same
+food can appear in more than one meal: pick the meal next to the search box and add it again. A coverage
 panel shows every target as a bar, with gaps and upper-limit breaches highlighted.
 
 **Nutrient explainers.** The **i** beside each nutrient explains what it does and why it
