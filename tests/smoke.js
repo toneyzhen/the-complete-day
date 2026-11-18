@@ -84,6 +84,12 @@ const DIETS = ["anything","pescatarian","vegetarian","vegan","paleo","whole30","
     addFood("oats"); setPortion("oats", 0, 0);
     ok(!meals.oats[0] && meals.oats[1] === BY.oats.serv && plan.oats === BY.oats.serv, "removing one meal's row");
     addMeal = 0;
+    // reordering inside a meal when a food is also in an earlier meal (oats at breakfast and lunch
+    // used to pin lunch oats to the top, so salmon snapped back below it)
+    plan = {oats: 80, egg: 50, salmon: 113}; meals = {oats: {0: 40, 1: 40}, egg: 0, salmon: 1}; rowOrder = [];
+    const v = mealTokens(), sal = v.indexOf("salmon@1"), lo = v.indexOf("oats@1");
+    v.splice(lo, 0, v.splice(sal, 1)[0]); applyTokens(v);
+    ok(mealRows(1).join() === "salmon,oats" && mealRows(0).join() === "oats,egg", "reordering within a meal with a shared food");
     // the calorie trim never removes a food the user kept
     profile = {sex: "male", age: 40, kcal: 2500};
     const seed = {oliveoil: 10, butter: 10, walnut: 200, peanut: 200, milk: 244};

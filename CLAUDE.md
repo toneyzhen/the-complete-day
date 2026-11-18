@@ -55,7 +55,9 @@ inherited names like `toString` from share links), the share-link encoding and m
   single meal index; mismatched sums are scaled) and guesses a meal for foods without one, so
   solver plans need no meal data. Each builder row is one `food@meal` token; drag and arrow keys
   both edit the token list (`mealTokens`/`applyTokens`), and a row moved into a meal that already
-  has that food merges into it.
+  has that food merges into it. Row order lives in `rowOrder` (those tokens), not in `plan`'s key
+  order: a food in two meals has one place in `plan`, which pinned it to the top of the later
+  meal. `rowOrder` travels with the current day, saved days, share links and backups (`order`).
 - Your own foods (`custom: true`, keys `c-…`) live in `localStorage` key `completeday-foods` and are
   merged into `FOODS`/`BY` at startup. Their names pass through `cleanText` (no markup characters),
   since food names are interpolated into HTML everywhere. Any plan loaded from storage goes
