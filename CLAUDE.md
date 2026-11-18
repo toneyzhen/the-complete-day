@@ -46,17 +46,19 @@ the "fortified" exclusion (27, B12). Any `OVER` line is a bug.
 - 28 targets = 27 counted nutrients + calories. Informational only (never a gap): EPA+DHA, fat,
   carb, sodium. Manganese's UL is advisory. The vitamin A UL counts preformed A only.
 - The current day, profile and chip settings persist in `localStorage` (key `completeday`).
-  Saved days use the `window.claude` db when hosted as a claude.ai artifact; standalone they are
-  in-memory only (known issue, see README).
+  Saved days use the `window.claude` db when hosted as a claude.ai artifact; standalone they go
+  in the same `localStorage` entry (`saved`, ids prefixed `local-`). Saved-day names are user
+  input (and shared across viewers in the artifact db): always render them through `esc()`.
 - Keep it one self-contained file: no external scripts; Google Fonts is the only external request.
 - Light and dark themes are CSS custom properties on `:root`; keep both working, and keep the
   layout usable at 390 px wide with no horizontal scroll.
 
 ## Open tasks (good starting points)
 
-1. Persist saved days to `localStorage` when `window.claude` is unavailable.
-2. Make the solver top up calories toward the target with plausible foods once nutrients are met.
-3. Optionally publish `index.html` with GitHub Pages.
+1. Make the solver top up calories toward the target with plausible foods once nutrients are met.
+
+The app is published with GitHub Pages from `main` (https://toneyzhen.github.io/the-complete-day/),
+so every push to `main` goes live; commit a rebuilt `index.html` with every src/data change.
 
 ## Working with Toney (the owner)
 

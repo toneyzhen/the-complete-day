@@ -1276,15 +1276,19 @@ function showTab(which){
 
 /* ---------------- persistence ---------------- */
 function persistLocal(){
-  try { localStorage.setItem("completeday", JSON.stringify({plan, profile, avoid:[...avoid], sugOff:[...sugOff]})); } catch (e) {}
+  try { localStorage.setItem("completeday", JSON.stringify({plan, profile, avoid:[...avoid], sugOff:[...sugOff],
+    saved: savedCache.filter(x => x.id.startsWith("local-"))})); } catch (e) {}
 }
+const esc = s => String(s).replace(/[&<>"']/g, c => "&#" + c.charCodeAt(0) + ";");
 function restoreLocal(){
   try {
     const s = JSON.parse(localStorage.getItem("completeday") || "null");
     if (s && s.plan){ plan = s.plan; if (s.profile) profile = s.profile;
       if (s.avoid) avoid = new Set(s.avoid);
       if (s.sugOff) sugOff = new Set(s.sugOff); }
+    if (s && Array.isArray(s.saved)) savedCache = s.saved;
   } catch (e) {}
+  renderSaved(savedCache);
   document.getElementById("sex").value = profile.sex;
   document.getElementById("age").value = String(profile.age);
   document.getElementById("kcal").value = profile.kcal;
@@ -1294,9 +1298,9 @@ function renderSaved(docs){
   if (!docs.length){ card.hidden = true; return; }
   card.hidden = false;
   document.getElementById("savedlist").innerHTML = docs.map(d =>
-    `<span class="chipbtn"><button style="all:unset;cursor:pointer" data-open="${d.id}"><b>${
-      d.name}</b> &middot; ${d.count} foods</button>
-     <button class="x" data-drop="${d.id}" aria-label="Delete ${d.name}">&times;</button></span>`).join("");
+    `<span class="chipbtn"><button style="all:unset;cursor:pointer" data-open="${esc(d.id)}"><b>${
+      esc(d.name)}</b> &middot; ${esc(d.count)} foods</button>
+     <button class="x" data-drop="${esc(d.id)}" aria-label="Delete ${esc(d.name)}">&times;</button></span>`).join("");
 }
 let savedCache = [];
 async function initDb(){
@@ -1305,11 +1309,11 @@ async function initDb(){
   if (!DB) return;
   try {
     DB.collection("plans").onSnapshot(snap => {
-      savedCache = snap.docs.map(d => {
+      savedCache = savedCache.filter(x => x.id.startsWith("local-")).concat(snap.docs.map(d => {
         const v = d.data() || {};
         return {id: d.id, name: v.name || "Untitled", plan: v.plan || {},
                 count: Object.keys(v.plan || {}).length};
-      });
+      }));
       renderSaved(savedCache);
     }, () => {});
   } catch (e) {}
@@ -1324,7 +1328,7 @@ document.getElementById("btn-save").addEventListener("click", async () => {
   }
   savedCache = savedCache.concat([{id: "local-" + Date.now(), name, plan: Object.assign({}, plan),
     count: Object.keys(plan).length}]);
-  renderSaved(savedCache);
+  renderSaved(savedCache); persistLocal();
 });
 document.getElementById("savedlist").addEventListener("click", async e => {
   const o = e.target.closest("[data-open]"), d = e.target.closest("[data-drop]");
@@ -1335,7 +1339,7 @@ document.getElementById("savedlist").addEventListener("click", async e => {
     const id = d.dataset.drop;
     if (DB && !id.startsWith("local-")){ try { await DB.doc("plans/" + id).delete(); } catch (e) {} }
     savedCache = savedCache.filter(x => x.id !== id);
-    renderSaved(savedCache);
+    renderSaved(savedCache); persistLocal();
   }
 });
 

@@ -7,9 +7,9 @@ page works from file:// or any static host with no server.
 import json, pathlib
 
 ROOT = pathlib.Path(__file__).parent
-data = json.loads((ROOT / "data/foods.json").read_text())
-page = (ROOT / "src/app.template.html").read_text()
+data = json.loads((ROOT / "data/foods.json").read_text(encoding="utf-8"))
+page = (ROOT / "src/app.template.html").read_text(encoding="utf-8")
 page = (page.replace("/*__DATA__*/", json.dumps(data, separators=(",", ":"), ensure_ascii=False))
             .replace("__NFOODS__", str(len(data["foods"]))))
-(ROOT / "index.html").write_text(page)
+(ROOT / "index.html").write_bytes(page.encode("utf-8"))  # bytes: keep LF endings on Windows
 print(f"index.html built: {len(data['foods'])} foods, {len(page):,} bytes")
