@@ -9,8 +9,9 @@ No install, no server, no account.
 ## What it does
 
 **Build a day.** Search 483 foods, add them by the serving (decimals allowed — 0.5 serving,
-1.25 servings), and drag to reorder. A coverage panel shows every target as a bar, with gaps
-and upper-limit breaches highlighted.
+1.25 servings), and drag to reorder. The day is split into breakfast, lunch, dinner and snacks,
+with calories per meal; drag a food (or use the arrow keys) to move it between meals. A coverage
+panel shows every target as a bar, with gaps and upper-limit breaches highlighted.
 
 **Nutrient explainers.** The **i** beside each nutrient explains what it does and why it
 matters, lists which foods in your day supply it (amount and share), and offers the richest
@@ -28,8 +29,18 @@ servings you could add, one tap each.
 It picks foods greedily by how much of the remaining gap each closes per calorie, weighting
 nutrients by how few foods in the allowed pool supply them, then tunes portions — while
 respecting upper limits (preformed vitamin A, selenium, zinc, calcium, iron, sodium and others).
+Once the nutrients are covered it tops calories up to your target, spreading the extra across
+the foods already in the day (trimming an iron- or calcium-heavy portion to make room if a limit
+is close) or adding an ordinary staple. The result is split into meals.
 
 **Food ranking.** Rank every food by any nutrient, per serving, per 100 g or per 100 kcal.
+
+**Your own foods.** Copy a Nutrition Facts label (per serving, as printed) and the app converts
+it to per 100 g. Blank nutrients count as zero, like the built-in data; calories and sodium are
+required. Say what it contains (plants only, dairy, egg, fish, meat) and tick allergens so diet
+patterns and exclusions treat it correctly. Paleo, Whole30, Mediterranean and raw leave your foods
+out, since the label doesn't say whether it has grain, legumes, added sugar or red meat. Your
+foods are kept in this browser only.
 
 **Saved days.** Stored in the artifact's shared database when the app runs as a claude.ai
 artifact. Opened standalone (including GitHub Pages), the current day and saved days are kept
@@ -83,6 +94,9 @@ python3 build.py                # write index.html from src/ + data/
 node tests/smoke.js             # solve every diet pattern in headless Chromium (needs Playwright)
 ```
 
+GitHub Actions runs all three on every push and pull request, and fails if the committed
+`index.html` doesn't match a fresh build.
+
 - `src/app.template.html` is the whole app (HTML, CSS, JS). The `/*__DATA__*/` placeholder is
   replaced with the contents of `data/foods.json` at build time, so `index.html` is fully
   self-contained.
@@ -90,8 +104,11 @@ node tests/smoke.js             # solve every diet pattern in headless Chromium 
 
 ## Known issues
 
-- The solver stops once every nutrient target is met and doesn't top up calories, so a solved day
-  often lands under the calorie target and shows 27/28 when opened in the builder.
+- With a tight food limit (5 or fewer) the solver can't add staples, so calories can stay under
+  target.
+- The "ordinary groceries" bias with the raw pattern overshoots calcium and calories; this happens
+  before the calorie top-up runs.
+- A saved day that uses one of your own foods loses that food when opened in another browser.
 
 ## Contributors
 

@@ -17,9 +17,10 @@ After any change:
 ```
 python3 scripts/validate.py && python3 build.py && node tests/smoke.js
 ```
-The smoke test needs Playwright. Expected results at 14 foods: 28/28 for every pattern except
-carnivore (~18, no route to fiber or vitamin C), raw (27–28, choline is tight), and vegan with
-the "fortified" exclusion (27, B12). Any `OVER` line is a bug.
+The smoke test needs Playwright (CI installs it; see `.github/workflows/ci.yml`). Calories count
+toward the 28, as in the builder. Expected results at 14 foods: 28/28 at ~101–102% kcal for every
+pattern except carnivore (~17, no route to fiber or vitamin C) and raw (26, choline is tight);
+vegan with the "fortified" exclusion gets 27 (B12). Any `OVER` line, or calories above 105%, fails.
 
 ## Data rules (do not relax these)
 
@@ -43,6 +44,13 @@ the "fortified" exclusion (27, B12). Any `OVER` line is a bug.
 
 - Amounts are stored in **grams** in the plan object; the builder displays and edits **servings**
   (decimals allowed). The plan object's key order is the display order (drag to reorder).
+- Meals live in a separate `meals` map (food key -> index into `MEALS`); a food sits in one meal.
+  `fillMeals` guesses a meal for any food without one, so plans from the solver or older saved
+  days need no meal data. Drag and arrow keys both edit a token list (`mealTokens`/`applyTokens`).
+- Your own foods (`custom: true`, keys `c-…`) live in `localStorage` key `completeday-foods` and are
+  merged into `FOODS`/`BY` at startup. Their names pass through `cleanText` (no markup characters),
+  since food names are interpolated into HTML everywhere. Any plan loaded from storage goes
+  through `knownOnly`, because it may name a custom food this browser doesn't have.
 - 28 targets = 27 counted nutrients + calories. Informational only (never a gap): EPA+DHA, fat,
   carb, sodium. Manganese's UL is advisory. The vitamin A UL counts preformed A only.
 - The current day, profile and chip settings persist in `localStorage` (key `completeday`).
@@ -55,7 +63,8 @@ the "fortified" exclusion (27, B12). Any `OVER` line is a bug.
 
 ## Open tasks (good starting points)
 
-1. Make the solver top up calories toward the target with plausible foods once nutrients are met.
+1. The "ordinary" bias + raw pattern overshoots calcium (and calories) in the main solve loop.
+2. Top-up picks the most energy-dense ordinary staple; it could choose by nutrient fit instead.
 
 The app is published with GitHub Pages from `main` (https://toneyzhen.github.io/the-complete-day/),
 so every push to `main` goes live; commit a rebuilt `index.html` with every src/data change.

@@ -200,6 +200,34 @@ body.reordering{user-select:none;-webkit-user-select:none;cursor:grabbing}
 .btn.ghost:hover{background:var(--pine-soft);filter:none}
 .btn:disabled{opacity:.45;cursor:not-allowed}
 .btnrow{display:flex;flex-wrap:wrap;gap:9px;padding:14px 18px;border-top:1px solid var(--rule)}
+.searchrow{display:flex;gap:8px;align-items:stretch}
+.searchrow .searchbar{flex:1;min-width:0}
+@media (max-width:520px){.searchrow{flex-wrap:wrap}.searchrow select{flex:1 1 100%;height:38px}}
+.searchrow select{background:var(--surface);border:1px solid var(--rule);border-radius:3px;
+  padding:0 8px;font-family:var(--display);font-size:13px;color:var(--ink)}
+.mealhd{display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+  padding:9px 18px 7px;background:var(--sunk);border-bottom:1px solid var(--rule);
+  font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted)}
+.mealhd .mk{font-family:var(--mono);font-weight:400;letter-spacing:0;text-transform:none}
+.mealempty{padding:9px 18px;font-family:var(--display);font-size:12.5px;color:var(--faint);
+  border-bottom:1px solid var(--rule)}
+.cfsum{cursor:pointer;font-size:12px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink);padding:15px 18px;font-family:var(--display)}
+details[open]>.cfsum{border-bottom:1px solid var(--rule)}
+.cfgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;padding:16px 18px}
+.cfgrid .fld input,.cfgrid .fld select{width:100%}
+.cfgrid .wide{grid-column:span 2}
+@media (max-width:520px){.cfgrid .wide{grid-column:1/-1}}
+.cfmore>summary{cursor:pointer;padding:0 18px 4px;font-family:var(--display);font-size:13px;color:var(--pine)}
+.cferr{margin:0 18px;color:var(--rust);font-family:var(--display);font-size:13px}
+.cferr:empty{display:none}
+.saveform{display:flex;flex-wrap:wrap;align-items:center;gap:9px;padding:0 18px 16px}
+.saveform[hidden]{display:none}
+.saveform label{width:100%}
+.saveform input,.cfgrid input,.cfgrid select{background:var(--surface);border:1px solid var(--rule);
+  border-radius:3px;padding:8px 10px;font-family:var(--display);font-size:14px;color:var(--ink)}
+.saveform input{flex:1 1 180px;min-width:0}
 
 /* ---------- suggestions ---------- */
 .sugfilter{display:flex;flex-direction:column;gap:8px;padding:14px 18px;
@@ -301,21 +329,30 @@ footer b{color:var(--muted);font-weight:600}
     <div class="card" style="margin-bottom:18px">
       <h3>Today&rsquo;s food</h3>
       <div class="cardpad" style="padding-bottom:0">
-        <div class="searchbar">
-          <input id="search" type="text" placeholder="Search 483 foods &mdash; try sardines, kale, lentils&hellip;"
-            autocomplete="off" role="combobox" aria-expanded="false" aria-controls="results">
-          <div class="results" id="results" role="listbox" hidden></div>
+        <div class="searchrow">
+          <div class="searchbar">
+            <input id="search" type="text" placeholder="Search 483 foods &mdash; try sardines, kale, lentils&hellip;"
+              autocomplete="off" role="combobox" aria-expanded="false" aria-controls="results">
+            <div class="results" id="results" role="listbox" hidden></div>
+          </div>
+          <select id="addmeal" aria-label="Meal that new foods are added to"></select>
         </div>
       </div>
       <p class="rowhint">Amounts are in <b>servings</b> &mdash; type decimals like
-        <b>0.5</b> or <b>1.25</b>; the &minus; and + buttons step by one whole serving. Drag the <b>&#8942;&#8942;</b> handle to reorder (or focus it and
-        use the arrow keys).</p>
+        <b>0.5</b> or <b>1.25</b>; the &minus; and + buttons step by one whole serving. Drag the <b>&#8942;&#8942;</b> handle to reorder
+        or move a food to another meal (or focus it and use the arrow keys).</p>
       <div id="planlist"></div>
       <div class="btnrow">
         <button class="btn ghost" id="btn-suggest">Fix my gaps</button>
         <button class="btn ghost" id="btn-clear">Clear day</button>
-        <button class="btn ghost" id="btn-save">Save this day</button>
+        <button class="btn ghost" id="btn-save" aria-expanded="false" aria-controls="saveform">Save this day</button>
       </div>
+      <form class="saveform" id="saveform" hidden>
+        <label for="savename" class="ctl-label">Name this day</label>
+        <input id="savename" type="text" maxlength="60" autocomplete="off" required>
+        <button class="btn" type="submit">Save</button>
+        <button class="btn ghost" type="button" id="savecancel">Cancel</button>
+      </form>
     </div>
     <div class="card" id="sugcard" hidden>
       <h3>Best single additions</h3>
@@ -328,6 +365,43 @@ footer b{color:var(--muted);font-weight:600}
     <div class="card" id="savedcard" style="margin-top:18px" hidden>
       <h3>Saved days</h3>
       <div class="cardpad"><div class="saved" id="savedlist"></div></div>
+    </div>
+    <div class="card" style="margin-top:18px">
+      <details id="cfbox">
+        <summary class="cfsum">Add your own food</summary>
+        <p class="rowhint">Copy a <b>Nutrition Facts</b> label: amounts per serving as printed, in
+          g, mg or mcg (not % Daily Value). Anything left blank counts as zero, the same rule the
+          built-in foods follow. Your foods are kept in this browser only.</p>
+        <form id="cfform" novalidate>
+          <div class="cfgrid">
+            <div class="fld wide"><label for="cf-name">Name</label>
+              <input id="cf-name" maxlength="60" required placeholder="e.g. Brand X granola"></div>
+            <div class="fld"><label for="cf-sl">Serving as printed</label>
+              <input id="cf-sl" maxlength="30" placeholder="2/3 cup"></div>
+            <div class="fld"><label for="cf-serv">Serving weight (g)</label>
+              <input id="cf-serv" type="number" min="1" max="1000" step="any" inputmode="decimal" required></div>
+            <div class="fld wide"><label for="cf-cls">Contains</label>
+              <select id="cf-cls">
+                <option value="plant">Plants only (vegan)</option>
+                <option value="dairy">Dairy, no meat or fish</option>
+                <option value="egg">Egg, no meat or fish</option>
+                <option value="fish">Fish or seafood</option>
+                <option value="meat">Meat or poultry</option></select></div>
+          </div>
+          <div class="avoidbox">
+            <span class="ctl-label" id="cftaglab">Also contains</span>
+            <div class="chips" role="group" aria-labelledby="cftaglab" id="cftags"></div>
+          </div>
+          <div class="cfgrid" id="cf-core"></div>
+          <details class="cfmore"><summary>More nutrients, if the label lists them</summary>
+            <div class="cfgrid" id="cf-more"></div></details>
+          <p class="cferr" id="cf-err" role="alert"></p>
+          <div class="btnrow"><button class="btn" type="submit">Save and add to today</button></div>
+        </form>
+      </details>
+      <div class="cardpad" id="cflistwrap" hidden style="border-top:1px solid var(--rule)">
+        <span class="ctl-label">My foods</span>
+        <div class="saved" id="cflist" style="margin-top:8px"></div></div>
     </div>
   </div>
   <div class="cov">
@@ -502,6 +576,40 @@ const AVOIDABLE = [["dairy","Dairy"],["egg","Eggs"],["gluten","Gluten"],["peanut
   ["sesame","Sesame"],["nightshade","Nightshades"],["fortified","Fortified foods"]];
 let avoid = new Set();
 const tagsOf = k => (BY[k].tags || "").split(" ").filter(Boolean);
+
+/* ---------------- your own foods (from a Nutrition Facts label) ---------------- */
+// Kept in this browser's localStorage and merged into FOODS before anything indexes it.
+// Names are user input that the app interpolates into HTML everywhere, so markup characters
+// are neutralised at the door: tags dropped, quotes made typographic, & spelled out.
+const CUSTOM_KEY = "completeday-foods";
+const cleanText = s => String(s == null ? "" : s).replace(/<[^>]*>?/g, "").replace(/[<>]/g, "")
+  .replace(/['`]/g, "’").replace(/"/g, "”").replace(/&/g, " and ")
+  .replace(/\s+/g, " ").trim().slice(0, 60);
+const CLS_TAG = {dairy: "dairy", egg: "egg", fish: "fish"};
+function normCustom(f){
+  if (!f || typeof f.k !== "string" || !/^c-[a-z0-9]+$/.test(f.k) || BY[f.k]) return null;
+  if (!ALLCLS.includes(f.cls) || !(f.serv > 0 && f.serv <= 1000)) return null;
+  if (!Array.isArray(f.n) || f.n.length !== ORDER.length
+      || !f.n.every(v => typeof v === "number" && isFinite(v) && v >= 0)) return null;
+  const okTags = new Set(AVOIDABLE.map(([t]) => t));
+  const tags = String(f.tags || "").split(" ").filter(t => okTags.has(t));
+  return {k: f.k, name: cleanText(f.name) || "My food", cat: "My foods", cls: f.cls, serv: +f.serv,
+    sl: cleanText(f.sl) || `${+f.serv} g`, tags: [...new Set(tags)].join(" "), raw: 0, n: f.n, custom: true};
+}
+function customFoods(){ return FOODS.filter(f => f.custom); }
+function saveCustom(){
+  try { localStorage.setItem(CUSTOM_KEY, JSON.stringify(customFoods().map(({cat, raw, custom, ...f}) => f))); }
+  catch (e) {}
+}
+try {
+  const arr = JSON.parse(localStorage.getItem(CUSTOM_KEY) || "[]");
+  (Array.isArray(arr) ? arr : []).map(normCustom).filter(Boolean)
+    .forEach(f => { FOODS.push(f); BY[f.k] = f; });
+} catch (e) {}
+// drop food keys this browser doesn't know (a deleted custom food, or one from another viewer)
+const knownOnly = p => { const out = {};
+  for (const k in (p || {})) if (BY[k] && p[k] > 0) out[k] = +p[k];
+  return out; };
 // Suggestion groups. Nuts and seeds share a category but not a shopping habit, so they
 // are split here: seeds are the ones that keep winning on nutrient-per-calorie.
 function groupOf(k){
@@ -538,6 +646,9 @@ const ORDINARY = new Set(["potato","sweetpot","oats","egg","milk","yogurt","ched
 
 let profile = {sex:"male", age:40, kcal:2500};
 let plan = {};              // foodKey -> grams
+let meals = {};             // foodKey -> index into MEALS (a food sits in one meal)
+let addMeal = 0;            // meal that newly added foods go into
+const MEALS = ["Breakfast","Lunch","Dinner","Snacks"];
 let gapsFirst = true;
 let DB = null;
 
@@ -745,19 +856,64 @@ function setOrder(keys){
   Object.keys(plan).forEach(k => { if (!(k in next)) next[k] = plan[k]; });
   plan = next;
 }
+/* ---------------- meals ---------------- */
+const kcalOf = (k, g) => BY[k].n[IDX.kcal] * g / 100;
+const BREAKFASTY = /oat|cereal|granola|muesli|bread|bagel|muffin|yogurt|milk|kefir|juice|bran/i;
+// A first guess at where a food belongs; anything not obviously breakfast or a snack goes to
+// whichever of lunch and dinner has fewer calories so far.
+function guessMeal(k){
+  const f = BY[k];
+  if (f.cat === "Fruit" || f.cat === "Nuts & seeds") return 3;
+  if (f.cat === "Eggs" || f.cat === "Dairy alternatives"
+      || ((f.cat === "Dairy" || f.cat === "Grains & starches") && BREAKFASTY.test(f.name))) return 0;
+  return null;
+}
+// meals for every food in p: keep valid assignments from m, guess the rest
+function fillMeals(p, m){
+  const out = {}, kc = [0, 0, 0, 0];
+  for (const k in p) if (m && Number.isInteger(m[k]) && MEALS[m[k]]){ out[k] = m[k]; kc[m[k]] += kcalOf(k, p[k]); }
+  for (const k in p){
+    if (k in out) continue;
+    let i = guessMeal(k);
+    if (i === null) i = kc[1] <= kc[2] ? 1 : 2;
+    out[k] = i; kc[i] += kcalOf(k, p[k]);
+  }
+  return out;
+}
+// The list is a token sequence: "#i" opens meal i, food keys follow. Drag and arrow keys both
+// edit this sequence, then it is written back to meals + plan order in one place.
+function mealTokens(){
+  const t = [];
+  MEALS.forEach((_, i) => { t.push("#" + i); for (const k in plan) if (meals[k] === i) t.push(k); });
+  return t;
+}
+function applyTokens(t){
+  let cur = 0; const keys = [];
+  t.forEach(x => { if (x[0] === "#") cur = +x.slice(1); else { keys.push(x); meals[x] = cur; } });
+  setOrder(keys);
+}
+function mealHeader(i, kcal, empty){
+  return `<div class="mealhd" data-meal="${i}"><span>${MEALS[i]}</span>
+    <span class="mk">${empty ? "" : Math.round(kcal) + " kcal"}</span></div>`
+    + (empty ? `<div class="mealempty">Nothing yet</div>` : "");
+}
+
 function renderPlan(){
+  meals = fillMeals(plan, meals);
   const keys = Object.keys(plan);
   const box = document.getElementById("planlist");
   if (!keys.length){
     box.innerHTML = `<p class="empty">Nothing added yet. Search above, or let
       <b>Auto-solve</b> build a complete day for you.</p>`;
   } else {
-    box.innerHTML = keys.map(k => {
+    box.innerHTML = MEALS.map((_, i) => {
+      const mk = keys.filter(k => meals[k] === i);
+      return mealHeader(i, mk.reduce((a, k) => a + kcalOf(k, plan[k]), 0), !mk.length) + mk.map(k => {
       const f = BY[k], g = plan[k];
       const servs = +(g / f.serv).toFixed(2);   // up to 2 decimals, trailing zeros dropped
       return `<div class="prow" data-k="${k}">
         <button class="grip" data-grip="${k}" title="Drag to reorder"
-          aria-label="Reorder ${f.name}. Use the up and down arrow keys to move it.">${GRIP}</button>
+          aria-label="Move ${f.name}, now in ${MEALS[i]}. Use the up and down arrow keys to move it.">${GRIP}</button>
         <span><span class="pname">${f.name}</span>
           <span class="pmeta">1 serving = ${f.sl} (${+f.serv.toFixed(1)} g) · ${Math.round(g)} g ·
             ${Math.round(f.n[IDX.kcal]*g/100)} kcal</span></span>
@@ -772,6 +928,7 @@ function renderPlan(){
           </span>
           <button class="del" data-del="${k}" aria-label="Remove ${f.name}">&times;</button>
         </span></div>`;
+      }).join("");
     }).join("");
   }
   renderCoverage();
@@ -792,7 +949,7 @@ function runSearch(){
     ? hits.map((f,i) => `<button class="res${i === 0 ? " cursor" : ""}" data-add="${f.k}"
         role="option" aria-selected="${i === 0}" id="res-${i}"><span>${f.name}</span>
         <small>${f.cat} &middot; ${f.sl}</small></button>`).join("")
-    : `<p class="empty">No food matches &ldquo;${q}&rdquo;.</p>`;
+    : `<p class="empty">No food matches &ldquo;${esc(q)}&rdquo;.</p>`;
   results.hidden = false;
   search.setAttribute("aria-expanded","true");
   syncCursor();
@@ -807,6 +964,7 @@ function syncCursor(){
 }
 function addFood(k, grams){
   const f = BY[k];
+  if (!(k in plan)) meals[k] = addMeal;
   plan[k] = (plan[k] || 0) + (grams != null ? grams : f.serv);
   renderPlan();
 }
@@ -849,12 +1007,13 @@ planBox.addEventListener("keydown", e => {
   const g = e.target.closest("[data-grip]"); if (!g) return;
   if (!["ArrowUp","ArrowDown","Home","End"].includes(e.key)) return;
   e.preventDefault();
-  const keys = Object.keys(plan), i = keys.indexOf(g.dataset.grip);
-  const j = e.key === "Home" ? 0 : e.key === "End" ? keys.length - 1
+  // moving past a meal header moves the food into that meal; index 0 is the first header
+  const t = mealTokens(), i = t.indexOf(g.dataset.grip);
+  const j = e.key === "Home" ? 1 : e.key === "End" ? t.length - 1
           : i + (e.key === "ArrowUp" ? -1 : 1);
-  if (j < 0 || j >= keys.length || j === i) return;
-  keys.splice(j, 0, keys.splice(i, 1)[0]);
-  setOrder(keys); renderPlan();
+  if (j < 1 || j >= t.length || j === i) return;
+  t.splice(j, 0, t.splice(i, 1)[0]);
+  applyTokens(t); renderPlan();
   const again = planBox.querySelector(`[data-grip="${g.dataset.grip}"]`);
   if (again) again.focus();
 });
@@ -873,25 +1032,25 @@ document.addEventListener("pointermove", e => {
   if (!drag || e.pointerId !== drag.id) return;
   const y = e.clientY;
   if (Math.abs(y - drag.startY) > 3) drag.moved = true;
-  // shift the row under the pointer, then compare against the other rows' midpoints
-  const rows = [...planBox.querySelectorAll(".prow")].filter(r => r !== drag.row);
+  // shift the row under the pointer, comparing against the midpoints of the other rows and the
+  // meal headers; starting at 1 keeps every food below the first header
+  const kids = [...planBox.children].filter(r => r !== drag.row);
   let before = null;
-  for (const r of rows){ const b = r.getBoundingClientRect();
-    if (y < b.top + b.height / 2){ before = r; break; } }
-  if (before !== drag.row.nextElementSibling || (before === null && drag.row.nextElementSibling)){
-    planBox.insertBefore(drag.row, before);
-  }
+  for (let i = 1; i < kids.length; i++){ const b = kids[i].getBoundingClientRect();
+    if (y < b.top + b.height / 2){ before = kids[i]; break; } }
+  if (before !== drag.row.nextElementSibling) planBox.insertBefore(drag.row, before);
   // keep the list in view while dragging near the window edges
   if (y < 40) window.scrollBy(0, -12); else if (y > innerHeight - 40) window.scrollBy(0, 12);
 });
 function endDrag(){
   if (!drag) return;
-  const keys = [...planBox.querySelectorAll(".prow")].map(r => r.dataset.k);
+  const t = [...planBox.querySelectorAll(".mealhd,.prow")]
+    .map(r => r.dataset.k || "#" + r.dataset.meal);
   drag.row.classList.remove("dragging");
   document.body.classList.remove("reordering");
-  const changed = keys.join() !== Object.keys(plan).join();
+  const changed = t.join() !== mealTokens().join();
   drag = null;
-  if (changed){ setOrder(keys); renderPlan(); }
+  if (changed){ applyTokens(t); renderPlan(); }
 }
 document.addEventListener("pointerup", e => { if (drag && e.pointerId === drag.id) endDrag(); });
 document.addEventListener("pointercancel", e => { if (drag && e.pointerId === drag.id) endDrag(); });
@@ -991,6 +1150,8 @@ function pool(diet, style, av){
   let ks = FOODS.filter(f => d.cls.includes(f.cls)).map(f => f.k);
   if (d.no)      ks = ks.filter(k => !tagsOf(k).some(t => d.no.includes(t)));
   if (d.rawOnly) ks = ks.filter(k => BY[k].raw);
+  // your own foods carry no grain/legume/sugar/red-meat tags, so rule-based patterns skip them
+  if (d.no) ks = ks.filter(k => !BY[k].custom);
   if (av && av.size) ks = ks.filter(k => !tagsOf(k).some(t => av.has(t)));
   if (style === "ordinary") ks = ks.filter(k => ORDINARY.has(k));
   return ks;
@@ -1034,8 +1195,67 @@ function solveDay(opts){
     if (countFoods(p) >= maxFoods) break;
   }
   tune(p, tg, ul, sc);
+  topUp(p, tg, ul, ks, maxFoods);
   Object.keys(p).forEach(k => { p[k] = Math.max(5, Math.round(p[k] / 5) * 5); });
   return p;
+}
+
+// Once nutrients are covered, bring calories up to the target (aiming 1% over, so rounding
+// portions to 5 g can't drop it back under). Grow the food that has been scaled up least
+// relative to its serving cap, so extra energy is spread across the day instead of piling
+// into one food; if nothing can grow and there is room, add an ordinary staple.
+// This is the last step, so no later food needs UL_HEADROOM; keep only a sliver of margin for
+// the 5 g rounding that follows.
+const KCAL_AIM = 1.01, KCAL_MAX = 1.04, TOPUP_UL = 0.97;
+function topUp(p, tg, ul, ks, maxFoods){
+  const fits = (k, g) => { const load = ulLoad(p, ul);
+    for (const n in ul) if (load[n] + ulAmount(BY[k], n, g) > ul[n] * TOPUP_UL) return false;
+    return true; };
+  // grams of k that close the gap, at most half a serving, in 5 g steps
+  const stepFor = (k, gap) => { const f = BY[k], kc = f.n[IDX.kcal];
+    return Math.min(Math.max(5, f.serv / 2), Math.ceil(gap / (kc / 100) / 5) * 5); };
+  const trimmed = new Set();   // foods cut back to make room under a limit; never grown again
+  for (let it = 0; it < 300; it++){
+    const kc = totals(p)[IDX.kcal], gap = tg.kcal * KCAL_AIM - kc;
+    if (gap <= 0) return;
+    let best = null, bestR = Infinity;
+    Object.keys(p).forEach(k => {
+      const f = BY[k], kc100 = f.n[IDX.kcal];
+      if (SEASONING.has(k) || trimmed.has(k) || kc100 < 20) return;   // salt and near-zero foods can't carry energy
+      const g = stepFor(k, gap);
+      if (p[k] + g > capOf(k) || kc + kc100 * g / 100 > tg.kcal * KCAL_MAX || !fits(k, g)) return;
+      const r = p[k] / capOf(k);
+      if (r < bestR){ bestR = r; best = k; }
+    });
+    if (!best && countFoods(p) < maxFoods){
+      // shortcut: picks the most energy-dense ordinary food in the pool; upgrade to a
+      // nutrient-aware choice if top-ups start looking odd
+      const staples = ks.filter(k => !(k in p) && BY[k].n[IDX.kcal] >= 60 && !MAXSERV[k]
+        && ORDINARY.has(k))
+        .sort((a, b) => BY[b].n[IDX.kcal] * BY[b].serv - BY[a].n[IDX.kcal] * BY[a].serv);
+      const add = staples.find(k => fits(k, stepFor(k, gap)));
+      if (add){ p[add] = stepFor(add, gap); continue; }
+    }
+    if (best){ p[best] += stepFor(best, gap); continue; }
+    if (!makeRoom(p, tg, ul, trimmed)) return;
+  }
+}
+// A limit is nearly full (often iron, after the solver leaned on soybeans and greens): cut half
+// a serving of its biggest contributor, as long as no nutrient target ends up worse off.
+function makeRoom(p, tg, ul, trimmed){
+  const load = ulLoad(p, ul), before = deficits(p, tg);
+  const noWorse = () => Object.entries(deficits(p, tg)).every(([n, d]) => n in before && d <= before[n] + 1e-9);
+  for (const n of Object.keys(ul).filter(n => load[n] > ul[n] * 0.9)){
+    const ks = Object.keys(p).sort((a, b) => ulAmount(BY[b], n, p[b]) - ulAmount(BY[a], n, p[a]));
+    for (const k of ks){
+      const step = Math.max(5, BY[k].serv / 2);
+      if (p[k] - step < 5 || ulAmount(BY[k], n, step) <= 0) continue;
+      p[k] -= step;
+      if (noWorse()){ trimmed.add(k); return true; }
+      p[k] += step;
+    }
+  }
+  return false;
 }
 
 function tune(p, tg, ul, sc){
@@ -1087,7 +1307,8 @@ function tune(p, tg, ul, sc){
 function evaluate(p, diet){
   const tot = totals(p), tg = dietTargets(diet || "anything");
   const ul = Object.assign({}, limits(), dietCaps(diet || "anything"));
-  const short = COUNTED.filter(n => tg[n] && tot[IDX[n]] < tg[n] * 0.995);
+  // calories count toward the 28 too, the same way the builder's coverage panel counts them
+  const short = COUNTED.concat(["kcal"]).filter(n => tg[n] && tot[IDX[n]] < tg[n] * 0.995);
   const load = ulLoad(p, ul);
   const over = Object.keys(ul).filter(n => load[n] > ul[n] * 1.001);
   const netcarb = Object.keys(p).reduce((a, k) => a + netCarbOf(BY[k], p[k]), 0);
@@ -1098,18 +1319,22 @@ function evaluate(p, diet){
     proPct: tot[IDX.kcal] ? 400 * tot[IDX.protein] / tot[IDX.kcal] : 0};
 }
 function planCard(p, i, opts){
-  const e = evaluate(p, opts && opts.diet), keys = Object.keys(p);
+  const e = evaluate(p, opts && opts.diet), keys = Object.keys(p), m = fillMeals(p, {});
   const ok = !e.short.length && !e.over.length;
   const flags = [];
   if (e.mn > D.softUl.Mn) flags.push(`Manganese ${Math.round(e.mn)} mg`);
   if (e.fe > 25) flags.push(`Iron ${Math.round(e.fe)} mg`);
   return `<div class="card" style="margin-bottom:14px">
     <h3>${ok ? "Complete day" : "Best found"} &mdash; ${keys.length} foods</h3>
-    <div id="sv-${i}">${keys.map(k => `<div class="prow"><span>
+    <div id="sv-${i}">${MEALS.map((_, mi) => {
+      const mk = keys.filter(k => m[k] === mi);
+      return mk.length ? mealHeader(mi, mk.reduce((a, k) => a + kcalOf(k, p[k]), 0), false)
+        + mk.map(k => `<div class="prow"><span>
       <span class="pname">${BY[k].name}</span>
       <span class="pmeta">${p[k]} g &middot; ${(p[k]/BY[k].serv).toFixed(1)} × ${BY[k].sl}</span>
       </span><span class="mono" style="font-size:12.5px;color:var(--muted)">${
-        Math.round(BY[k].n[IDX.kcal]*p[k]/100)} kcal</span></div>`).join("")}</div>
+        Math.round(BY[k].n[IDX.kcal]*p[k]/100)} kcal</span></div>`).join("") : "";
+    }).join("")}</div>
     <div class="sum" style="border-bottom:none;border-top:1px solid var(--rule)">
       <div class="sumcell"><span class="k">Targets met</span>
         <span class="v ${ok?"good":"bad"}">${28 - e.short.length}/28</span></div>
@@ -1166,7 +1391,7 @@ document.getElementById("btn-solve5").addEventListener("click", () => {
 });
 document.getElementById("solveout").addEventListener("click", e => {
   const b = e.target.closest("[data-load]"); if (!b) return;
-  plan = JSON.parse(b.dataset.load);
+  plan = knownOnly(JSON.parse(b.dataset.load)); meals = {};
   renderPlan(); showTab("build");
   window.scrollTo({top: 0, behavior: "smooth"});
 });
@@ -1213,8 +1438,13 @@ brNut.innerHTML = RANKABLE.map(n => `<option value="${n}">${META[n].label}</opti
 brNut.value = "K";
 document.getElementById("br-diet").innerHTML =
   Object.keys(DIETS).map(k => `<option value="${k}">${DIETS[k].label}</option>`).join("");
-brCat.innerHTML = `<option value="">All categories</option>` +
-  [...new Set(FOODS.map(f => f.cat))].sort().map(c => `<option>${c}</option>`).join("");
+function fillCats(){
+  const was = brCat.value;
+  brCat.innerHTML = `<option value="">All categories</option>` +
+    [...new Set(FOODS.map(f => f.cat))].sort().map(c => `<option>${c}</option>`).join("");
+  brCat.value = [...brCat.options].some(o => o.value === was) ? was : "";
+}
+fillCats();
 function renderBrowse(){
   const n = brNut.value, basis = document.getElementById("br-basis").value;
   const cat = brCat.value, diet = document.getElementById("br-diet").value;
@@ -1276,14 +1506,17 @@ function showTab(which){
 
 /* ---------------- persistence ---------------- */
 function persistLocal(){
-  try { localStorage.setItem("completeday", JSON.stringify({plan, profile, avoid:[...avoid], sugOff:[...sugOff],
+  try { localStorage.setItem("completeday", JSON.stringify({plan, meals, addMeal, profile,
+    avoid:[...avoid], sugOff:[...sugOff],
     saved: savedCache.filter(x => x.id.startsWith("local-"))})); } catch (e) {}
 }
 const esc = s => String(s).replace(/[&<>"']/g, c => "&#" + c.charCodeAt(0) + ";");
 function restoreLocal(){
   try {
     const s = JSON.parse(localStorage.getItem("completeday") || "null");
-    if (s && s.plan){ plan = s.plan; if (s.profile) profile = s.profile;
+    if (s && s.plan){ plan = knownOnly(s.plan); meals = s.meals || {};
+      if (MEALS[s.addMeal]) addMeal = s.addMeal;
+      if (s.profile) profile = s.profile;
       if (s.avoid) avoid = new Set(s.avoid);
       if (s.sugOff) sugOff = new Set(s.sugOff); }
     if (s && Array.isArray(s.saved)) savedCache = s.saved;
@@ -1311,30 +1544,44 @@ async function initDb(){
     DB.collection("plans").onSnapshot(snap => {
       savedCache = savedCache.filter(x => x.id.startsWith("local-")).concat(snap.docs.map(d => {
         const v = d.data() || {};
-        return {id: d.id, name: v.name || "Untitled", plan: v.plan || {},
+        return {id: d.id, name: v.name || "Untitled", plan: v.plan || {}, meals: v.meals || {},
                 count: Object.keys(v.plan || {}).length};
       }));
       renderSaved(savedCache);
     }, () => {});
   } catch (e) {}
 }
-document.getElementById("btn-save").addEventListener("click", async () => {
+const saveForm = document.getElementById("saveform"), saveName = document.getElementById("savename"),
+      saveBtn = document.getElementById("btn-save");
+function showSaveForm(open){
+  saveForm.hidden = !open; saveBtn.setAttribute("aria-expanded", String(open));
+  if (open){ saveName.value = new Date().toLocaleDateString(); saveName.focus(); saveName.select(); }
+}
+saveBtn.addEventListener("click", () => {
   if (!Object.keys(plan).length) return;
-  const name = prompt("Name this day", new Date().toLocaleDateString());
-  if (!name) return;
+  showSaveForm(saveForm.hidden);
+});
+document.getElementById("savecancel").addEventListener("click", () => { showSaveForm(false); saveBtn.focus(); });
+saveName.addEventListener("keydown", e => { if (e.key === "Escape"){ showSaveForm(false); saveBtn.focus(); } });
+saveForm.addEventListener("submit", async e => {
+  e.preventDefault();
+  const name = saveName.value.trim();
+  if (!name || !Object.keys(plan).length) return;
+  showSaveForm(false);
+  const entry = {name, plan: Object.assign({}, plan), meals: Object.assign({}, meals)};
   if (DB){
-    try { await DB.collection("plans").add({name, plan, profile, ts: Date.now()}); return; }
+    try { await DB.collection("plans").add(Object.assign({profile, ts: Date.now()}, entry)); return; }
     catch (e) {}
   }
-  savedCache = savedCache.concat([{id: "local-" + Date.now(), name, plan: Object.assign({}, plan),
-    count: Object.keys(plan).length}]);
+  savedCache = savedCache.concat([Object.assign({id: "local-" + Date.now(),
+    count: Object.keys(plan).length}, entry)]);
   renderSaved(savedCache); persistLocal();
 });
 document.getElementById("savedlist").addEventListener("click", async e => {
   const o = e.target.closest("[data-open]"), d = e.target.closest("[data-drop]");
   if (o){
     const s = savedCache.find(x => x.id === o.dataset.open);
-    if (s){ plan = Object.assign({}, s.plan); renderPlan(); }
+    if (s){ plan = knownOnly(s.plan); meals = Object.assign({}, s.meals); renderPlan(); }
   } else if (d){
     const id = d.dataset.drop;
     if (DB && !id.startsWith("local-")){ try { await DB.doc("plans/" + id).delete(); } catch (e) {} }
@@ -1343,8 +1590,79 @@ document.getElementById("savedlist").addEventListener("click", async e => {
   }
 });
 
+/* ---------------- your own foods: form ---------------- */
+const CF_CORE = ["kcal","fat","Na","carb","fiber","protein","D","Ca","Fe","K"];   // label order
+const cfField = n => `<div class="fld"><label for="cf-n-${n}">${META[n].label} (${META[n].unit})</label>
+  <input id="cf-n-${n}" data-cfn="${n}" type="number" min="0" step="any" inputmode="decimal"
+    ${n === "kcal" || n === "Na" ? "required" : ""}></div>`;
+document.getElementById("cf-core").innerHTML = CF_CORE.map(cfField).join("");
+document.getElementById("cf-more").innerHTML = ORDER.filter(n => !CF_CORE.includes(n)).map(cfField).join("");
+const cfTags = new Set();
+document.getElementById("cftags").innerHTML = AVOIDABLE.map(([t, label]) =>
+  `<button type="button" class="chip" data-cftag="${t}" aria-pressed="false">${label}</button>`).join("");
+document.getElementById("cftags").addEventListener("click", e => {
+  const c = e.target.closest("[data-cftag]"); if (!c) return;
+  const t = c.dataset.cftag;
+  if (cfTags.has(t)) cfTags.delete(t); else cfTags.add(t);
+  c.setAttribute("aria-pressed", String(cfTags.has(t)));
+});
+function renderCustomList(){
+  const list = customFoods();
+  document.getElementById("cflistwrap").hidden = !list.length;
+  document.getElementById("cflist").innerHTML = list.map(f =>
+    `<span class="chipbtn"><b>${f.name}</b>&nbsp;&middot; ${f.sl}
+     <button class="x" data-cfdel="${f.k}" aria-label="Delete ${f.name}">&times;</button></span>`).join("");
+}
+function foodsChanged(){
+  SCARCE = scarcityFor(ALLKEYS); fillCats(); renderCustomList();
+  if (!document.getElementById("p-browse").hidden) renderBrowse();
+}
+document.getElementById("cfform").addEventListener("submit", e => {
+  e.preventDefault();
+  const val = id => document.getElementById(id).value.trim();
+  const num = s => { const v = parseFloat(String(s).replace(",", ".")); return isFinite(v) ? v : NaN; };
+  const err = msg => { document.getElementById("cf-err").textContent = msg; };
+  const name = cleanText(val("cf-name")), serv = num(val("cf-serv"));
+  if (!name) return err("Give the food a name.");
+  if (!(serv > 0 && serv <= 1000)) return err("Serving weight must be between 1 and 1000 g (it is printed next to the serving size).");
+  const per = {};
+  for (const n of ORDER){
+    const raw = document.getElementById("cf-n-" + n).value.trim();
+    const v = raw === "" ? 0 : num(raw);
+    if (!(v >= 0)) return err(`${META[n].label} must be a number of zero or more.`);
+    per[n] = v;
+  }
+  if (val("cf-n-kcal") === "") return err("Calories are required.");
+  if (val("cf-n-Na") === "") return err("Sodium is required: it is a ceiling, so a blank would err in the unsafe direction.");
+  if (per.fiber > per.carb) return err("Fiber can't be more than total carbohydrate.");
+  const cls = document.getElementById("cf-cls").value;
+  const tags = new Set(cfTags); if (CLS_TAG[cls]) tags.add(CLS_TAG[cls]);
+  const f = normCustom({k: "c-" + Date.now().toString(36), name, cls, serv, sl: val("cf-sl"),
+    tags: [...tags].join(" "), n: ORDER.map(n => per[n] * 100 / serv)});
+  if (!f) return err("Couldn't save that food; check the numbers.");
+  err("");
+  FOODS.push(f); BY[f.k] = f; ALLKEYS.push(f.k);
+  saveCustom(); foodsChanged();
+  addFood(f.k);
+  e.target.reset(); cfTags.clear();
+  document.querySelectorAll("[data-cftag]").forEach(c => c.setAttribute("aria-pressed", "false"));
+});
+document.getElementById("cflist").addEventListener("click", e => {
+  const d = e.target.closest("[data-cfdel]"); if (!d) return;
+  const k = d.dataset.cfdel, f = BY[k];
+  if (!f || !confirm(`Delete "${f.name}"? It will also be removed from today's food.`)) return;
+  FOODS.splice(FOODS.indexOf(f), 1); ALLKEYS.splice(ALLKEYS.indexOf(k), 1); delete BY[k];
+  delete plan[k]; delete meals[k];
+  saveCustom(); foodsChanged(); renderPlan();
+});
+
 /* ---------------- boot ---------------- */
+const addMealSel = document.getElementById("addmeal");
+addMealSel.innerHTML = MEALS.map((m, i) => `<option value="${i}">Add to ${m.toLowerCase()}</option>`).join("");
+addMealSel.addEventListener("change", () => { addMeal = +addMealSel.value; persistLocal(); });
 restoreLocal();
+addMealSel.value = String(addMeal);
+renderCustomList();
 AVOIDABLE.forEach(([t]) => {
   const c = document.querySelector(`[data-avoid="${t}"]`);
   if (c) c.setAttribute("aria-pressed", String(avoid.has(t)));
