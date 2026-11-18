@@ -8,7 +8,7 @@ No install, no server, no account.
 
 ## What it does
 
-**Build a day.** Search 483 foods, add them by the serving (decimals allowed — 0.5 serving,
+**Build a day.** Search 514 foods, add them by the serving (decimals allowed — 0.5 serving,
 1.25 servings), and drag to reorder. The day is split into breakfast, lunch, dinner and snacks,
 with calories per meal; drag a food (or use the arrow keys) to move it between meals. The same
 food can appear in more than one meal: pick the meal next to the search box and add it again. A coverage
@@ -73,7 +73,7 @@ Calories are set by you. Some deliberate choices:
 
 ## The data
 
-`data/foods.json` holds 483 foods with 32 values each, per 100 g of the food as named
+`data/foods.json` holds 514 foods with 32 values each, per 100 g of the food as named
 (e.g. "Lentils, cooked" means boiled, unsalted).
 
 - **Sources:** USDA FoodData Central (SR Legacy first) for whole foods; the USDA/FDA/ODS
