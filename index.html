@@ -441,7 +441,7 @@ footer b{color:var(--muted);font-weight:600}
       </div>
       <div class="covtools">
         <span class="status" id="covhint">Add food to begin</span>
-        <button class="mini" id="btn-gapsfirst" aria-pressed="true">Gaps first</button>
+        <button class="mini" id="btn-gapsfirst" aria-pressed="true">Sort by %</button>
       </div>
       <div class="covscroll"><div id="coverage"></div></div>
     </div>
@@ -857,9 +857,10 @@ function renderCoverage(){
   rows.splice(ORDER.indexOf("carb") + 1, 0,
     {n: "netcarb", p: null, over: false, soft: false, ok: true, counted: false, amt: netcarb});
   const gaps = rows.filter(r => r.counted && !r.ok);
+  // lowest % first, so gaps lead; informational rows (sodium, fat, carbs, EPA+DHA) keep their order at the end
+  const key = r => r.counted && r.p !== null ? r.p : Infinity;
   const sorted = gapsFirst
-    ? rows.slice().sort((a, b) => (a.counted && !a.ok ? 0 : 1) - (b.counted && !b.ok ? 0 : 1)
-        || rows.indexOf(a) - rows.indexOf(b))
+    ? rows.slice().sort((a, b) => key(a) - key(b) || rows.indexOf(a) - rows.indexOf(b))
     : rows;
 
   document.getElementById("coverage").innerHTML = sorted.map(r => {
