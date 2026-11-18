@@ -31,7 +31,9 @@ nutrients by how few foods in the allowed pool supply them, then tunes portions 
 respecting upper limits (preformed vitamin A, selenium, zinc, calcium, iron, sodium and others).
 Once the nutrients are covered it tops calories up to your target, spreading the extra across
 the foods already in the day (trimming an iron- or calcium-heavy portion to make room if a limit
-is close) or adding an ordinary staple. The result is split into meals.
+is close) or adding an ordinary staple. If whole servings overshoot, it trims whatever portion
+costs no nutrient. Portions are rounded to 5 g (0.5 g for salt, spices and the like) without
+crossing an upper limit. The result is split into meals.
 
 **Food ranking.** Rank every food by any nutrient, per serving, per 100 g or per 100 kcal.
 
@@ -106,8 +108,10 @@ GitHub Actions runs all three on every push and pull request, and fails if the c
 
 - With a tight food limit (5 or fewer) the solver can't add staples, so calories can stay under
   target.
-- The "ordinary groceries" bias with the raw pattern overshoots calcium and calories; this happens
-  before the calorie top-up runs.
+- Some days can't meet every nutrient within the calorie target from the allowed foods (low
+  targets like 1,400–1,600 kcal, carnivore, "least food weight" with high-protein, "ordinary
+  groceries" with raw). The solver trims calories only where no nutrient suffers, so these land
+  above target; it would need to swap foods for leaner ones to do better.
 - A saved day that uses one of your own foods loses that food when opened in another browser.
 
 ## Contributors

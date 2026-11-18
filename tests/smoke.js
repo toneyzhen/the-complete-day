@@ -21,6 +21,23 @@ const DIETS = ["anything","pescatarian","vegetarian","vegan","paleo","whole30","
     if (r.over.length) errors.push(`${diet}: over an upper limit`);
     if (r.kcalPct > 105) errors.push(`${diet}: calories ${r.kcalPct}% of target`);
   }
+  // Upper limits are a hard rule for every bias and profile, not just the default one.
+  // (female 31-50 + raw once put 5 g of iodized salt in the day; ordinary + raw rounded calcium over)
+  const breaches = await page.evaluate(DIETS => {
+    const out = [];
+    for (const [sex, age, kcal] of [["male", 40, 2500], ["female", 40, 2000], ["female", 75, 1600]]){
+      profile = {sex, age, kcal};
+      for (const style of ["balanced", "fewest", "light", "ordinary"])
+        for (const maxFoods of [14, 7]) for (const diet of DIETS){
+          const p = solveDay({diet, maxFoods, style, seed: null, avoid: new Set()});
+          const e = evaluate(p, diet);
+          if (e.over.length) out.push(`${sex} ${age} ${kcal} kcal, ${style}, ${maxFoods} foods, ${diet}: ${e.over}`);
+        }
+    }
+    return out;
+  }, DIETS);
+  console.log(`upper-limit sweep: ${breaches.length} breaches`);
+  breaches.forEach(b => errors.push('OVER ' + b));
   await browser.close();
   if (errors.length){ console.error(errors); process.exit(1); }
 })();

@@ -1195,8 +1195,9 @@ function solveDay(opts){
     if (countFoods(p) >= maxFoods) break;
   }
   tune(p, tg, ul, sc);
+  trimKcal(p, tg);
   topUp(p, tg, ul, ks, maxFoods);
-  Object.keys(p).forEach(k => { p[k] = Math.max(5, Math.round(p[k] / 5) * 5); });
+  roundPortions(p, ul);
   return p;
 }
 
@@ -1242,9 +1243,51 @@ function topUp(p, tg, ul, ks, maxFoods){
 }
 // A limit is nearly full (often iron, after the solver leaned on soybeans and greens): cut half
 // a serving of its biggest contributor, as long as no nutrient target ends up worse off.
+// true if no nutrient target is further from met than it was in `before` (a deficits() result)
+const noWorseThan = (p, tg, before) =>
+  Object.entries(deficits(p, tg)).every(([n, d]) => n in before && d <= before[n] + 1e-9);
+// The mirror of topUp: when a small food pool needs many whole servings to close the last gaps,
+// calories overshoot and tune() never gets to trim them. Cut whatever portion removes the most
+// energy without leaving any nutrient worse off, down to KCAL_AIM.
+function trimKcal(p, tg){
+  for (let it = 0; it < 300; it++){
+    const excess = totals(p)[IDX.kcal] - tg.kcal * KCAL_AIM;
+    if (excess <= tg.kcal * (KCAL_MAX - KCAL_AIM)) return;
+    const before = deficits(p, tg);
+    let best = null, bestG = 0, bestCut = 0;
+    for (const k in p){
+      const kc100 = BY[k].n[IDX.kcal]; if (kc100 <= 0) continue;
+      const g = Math.min(p[k], Math.max(5, BY[k].serv / 2), Math.ceil(excess / (kc100 / 100) / 5) * 5);
+      const cut = kc100 * g / 100; if (cut <= bestCut) continue;
+      p[k] -= g; const ok = noWorseThan(p, tg, before); p[k] += g;
+      if (ok){ best = k; bestG = g; bestCut = cut; }
+    }
+    if (!best) return;
+    p[best] -= bestG;
+    if (p[best] < 5) delete p[best];
+  }
+}
+// Round portions to 5 g, or 0.5 g for foods served by the gram or two (salt is 1.5 g a serving;
+// a 5 g floor put 2 g of sodium in some days). A nutrient the solver filled right up to its
+// limit can be tipped over by rounding up, so for any limit that ends up breached, round its
+// contributors down instead.
+function roundPortions(p, ul){
+  const raw = Object.assign({}, p);
+  const unit = k => BY[k].serv < 10 ? 0.5 : 5;
+  const round = (k, how) => Math.max(unit(k), how(raw[k] / unit(k)) * unit(k));
+  for (const k in p) p[k] = round(k, Math.round);
+  for (const n in ul){
+    const up = Object.keys(p).filter(k => p[k] > raw[k])
+      .sort((a, b) => ulAmount(BY[b], n, p[b]) - ulAmount(BY[a], n, p[a]));
+    for (const k of up){
+      if (ulLoad(p, ul)[n] <= ul[n]) break;
+      p[k] = round(k, Math.floor);
+    }
+  }
+}
 function makeRoom(p, tg, ul, trimmed){
   const load = ulLoad(p, ul), before = deficits(p, tg);
-  const noWorse = () => Object.entries(deficits(p, tg)).every(([n, d]) => n in before && d <= before[n] + 1e-9);
+  const noWorse = () => noWorseThan(p, tg, before);
   for (const n of Object.keys(ul).filter(n => load[n] > ul[n] * 0.9)){
     const ks = Object.keys(p).sort((a, b) => ulAmount(BY[b], n, p[b]) - ulAmount(BY[a], n, p[a]));
     for (const k of ks){

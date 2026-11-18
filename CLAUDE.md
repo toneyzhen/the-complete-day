@@ -21,6 +21,8 @@ The smoke test needs Playwright (CI installs it; see `.github/workflows/ci.yml`)
 toward the 28, as in the builder. Expected results at 14 foods: 28/28 at ~101–102% kcal for every
 pattern except carnivore (~17, no route to fiber or vitamin C) and raw (26, choline is tight);
 vegan with the "fortified" exclusion gets 27 (B12). Any `OVER` line, or calories above 105%, fails.
+It also sweeps every bias × pattern at 14 and 7 foods for three profiles and fails on any
+upper-limit breach; that sweep is what caught the rounding bugs, so extend it rather than trim it.
 
 ## Data rules (do not relax these)
 
@@ -63,7 +65,9 @@ vegan with the "fortified" exclusion gets 27 (B12). Any `OVER` line, or calories
 
 ## Open tasks (good starting points)
 
-1. The "ordinary" bias + raw pattern overshoots calcium (and calories) in the main solve loop.
+1. Calorie-bound days (low targets, carnivore, light + high-protein, ordinary + raw) end above the
+   calorie target: `trimKcal` only cuts portions that cost no nutrient. Fixing it needs swaps
+   (replace a calorie-dense food with a leaner one that covers the same nutrients).
 2. Top-up picks the most energy-dense ordinary staple; it could choose by nutrient fit instead.
 
 The app is published with GitHub Pages from `main` (https://toneyzhen.github.io/the-complete-day/),
