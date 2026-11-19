@@ -52,7 +52,8 @@ inherited names like `toString` from share links), the share-link encoding and m
 ## App conventions
 
 - Amounts are stored in **grams** in the plan object; the builder displays and edits **servings**
-  (decimals allowed). The plan object's key order is the display order (drag to reorder).
+  (decimals allowed). The builder's row order is `rowOrder` (below), not `plan`'s key order;
+  reordering `plan` keys changes nothing on screen.
 - `plan[k]` is a food's total for the day; `meals[k]` splits it by meal (`{"0": 40, "1": 80}`
   grams), so one food can sit in several meals. Change a meal's portion only through `setPortion`,
   which keeps `plan[k]` equal to the sum. `fillMeals` normalises any input (older data stored a
@@ -66,6 +67,9 @@ inherited names like `toString` from share links), the share-link encoding and m
   merged into `FOODS`/`BY` at startup. Their names pass through `cleanText` (no markup characters),
   since food names are interpolated into HTML everywhere. Any plan loaded from storage goes
   through `knownOnly`, because it may name a custom food this browser doesn't have.
+- Food keys are permanent: saved days, share links and backups refer to them. To remove a food,
+  map its key to its replacement in `RENAMED`; `knownOnly`, `cleanMeals` and `cleanOrder` follow
+  it, and the smoke test checks every target exists.
 - Share links (`#day=` + base64url JSON) and backup files are untrusted: they only enter through
   `importFoods` (normCustom), `knownOnly` and `cleanMeals`. A shared day never replaces the
   current one without the user pressing "Open it"; a restore only ever adds.
@@ -92,7 +96,7 @@ inherited names like `toString` from share links), the share-link encoding and m
    90% kcal, 8 over 105%). Without it, fortified cereals used up the iron room and vegan days
    stalled near 60% kcal. Check those sweep numbers again after adding foods.
 3. Top-up picks the most energy-dense ordinary staple; it could choose by nutrient fit instead.
-4. `src/app.template.html` is ~1,900 lines. If the solver grows further, split the JS into
+4. `src/app.template.html` is ~2,050 lines. If the solver grows further, split the JS into
    files that `build.py` inlines, keeping the single-file output.
 5. `UNCOMMON_WEIGHT` (0.5) scales an uncommon food's score in `suggest`. Sweep, 1.0 vs 0.5:
    uncommon foods per day 3.1 -> 0.3, fully met at 14 foods 125 -> 126, at 7 foods 48 -> 40,

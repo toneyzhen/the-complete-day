@@ -93,7 +93,8 @@ everyday food (`common`).
   creamy dressings) were left out, because the validator rejects fiber in animal foods.
 - **Iodine** comes from the USDA, FDA and ODS-NIH Iodine Database, Release 4.0 (2024): by its own
   SR Legacy link where it has one, otherwise matched by name to the same food and form. 331 foods
-  have an iodine value; the rest read 0, which mostly matters for foods it never measured.
+  have an iodine value; the rest read 0, which mostly matters for foods it never measured. The
+  database row behind each value is in `data/audit/iodine_r4.json`.
 - **Unknown trace values are recorded as 0**, not guessed. The app under-credits rather than
   over-credits, so a day that clears every target has margin in hand.
 - **Sodium is the exception**: it is filled in for every food, because a blank there would err

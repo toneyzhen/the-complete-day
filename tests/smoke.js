@@ -95,6 +95,12 @@ const DIETS = ["anything","pescatarian","vegetarian","vegan","paleo","whole30","
     const v = mealTokens(), sal = v.indexOf("salmon@1"), lo = v.indexOf("oats@1");
     v.splice(lo, 0, v.splice(sal, 1)[0]); applyTokens(v);
     ok(mealRows(1).join() === "salmon,oats" && mealRows(0).join() === "oats,egg", "reordering within a meal with a shared food");
+    // a removed food key still loads as the food that replaced it (days saved before the change)
+    ok(Object.values(RENAMED).every(k => Object.prototype.hasOwnProperty.call(BY, k)) &&
+       Object.keys(RENAMED).every(k => !Object.prototype.hasOwnProperty.call(BY, k)), "RENAMED points at a missing or live key");
+    ok(JSON.stringify(knownOnly({salmon_farmed: 85, salmon: 50})) === JSON.stringify({salmon: 135}), "renamed key in a plan");
+    ok(JSON.stringify(cleanMeals({salmon_farmed: {1: 85}})) === JSON.stringify({salmon: {1: 85}}), "renamed key in meals");
+    ok(cleanOrder(["salmon_farmed@1", "salmon@1"]).join() === "salmon@1", "renamed key in row order");
     // the calorie trim never removes a food the user kept
     profile = {sex: "male", age: 40, kcal: 2500};
     const seed = {oliveoil: 10, butter: 10, walnut: 200, peanut: 200, milk: 244};

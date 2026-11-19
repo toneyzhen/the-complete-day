@@ -639,9 +639,23 @@ try {
 // Drop food keys this browser doesn't know (a deleted custom food, one from another viewer, or
 // anything in a share link or backup file) and clamp amounts to the builder's 50 servings.
 // hasOwnProperty, not BY[k]: "toString" or "constructor" would pass that test and crash rendering.
+// Keys that were removed, mapped to the food that replaced them, so days saved, shared or backed
+// up before the change still load. Never delete a food key without adding it here.
+// (2026-11: duplicates of hand-corrected older foods, removed from the 1,500-food expansion)
+const RENAMED = {milk1_nofort: "milk1", milk2_nofort: "milk2", skim_nofort: "skimmilk",
+  butter_salted: "butter", butteroil: "ghee", goatmilk_d: "goatmilk", parmesan_hard: "parmesan",
+  coconutcream_raw: "coconutcream", whitebean: "cannellini", edamame_frozen: "edamame",
+  lupins_cooked: "lupini", morinu_soft: "silkentofu", chbreast_skinless_roast: "chickenbreast",
+  flaxseed_whole: "flax", cuminseed: "cumin", jackmackerel_can: "cannedmackerel",
+  alaskakingcrab: "crab", northernpike: "pike", salmon_farmed: "salmon", squid_fried: "squid",
+  redchili_raw: "chilipepper", parsnip_cooked2: "parsnip", snowpea_raw: "snappea"};
+const renamed = k => Object.prototype.hasOwnProperty.call(RENAMED, k) ? RENAMED[k] : k;
 const knownOnly = p => { const out = {};
-  if (p && typeof p === "object") for (const k in p)
-    if (Object.prototype.hasOwnProperty.call(BY, k) && +p[k] > 0) out[k] = Math.min(+p[k], 50 * BY[k].serv);
+  if (p && typeof p === "object") for (const k0 in p){
+    const k = renamed(k0);
+    if (Object.prototype.hasOwnProperty.call(BY, k) && +p[k0] > 0)
+      out[k] = Math.min((out[k] || 0) + +p[k0], 50 * BY[k].serv);   // an old and a new key add up
+  }
   return out; };
 // Suggestion groups. Nuts and seeds share a category but not a shopping habit, so they
 // are split here: seeds are the ones that keep winning on nutrient-per-calorie.
@@ -999,7 +1013,8 @@ function applyTokens(t){
 }
 // rowOrder from outside (storage, saved day, link, backup): a short list of well-formed tokens
 const cleanOrder = o => Array.isArray(o)
-  ? o.filter(x => typeof x === "string" && /^[A-Za-z0-9_-]{1,40}@[0-3]$/.test(x)).slice(0, 400) : [];
+  ? [...new Set(o.filter(x => typeof x === "string" && /^[A-Za-z0-9_-]{1,40}@[0-3]$/.test(x)).slice(0, 400)
+      .map(x => { const [k, i] = x.split("@"); return renamed(k) + "@" + i; }))] : [];
 function mealHeader(i, kcal, empty){
   return `<div class="mealhd" data-meal="${i}"><span>${MEALS[i]}</span>
     <span class="mk">${empty ? "" : Math.round(kcal) + " kcal"}</span></div>`
@@ -1734,7 +1749,7 @@ const esc = s => String(s).replace(/[&<>"']/g, c => "&#" + c.charCodeAt(0) + ";"
 function restoreLocal(){
   try {
     const s = JSON.parse(localStorage.getItem("completeday") || "null");
-    if (s && s.plan){ plan = knownOnly(s.plan); meals = s.meals || {}; rowOrder = cleanOrder(s.rowOrder);
+    if (s && s.plan){ plan = knownOnly(s.plan); meals = cleanMeals(s.meals); rowOrder = cleanOrder(s.rowOrder);
       if (MEALS[s.addMeal]) addMeal = s.addMeal;
       if (s.profile) profile = s.profile;
       if (s.avoid) avoid = new Set(s.avoid);
@@ -1801,7 +1816,7 @@ document.getElementById("savedlist").addEventListener("click", async e => {
   const o = e.target.closest("[data-open]"), d = e.target.closest("[data-drop]");
   if (o){
     const s = savedCache.find(x => x.id === o.dataset.open);
-    if (s){ plan = knownOnly(s.plan); meals = Object.assign({}, s.meals); rowOrder = cleanOrder(s.order); renderPlan(); }
+    if (s){ plan = knownOnly(s.plan); meals = cleanMeals(s.meals); rowOrder = cleanOrder(s.order); renderPlan(); }
   } else if (d){
     const id = d.dataset.drop;
     if (DB && !id.startsWith("local-")){ try { await DB.doc("plans/" + id).delete(); } catch (e) {} }
@@ -1889,9 +1904,11 @@ const foodRecord = ({cat, raw, custom, ...f}) => f;   // what saveCustom stores
 // meals from outside: a split {meal: grams} per food, or an older single meal index; own keys of
 // known foods only, so "__proto__" in a link can't reach the result's prototype
 const cleanMeals = m => { const out = {};
-  if (m && typeof m === "object") for (const k in m){
-    if (!Object.prototype.hasOwnProperty.call(BY, k)) continue;
-    const v = m[k];
+  if (m && typeof m === "object") for (const k0 in m){
+    const k = renamed(k0);
+    // first one wins when an old and a new key both appear; fillMeals rescales to the plan total
+    if (!Object.prototype.hasOwnProperty.call(BY, k) || k in out) continue;
+    const v = m[k0];
     if (Number.isInteger(v) && MEALS[v]){ out[k] = v; continue; }
     if (!v || typeof v !== "object") continue;
     const s = {}; MEAL_IDS.forEach(i => { if (+v[i] > 0) s[i] = +v[i]; });

@@ -1,0 +1,1833 @@
+{
+ "source": "USDA, FDA and ODS-NIH Database for the Iodine Content of Common Foods, Release 4.0 (October 2024), per 100 g. https://www.ars.usda.gov/northeast-area/beltsville-md-bhnrc/beltsville-human-nutrition-research-center/methods-and-application-of-food-composition-laboratory/mafcl-site-pages/iodine/",
+ "how": "Filled only where a food read 0. usda_link: the iodine database row lists this food's SR Legacy NDB number (matched through the food's fdc). name: the same food and form matched by name (Sonnet subagents, reviewed). Values are rounded to 0.1 mcg.",
+ "foods": {
+  "acornsquash": {
+   "row": 81,
+   "description": "Squash, winter (Hubbard or acorn), fresh/frozen, boiled",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.8,
+   "match": "name"
+  },
+  "almond": {
+   "row": 227,
+   "description": "Almonds, shelled",
+   "samples": 3,
+   "iodine_mcg_per_100g": 0.0,
+   "match": "usda_link"
+  },
+  "almondmilk": {
+   "row": 210,
+   "description": "Beverage, almond",
+   "samples": 9,
+   "iodine_mcg_per_100g": 0.4,
+   "match": "name"
+  },
+  "almondmilk_f": {
+   "row": 210,
+   "description": "Beverage, almond",
+   "samples": 9,
+   "iodine_mcg_per_100g": 0.4,
+   "match": "name"
+  },
+  "american_processed": {
+   "row": 24,
+   "description": "Cheese, American, processed",
+   "samples": 37,
+   "iodine_mcg_per_100g": 56.7,
+   "match": "name"
+  },
+  "apflour": {
+   "row": 16,
+   "description": "Flour, white, all-purpose",
+   "samples": 3,
+   "iodine_mcg_per_100g": 0.8,
+   "match": "usda_link"
+  },
+  "apple": {
+   "row": 54,
+   "description": "Apple, red, with peel, raw",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.1,
+   "match": "usda_link"
+  },
+  "apple_fuji": {
+   "row": 54,
+   "description": "Apple, red, with peel, raw",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.1,
+   "match": "name"
+  },
+  "apple_gala": {
+   "row": 54,
+   "description": "Apple, red, with peel, raw",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.1,
+   "match": "name"
+  },
+  "apple_reddelicious": {
+   "row": 54,
+   "description": "Apple, red, with peel, raw",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.1,
+   "match": "name"
+  },
+  "applegrapepearjuice": {
+   "row": 172,
+   "description": "Juice, fruit blend (100% juice), canned/bottled",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.8,
+   "match": "usda_link"
+  },
+  "applejuice_plain": {
+   "row": 68,
+   "description": "Juice, apple, bottled",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.4,
+   "match": "name"
+  },
+  "applesauce": {
+   "row": 59,
+   "description": "Applesauce, bottled",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.1,
+   "match": "name"
+  },
+  "applesauce_sw": {
+   "row": 59,
+   "description": "Applesauce, bottled",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.1,
+   "match": "usda_link"
+  },
+  "asparagus": {
+   "row": 74,
+   "description": "Asparagus, fresh/frozen, boiled",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.9,
+   "match": "usda_link"
+  },
+  "asparagus_frozen": {
+   "row": 74,
+   "description": "Asparagus, fresh/frozen, boiled",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.9,
+   "match": "name"
+  },
+  "avocado": {
+   "row": 67,
+   "description": "Avocado, raw",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.2,
+   "match": "usda_link"
+  },
+  "bacon_baked": {
+   "row": 29,
+   "description": "Pork bacon, oven-cooked",
+   "samples": 35,
+   "iodine_mcg_per_100g": 1.1,
+   "match": "usda_link"
+  },
+  "bacon_microwaved": {
+   "row": 29,
+   "description": "Pork bacon, oven-cooked",
+   "samples": 35,
+   "iodine_mcg_per_100g": 1.1,
+   "match": "name"
+  },
+  "bacon_presliced": {
+   "row": 29,
+   "description": "Pork bacon, oven-cooked",
+   "samples": 35,
+   "iodine_mcg_per_100g": 1.1,
+   "match": "name"
+  },
+  "bagel_plain": {
+   "row": 133,
+   "description": "Bagel, plain, toasted",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.6,
+   "match": "usda_link"
+  },
+  "banana": {
+   "row": 56,
+   "description": "Banana, raw",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.2,
+   "match": "usda_link"
+  },
+  "bbqsauce": {
+   "row": 203,
+   "description": "Sauce, barbecue, bottled",
+   "samples": 27,
+   "iodine_mcg_per_100g": 2.7,
+   "match": "usda_link"
+  },
+  "beef80": {
+   "row": 251,
+   "description": "Beef, ground, pan-cooked",
+   "samples": 35,
+   "iodine_mcg_per_100g": 7.5,
+   "match": "name"
+  },
+  "beef93": {
+   "row": 251,
+   "description": "Beef, ground, pan-cooked",
+   "samples": 35,
+   "iodine_mcg_per_100g": 7.5,
+   "match": "name"
+  },
+  "beet_can": {
+   "row": 340,
+   "description": "Beets, canned",
+   "samples": 7,
+   "iodine_mcg_per_100g": 0.4,
+   "match": "usda_link"
+  },
+  "bellpepper_green": {
+   "row": 80,
+   "description": "Pepper, bell, green, raw",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.2,
+   "match": "usda_link"
+  },
+  "bf_chuckeyeroast": {
+   "row": 334,
+   "description": "Beef roast, chuck, oven-roasted",
+   "samples": 8,
+   "iodine_mcg_per_100g": 3.8,
+   "match": "name"
+  },
+  "bf_clodroast": {
+   "row": 334,
+   "description": "Beef roast, chuck, oven-roasted",
+   "samples": 8,
+   "iodine_mcg_per_100g": 3.8,
+   "match": "name"
+  },
+  "bf_g7030": {
+   "row": 251,
+   "description": "Beef, ground, pan-cooked",
+   "samples": 35,
+   "iodine_mcg_per_100g": 7.5,
+   "match": "name"
+  },
+  "bf_g7525": {
+   "row": 251,
+   "description": "Beef, ground, pan-cooked",
+   "samples": 35,
+   "iodine_mcg_per_100g": 7.5,
+   "match": "name"
+  },
+  "bf_g9010": {
+   "row": 251,
+   "description": "Beef, ground, pan-cooked",
+   "samples": 35,
+   "iodine_mcg_per_100g": 7.5,
+   "match": "name"
+  },
+  "bf_g9505": {
+   "row": 251,
+   "description": "Beef, ground, pan-cooked",
+   "samples": 35,
+   "iodine_mcg_per_100g": 7.5,
+   "match": "name"
+  },
+  "bf_porterhouse": {
+   "row": 260,
+   "description": "Beef steak, loin/sirloin, broiled",
+   "samples": 34,
+   "iodine_mcg_per_100g": 4.7,
+   "match": "name"
+  },
+  "bf_stripliplon": {
+   "row": 260,
+   "description": "Beef steak, loin/sirloin, broiled",
+   "samples": 34,
+   "iodine_mcg_per_100g": 4.7,
+   "match": "name"
+  },
+  "bf_stripsteak": {
+   "row": 260,
+   "description": "Beef steak, loin/sirloin, broiled",
+   "samples": 34,
+   "iodine_mcg_per_100g": 4.7,
+   "match": "name"
+  },
+  "bf_tbone": {
+   "row": 260,
+   "description": "Beef steak, loin/sirloin, broiled",
+   "samples": 34,
+   "iodine_mcg_per_100g": 4.7,
+   "match": "name"
+  },
+  "blackbean_can": {
+   "row": 270,
+   "description": "Beans, black, canned, drained",
+   "samples": 3,
+   "iodine_mcg_per_100g": 0.0,
+   "match": "name"
+  },
+  "blacktea": {
+   "row": 109,
+   "description": "Tea, brewed from tea bag",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.1,
+   "match": "usda_link"
+  },
+  "blueberry": {
+   "row": 196,
+   "description": "Blueberries, raw",
+   "samples": 28,
+   "iodine_mcg_per_100g": 0.3,
+   "match": "usda_link"
+  },
+  "bluecrab_canned": {
+   "row": 389,
+   "description": "Crustaceans, crab, blue, canned",
+   "samples": 3,
+   "iodine_mcg_per_100g": 37.8,
+   "match": "usda_link"
+  },
+  "bluefintuna": {
+   "row": 388,
+   "description": "Fish, tuna, fresh, bluefin, cooked, dry heat",
+   "samples": 4,
+   "iodine_mcg_per_100g": 23.0,
+   "match": "usda_link"
+  },
+  "bluefintuna_raw": {
+   "row": 387,
+   "description": "Fish, tuna, fresh, bluefin, raw",
+   "samples": 4,
+   "iodine_mcg_per_100g": 17.6,
+   "match": "usda_link"
+  },
+  "boiledpotato": {
+   "row": 83,
+   "description": "Potato, peeled, boiled1",
+   "samples": 34,
+   "iodine_mcg_per_100g": 0.0,
+   "match": "name"
+  },
+  "bread_multigrain": {
+   "row": 344,
+   "description": "Bread, multigrain5",
+   "samples": 4,
+   "iodine_mcg_per_100g": 1.8,
+   "match": "usda_link"
+  },
+  "breadcrumbs": {
+   "row": 15,
+   "description": "Breadcrumbs",
+   "samples": 3,
+   "iodine_mcg_per_100g": 111.7,
+   "match": "usda_link"
+  },
+  "broccoli": {
+   "row": 72,
+   "description": "Broccoli, fresh/frozen, boiled",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.5,
+   "match": "name"
+  },
+  "broccoli_frozen": {
+   "row": 72,
+   "description": "Broccoli, fresh/frozen, boiled",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.5,
+   "match": "name"
+  },
+  "brownrice": {
+   "row": 200,
+   "description": "Rice, brown, cooked",
+   "samples": 28,
+   "iodine_mcg_per_100g": 0.0,
+   "match": "name"
+  },
+  "brownrice_med": {
+   "row": 200,
+   "description": "Rice, brown, cooked",
+   "samples": 28,
+   "iodine_mcg_per_100g": 0.0,
+   "match": "usda_link"
+  },
+  "brussels": {
+   "row": 140,
+   "description": "Brussels sprouts, fresh/frozen, boiled",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.0,
+   "match": "usda_link"
+  },
+  "bun_hamburger": {
+   "row": 199,
+   "description": "Bread, white roll/bun (hamburger/hotdog)6",
+   "samples": 16,
+   "iodine_mcg_per_100g": 2.4,
+   "match": "usda_link"
+  },
+  "buttermilk_red": {
+   "row": 446,
+   "description": "Milk, buttermilk, lowfat",
+   "samples": 8,
+   "iodine_mcg_per_100g": 34.2,
+   "match": "name"
+  },
+  "cabbage": {
+   "row": 331,
+   "description": "Cabbage, fresh, boiled",
+   "samples": 8,
+   "iodine_mcg_per_100g": 0.1,
+   "match": "usda_link"
+  },
+  "cabbage_raw": {
+   "row": 204,
+   "description": "Cabbage, raw",
+   "samples": 27,
+   "iodine_mcg_per_100g": 0.0,
+   "match": "usda_link"
+  },
+  "cantaloupe": {
+   "row": 64,
+   "description": "Cantaloupe, raw/frozen",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.3,
+   "match": "usda_link"
+  },
+  "carrot": {
+   "row": 175,
+   "description": "Carrot, baby, raw",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.6,
+   "match": "name"
+  },
+  "carrot_cooked": {
+   "row": 313,
+   "description": "Carrot, fresh, peeled, boiled",
+   "samples": 7,
+   "iodine_mcg_per_100g": 0.5,
+   "match": "usda_link"
+  },
+  "carrot_frozen": {
+   "row": 313,
+   "description": "Carrot, fresh, peeled, boiled",
+   "samples": 7,
+   "iodine_mcg_per_100g": 0.5,
+   "match": "name"
+  },
+  "catfish": {
+   "row": 165,
+   "description": "Fish, catfish, pan-cooked with oil",
+   "samples": 35,
+   "iodine_mcg_per_100g": 3.2,
+   "match": "name"
+  },
+  "cauliflower": {
+   "row": 75,
+   "description": "Cauliflower, fresh/frozen, boiled",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.6,
+   "match": "usda_link"
+  },
+  "cauliflower_frozen": {
+   "row": 75,
+   "description": "Cauliflower, fresh/frozen, boiled",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.6,
+   "match": "name"
+  },
+  "celery": {
+   "row": 73,
+   "description": "Celery, raw",
+   "samples": 35,
+   "iodine_mcg_per_100g": 1.7,
+   "match": "usda_link"
+  },
+  "cheddar_sharp": {
+   "row": 25,
+   "description": "Cheese, cheddar (sharp/mild)",
+   "samples": 38,
+   "iodine_mcg_per_100g": 45.9,
+   "match": "name"
+  },
+  "cheerios": {
+   "row": 256,
+   "description": "Cereal, oat ring",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.7,
+   "match": "name"
+  },
+  "chicken_deli_ovenroast": {
+   "row": 261,
+   "description": "Luncheon meat (chicken/turkey)",
+   "samples": 10,
+   "iodine_mcg_per_100g": 3.5,
+   "match": "name"
+  },
+  "chickenbroth": {
+   "row": 273,
+   "description": "Broth, chicken, ready-to-use from carton",
+   "samples": 3,
+   "iodine_mcg_per_100g": 0.7,
+   "match": "name"
+  },
+  "chickpea_can": {
+   "row": 456,
+   "description": "Beans, garbanzo (chickpeas), canned, drained solids",
+   "samples": 1,
+   "iodine_mcg_per_100g": 0.0,
+   "match": "name"
+  },
+  "chocmilk_redsugar": {
+   "row": 22,
+   "description": "Milk, chocolate, lowfat, fluid",
+   "samples": 37,
+   "iodine_mcg_per_100g": 29.7,
+   "match": "name"
+  },
+  "chocsyrup": {
+   "row": 150,
+   "description": "Syrup, chocolate",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.7,
+   "match": "name"
+  },
+  "chorizo_raw": {
+   "row": 367,
+   "description": "Sausage, pork, chorizo, raw",
+   "samples": 1,
+   "iodine_mcg_per_100g": 29.8,
+   "match": "usda_link"
+  },
+  "chuck": {
+   "row": 334,
+   "description": "Beef roast, chuck, oven-roasted",
+   "samples": 8,
+   "iodine_mcg_per_100g": 3.8,
+   "match": "name"
+  },
+  "clams_canned": {
+   "row": 392,
+   "description": "Mollusks, clam, mixed species, canned, drained solids",
+   "samples": 4,
+   "iodine_mcg_per_100g": 66.5,
+   "match": "usda_link"
+  },
+  "cocoa": {
+   "row": 488,
+   "description": "Cocoa powder",
+   "samples": 1,
+   "iodine_mcg_per_100g": 0.0,
+   "match": "name"
+  },
+  "coconutwater": {
+   "row": 211,
+   "description": "Beverage, coconut water",
+   "samples": 3,
+   "iodine_mcg_per_100g": 0.6,
+   "match": "name"
+  },
+  "coconutwater_btl": {
+   "row": 211,
+   "description": "Beverage, coconut water",
+   "samples": 3,
+   "iodine_mcg_per_100g": 0.6,
+   "match": "usda_link"
+  },
+  "coffee": {
+   "row": 155,
+   "description": "Coffee, brewed from ground",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.1,
+   "match": "usda_link"
+  },
+  "coffee_decaf": {
+   "row": 13,
+   "description": "Coffee, decaffeinated, from ground",
+   "samples": 7,
+   "iodine_mcg_per_100g": 0.2,
+   "match": "usda_link"
+  },
+  "cola": {
+   "row": 106,
+   "description": "Carbonated beverage, cola, regular",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.2,
+   "match": "usda_link"
+  },
+  "cola_diet": {
+   "row": 108,
+   "description": "Carbonated beverage, cola, low-calorie",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.3,
+   "match": "usda_link"
+  },
+  "coleslawdress": {
+   "row": 433,
+   "description": "Salad dressing, coleslaw, bottled",
+   "samples": 1,
+   "iodine_mcg_per_100g": 1.5,
+   "match": "usda_link"
+  },
+  "collards": {
+   "row": 70,
+   "description": "Collards, fresh/frozen, boiled",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.8,
+   "match": "name"
+  },
+  "collards_frozen": {
+   "row": 70,
+   "description": "Collards, fresh/frozen, boiled",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.8,
+   "match": "name"
+  },
+  "corn": {
+   "row": 44,
+   "description": "Corn, frozen, boiled",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.2,
+   "match": "name"
+  },
+  "corn_can": {
+   "row": 45,
+   "description": "Corn, canned, drained solids",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.3,
+   "match": "usda_link"
+  },
+  "corn_frozen": {
+   "row": 44,
+   "description": "Corn, frozen, boiled",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.2,
+   "match": "usda_link"
+  },
+  "cornchips": {
+   "row": 52,
+   "description": "Chips, corn/tortilla",
+   "samples": 10,
+   "iodine_mcg_per_100g": 1.8,
+   "match": "name"
+  },
+  "cornflakes": {
+   "row": 253,
+   "description": "Cereal, corn flakes",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.2,
+   "match": "name"
+  },
+  "corntortilla": {
+   "row": 198,
+   "description": "Tortilla, corn",
+   "samples": 28,
+   "iodine_mcg_per_100g": 0.3,
+   "match": "usda_link"
+  },
+  "cotija": {
+   "row": 494,
+   "description": "Cheese, queso cotija",
+   "samples": 7,
+   "iodine_mcg_per_100g": 64.8,
+   "match": "usda_link"
+  },
+  "cottage2": {
+   "row": 161,
+   "description": "Cottage cheese, creamed, reduced fat",
+   "samples": 11,
+   "iodine_mcg_per_100g": 36.6,
+   "match": "usda_link"
+  },
+  "cranjuice_cocktail": {
+   "row": 173,
+   "description": "Cranberry juice cocktail, canned/bottled",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.2,
+   "match": "usda_link"
+  },
+  "crisprice": {
+   "row": 255,
+   "description": "Cereal, crisped rice",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.3,
+   "match": "name"
+  },
+  "crookneck_cooked": {
+   "row": 332,
+   "description": "Squash, summer, fresh/frozen, boiled",
+   "samples": 8,
+   "iodine_mcg_per_100g": 0.3,
+   "match": "usda_link"
+  },
+  "cucumber": {
+   "row": 79,
+   "description": "Cucumber, peeled, raw",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.5,
+   "match": "name"
+  },
+  "egg_dried": {
+   "row": 355,
+   "description": "Egg, whole, dried",
+   "samples": 17,
+   "iodine_mcg_per_100g": 274.4,
+   "match": "usda_link"
+  },
+  "egg_frozen": {
+   "row": 357,
+   "description": "Egg, whole, raw, frozen, pasteurized",
+   "samples": 14,
+   "iodine_mcg_per_100g": 61.6,
+   "match": "usda_link"
+  },
+  "egg_hardboiled": {
+   "row": 34,
+   "description": "Eggs, hard-boiled",
+   "samples": 35,
+   "iodine_mcg_per_100g": 61.0,
+   "match": "usda_link"
+  },
+  "egg_scrambled": {
+   "row": 336,
+   "description": "Eggs, scrambled with oil",
+   "samples": 7,
+   "iodine_mcg_per_100g": 42.6,
+   "match": "usda_link"
+  },
+  "eggplant": {
+   "row": 315,
+   "description": "Eggplant, fresh, without peel, boiled",
+   "samples": 14,
+   "iodine_mcg_per_100g": 0.2,
+   "match": "usda_link"
+  },
+  "eggwhite_dried": {
+   "row": 362,
+   "description": "Egg, white, dried, stabilized, glucose reduced",
+   "samples": 15,
+   "iodine_mcg_per_100g": 34.0,
+   "match": "name"
+  },
+  "eggwhite_frozen": {
+   "row": 358,
+   "description": "Egg, white, raw, frozen, pasteurized",
+   "samples": 6,
+   "iodine_mcg_per_100g": 1.5,
+   "match": "usda_link"
+  },
+  "eggyolk_dried": {
+   "row": 356,
+   "description": "Egg, yolk, dried",
+   "samples": 17,
+   "iodine_mcg_per_100g": 349.3,
+   "match": "usda_link"
+  },
+  "energydrink": {
+   "row": 212,
+   "description": "Beverage, energy",
+   "samples": 3,
+   "iodine_mcg_per_100g": 0.1,
+   "match": "name"
+  },
+  "englishmuffin": {
+   "row": 134,
+   "description": "English muffin, plain, toasted",
+   "samples": 35,
+   "iodine_mcg_per_100g": 1.1,
+   "match": "name"
+  },
+  "farina": {
+   "row": 42,
+   "description": "Cereal, cream of wheat (farina), enriched, cooked",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.0,
+   "match": "name"
+  },
+  "fishsauce": {
+   "row": 366,
+   "description": "Sauce, fish, ready-to-serve",
+   "samples": 1,
+   "iodine_mcg_per_100g": 20.7,
+   "match": "usda_link"
+  },
+  "flourtortilla": {
+   "row": 49,
+   "description": "Tortilla, flour",
+   "samples": 34,
+   "iodine_mcg_per_100g": 0.4,
+   "match": "name"
+  },
+  "flourtortilla_sm": {
+   "row": 49,
+   "description": "Tortilla, flour",
+   "samples": 34,
+   "iodine_mcg_per_100g": 0.4,
+   "match": "usda_link"
+  },
+  "frozenyogurt": {
+   "row": 295,
+   "description": "Yogurt, frozen, vanilla",
+   "samples": 27,
+   "iodine_mcg_per_100g": 45.9,
+   "match": "usda_link"
+  },
+  "fruitcocktail_syrup": {
+   "row": 62,
+   "description": "Fruit cocktail, canned in light syrup",
+   "samples": 10,
+   "iodine_mcg_per_100g": 3.9,
+   "match": "name"
+  },
+  "garlic": {
+   "row": 454,
+   "description": "Garlic, raw",
+   "samples": 6,
+   "iodine_mcg_per_100g": 1.0,
+   "match": "usda_link"
+  },
+  "grahamcracker": {
+   "row": 135,
+   "description": "Crackers, graham",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.9,
+   "match": "usda_link"
+  },
+  "granolabar_hard": {
+   "row": 224,
+   "description": "Granola bar",
+   "samples": 3,
+   "iodine_mcg_per_100g": 1.9,
+   "match": "usda_link"
+  },
+  "grape": {
+   "row": 63,
+   "description": "Grapes, seedless, red/green, raw",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.4,
+   "match": "usda_link"
+  },
+  "grapefruit": {
+   "row": 65,
+   "description": "Grapefruit, raw",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.1,
+   "match": "name"
+  },
+  "grapefruitjuice": {
+   "row": 69,
+   "description": "Juice, grapefruit, bottle/carton",
+   "samples": 10,
+   "iodine_mcg_per_100g": 5.1,
+   "match": "usda_link"
+  },
+  "grapejuice": {
+   "row": 138,
+   "description": "Juice, grape, bottled",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.3,
+   "match": "name"
+  },
+  "greenbean": {
+   "row": 77,
+   "description": "Green beans, fresh/frozen, boiled",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.6,
+   "match": "name"
+  },
+  "greenbean_can": {
+   "row": 78,
+   "description": "Green beans, canned, drained solids",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.3,
+   "match": "name"
+  },
+  "greenbean_frozen": {
+   "row": 77,
+   "description": "Green beans, fresh/frozen, boiled",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.6,
+   "match": "usda_link"
+  },
+  "greenleaf": {
+   "row": 176,
+   "description": "Lettuce, leaf, raw",
+   "samples": 35,
+   "iodine_mcg_per_100g": 1.1,
+   "match": "usda_link"
+  },
+  "greentea": {
+   "row": 109,
+   "description": "Tea, brewed from tea bag",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.1,
+   "match": "name"
+  },
+  "grits_yellow": {
+   "row": 43,
+   "description": "Cereal, corn/hominy grits, enriched, cooked",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.0,
+   "match": "name"
+  },
+  "gturkey85_crumbles": {
+   "row": 189,
+   "description": "Turkey, ground, pan-cooked",
+   "samples": 28,
+   "iodine_mcg_per_100g": 3.9,
+   "match": "name"
+  },
+  "gturkey93_crumbles": {
+   "row": 189,
+   "description": "Turkey, ground, pan-cooked",
+   "samples": 28,
+   "iodine_mcg_per_100g": 3.9,
+   "match": "name"
+  },
+  "ham_boneless": {
+   "row": 26,
+   "description": "Ham, cured (not canned), baked",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.7,
+   "match": "name"
+  },
+  "ham_naturaljuices": {
+   "row": 26,
+   "description": "Ham, cured (not canned), baked",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.7,
+   "match": "name"
+  },
+  "ham_spiral": {
+   "row": 26,
+   "description": "Ham, cured (not canned), baked",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.7,
+   "match": "name"
+  },
+  "ham_wateradded": {
+   "row": 26,
+   "description": "Ham, cured (not canned), baked",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.7,
+   "match": "name"
+  },
+  "honey": {
+   "row": 97,
+   "description": "Honey",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.7,
+   "match": "usda_link"
+  },
+  "hotdog_beef": {
+   "row": 369,
+   "description": "Frankfurter, beef, heated",
+   "samples": 2,
+   "iodine_mcg_per_100g": 7.4,
+   "match": "usda_link"
+  },
+  "hotdog_meatpoultry": {
+   "row": 31,
+   "description": "Frankfurter, beef/pork, boiled16",
+   "samples": 28,
+   "iodine_mcg_per_100g": 8.8,
+   "match": "name"
+  },
+  "hubbard_baked": {
+   "row": 81,
+   "description": "Squash, winter (Hubbard or acorn), fresh/frozen, boiled",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.8,
+   "match": "name"
+  },
+  "iceberg": {
+   "row": 71,
+   "description": "Lettuce, iceberg, raw",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.2,
+   "match": "usda_link"
+  },
+  "italiandress": {
+   "row": 181,
+   "description": "Salad dressing, Italian, regular, bottled",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.7,
+   "match": "usda_link"
+  },
+  "jelly": {
+   "row": 151,
+   "description": "Jelly, assorted flavors",
+   "samples": 10,
+   "iodine_mcg_per_100g": 1.0,
+   "match": "usda_link"
+  },
+  "kale": {
+   "row": 452,
+   "description": "Kale, fresh, pan-cooked",
+   "samples": 6,
+   "iodine_mcg_per_100g": 1.8,
+   "match": "name"
+  },
+  "kale_frozen": {
+   "row": 452,
+   "description": "Kale, fresh, pan-cooked",
+   "samples": 6,
+   "iodine_mcg_per_100g": 1.8,
+   "match": "usda_link"
+  },
+  "kidneybean_can": {
+   "row": 271,
+   "description": "Beans, kidney, canned, drained",
+   "samples": 3,
+   "iodine_mcg_per_100g": 0.0,
+   "match": "name"
+  },
+  "lambloinchop": {
+   "row": 252,
+   "description": "Lamb chop, pan-cooked with oil",
+   "samples": 35,
+   "iodine_mcg_per_100g": 2.5,
+   "match": "name"
+  },
+  "lemonade": {
+   "row": 310,
+   "description": "Lemonade, from frozen concentrate, reconstituted",
+   "samples": 7,
+   "iodine_mcg_per_100g": 0.1,
+   "match": "usda_link"
+  },
+  "lemonjuice": {
+   "row": 225,
+   "description": "Juice, lemon, bottled",
+   "samples": 3,
+   "iodine_mcg_per_100g": 1.5,
+   "match": "usda_link"
+  },
+  "lentil": {
+   "row": 457,
+   "description": "Lentils, dry, cooked",
+   "samples": 1,
+   "iodine_mcg_per_100g": 0.0,
+   "match": "name"
+  },
+  "limabean_frozen": {
+   "row": 36,
+   "description": "Lima beans, immature, frozen, boiled",
+   "samples": 9,
+   "iodine_mcg_per_100g": 0.2,
+   "match": "name"
+  },
+  "mango": {
+   "row": 453,
+   "description": "Mango, raw/frozen",
+   "samples": 6,
+   "iodine_mcg_per_100g": 0.1,
+   "match": "usda_link"
+  },
+  "marinara": {
+   "row": 221,
+   "description": "Sauce, tomato pasta, bottled",
+   "samples": 3,
+   "iodine_mcg_per_100g": 1.6,
+   "match": "usda_link"
+  },
+  "mayonnaise": {
+   "row": 92,
+   "description": "Mayonnaise, regular, bottled",
+   "samples": 10,
+   "iodine_mcg_per_100g": 5.3,
+   "match": "name"
+  },
+  "milk_producer": {
+   "row": 20,
+   "description": "Milk, whole, fluid",
+   "samples": 59,
+   "iodine_mcg_per_100g": 33.5,
+   "match": "name"
+  },
+  "mixedveg_frozen": {
+   "row": 142,
+   "description": "Mixed vegetables, frozen, boiled",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.2,
+   "match": "usda_link"
+  },
+  "mozz_lowmoist": {
+   "row": 191,
+   "description": "Cheese, mozzarella",
+   "samples": 30,
+   "iodine_mcg_per_100g": 51.0,
+   "match": "name"
+  },
+  "mozz_lowmoist_ps": {
+   "row": 191,
+   "description": "Cheese, mozzarella",
+   "samples": 30,
+   "iodine_mcg_per_100g": 51.0,
+   "match": "usda_link"
+  },
+  "mushroom_can": {
+   "row": 451,
+   "description": "Mushrooms, canned, drained solids",
+   "samples": 1,
+   "iodine_mcg_per_100g": 0.0,
+   "match": "name"
+  },
+  "mustard": {
+   "row": 152,
+   "description": "Mustard, yellow, plain",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.4,
+   "match": "usda_link"
+  },
+  "oatmeal": {
+   "row": 41,
+   "description": "Cereal, oatmeal, plain, cooked",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.2,
+   "match": "usda_link"
+  },
+  "oceanperch": {
+   "row": 379,
+   "description": "Fish, ocean perch, Atlantic, raw",
+   "samples": 4,
+   "iodine_mcg_per_100g": 9.3,
+   "match": "name"
+  },
+  "okra": {
+   "row": 317,
+   "description": "Okra, fresh/frozen, boiled",
+   "samples": 7,
+   "iodine_mcg_per_100g": 1.0,
+   "match": "name"
+  },
+  "okra_frozen": {
+   "row": 317,
+   "description": "Okra, fresh/frozen, boiled",
+   "samples": 7,
+   "iodine_mcg_per_100g": 1.0,
+   "match": "name"
+  },
+  "oliveoil": {
+   "row": 182,
+   "description": "Oil, olive",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.2,
+   "match": "name"
+  },
+  "olives": {
+   "row": 153,
+   "description": "Olives, black, pitted",
+   "samples": 10,
+   "iodine_mcg_per_100g": 2.1,
+   "match": "usda_link"
+  },
+  "onion": {
+   "row": 82,
+   "description": "Onion, mature, raw",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.3,
+   "match": "usda_link"
+  },
+  "orange": {
+   "row": 55,
+   "description": "Orange, raw",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.2,
+   "match": "usda_link"
+  },
+  "orangejuice": {
+   "row": 174,
+   "description": "Juice, orange, bottle/carton",
+   "samples": 10,
+   "iodine_mcg_per_100g": 8.5,
+   "match": "name"
+  },
+  "oyster_raw_east": {
+   "row": 393,
+   "description": "Mollusks, oyster, eastern, wild, cooked, moist heat",
+   "samples": 3,
+   "iodine_mcg_per_100g": 109.1,
+   "match": "name"
+  },
+  "peach": {
+   "row": 58,
+   "description": "Peach, raw/frozen",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.2,
+   "match": "usda_link"
+  },
+  "peach_syrup": {
+   "row": 345,
+   "description": "Peach, canned in light/medium syrup",
+   "samples": 7,
+   "iodine_mcg_per_100g": 6.2,
+   "match": "name"
+  },
+  "peanutbutter": {
+   "row": 38,
+   "description": "Peanut butter, smooth/creamy",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.4,
+   "match": "name"
+  },
+  "pear": {
+   "row": 60,
+   "description": "Pear, with peel, raw",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.1,
+   "match": "usda_link"
+  },
+  "pear_anjou": {
+   "row": 60,
+   "description": "Pear, with peel, raw",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.1,
+   "match": "name"
+  },
+  "pear_bartlett": {
+   "row": 60,
+   "description": "Pear, with peel, raw",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.1,
+   "match": "name"
+  },
+  "pear_bosc": {
+   "row": 60,
+   "description": "Pear, with peel, raw",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.1,
+   "match": "name"
+  },
+  "pear_syrup": {
+   "row": 346,
+   "description": "Pear, canned in light syrup",
+   "samples": 7,
+   "iodine_mcg_per_100g": 0.1,
+   "match": "name"
+  },
+  "peas": {
+   "row": 37,
+   "description": "Peas, green, fresh/frozen, boiled",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.1,
+   "match": "name"
+  },
+  "peas_frozen": {
+   "row": 37,
+   "description": "Peas, green, fresh/frozen, boiled",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.1,
+   "match": "usda_link"
+  },
+  "pickle": {
+   "row": 89,
+   "description": "Pickles, dill, cucumber",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.7,
+   "match": "name"
+  },
+  "pineapple": {
+   "row": 194,
+   "description": "Pineapple, raw/frozen",
+   "samples": 28,
+   "iodine_mcg_per_100g": 0.3,
+   "match": "usda_link"
+  },
+  "pineapple_can": {
+   "row": 309,
+   "description": "Pineapple, canned in juice",
+   "samples": 7,
+   "iodine_mcg_per_100g": 1.8,
+   "match": "name"
+  },
+  "pineapplejuice": {
+   "row": 137,
+   "description": "Juice, pineapple, canned",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.2,
+   "match": "name"
+  },
+  "pineapplejuice_f": {
+   "row": 137,
+   "description": "Juice, pineapple, canned",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.2,
+   "match": "usda_link"
+  },
+  "pinksalmon": {
+   "row": 381,
+   "description": "Fish, salmon, pink, raw",
+   "samples": 5,
+   "iodine_mcg_per_100g": 26.2,
+   "match": "name"
+  },
+  "pinksalmon_can": {
+   "row": 395,
+   "description": "Fish, salmon, pink, canned, drained solids",
+   "samples": 2,
+   "iodine_mcg_per_100g": 14.0,
+   "match": "usda_link"
+  },
+  "pintobean": {
+   "row": 304,
+   "description": "Beans, pinto, from dry, boiled",
+   "samples": 7,
+   "iodine_mcg_per_100g": 0.0,
+   "match": "usda_link"
+  },
+  "pintobean_can": {
+   "row": 228,
+   "description": "Beans, pinto, canned, drained",
+   "samples": 3,
+   "iodine_mcg_per_100g": 0.9,
+   "match": "name"
+  },
+  "popcorn_micro": {
+   "row": 179,
+   "description": "Popcorn, microwave, butter-flavored",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.4,
+   "match": "name"
+  },
+  "porkloinchop_bnls": {
+   "row": 27,
+   "description": "Pork chop, pan-cooked with oil",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.5,
+   "match": "name"
+  },
+  "porkloinroast": {
+   "row": 333,
+   "description": "Pork roast, loin, oven-roasted",
+   "samples": 7,
+   "iodine_mcg_per_100g": 0.4,
+   "match": "name"
+  },
+  "porktoploin_chop": {
+   "row": 27,
+   "description": "Pork chop, pan-cooked with oil",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.5,
+   "match": "name"
+  },
+  "potato": {
+   "row": 84,
+   "description": "Potato, with peel, baked",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.5,
+   "match": "name"
+  },
+  "potatochips": {
+   "row": 85,
+   "description": "Chips, potato",
+   "samples": 10,
+   "iodine_mcg_per_100g": 2.3,
+   "match": "usda_link"
+  },
+  "pretzels_hard": {
+   "row": 149,
+   "description": "Pretzels, hard, salted",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.5,
+   "match": "usda_link"
+  },
+  "prunejuice": {
+   "row": 339,
+   "description": "Juice, prune, bottled",
+   "samples": 7,
+   "iodine_mcg_per_100g": 1.3,
+   "match": "usda_link"
+  },
+  "quesofresco": {
+   "row": 492,
+   "description": "Cheese, queso fresco",
+   "samples": 8,
+   "iodine_mcg_per_100g": 79.9,
+   "match": "usda_link"
+  },
+  "quinoa": {
+   "row": 223,
+   "description": "Quinoa, cooked",
+   "samples": 3,
+   "iodine_mcg_per_100g": 0.0,
+   "match": "usda_link"
+  },
+  "raisin": {
+   "row": 66,
+   "description": "Raisins",
+   "samples": 10,
+   "iodine_mcg_per_100g": 1.7,
+   "match": "name"
+  },
+  "raisinbran": {
+   "row": 254,
+   "description": "Cereal, bran with raisins",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.7,
+   "match": "name"
+  },
+  "ranch": {
+   "row": 218,
+   "description": "Salad dressing, ranch, regular, bottled",
+   "samples": 6,
+   "iodine_mcg_per_100g": 9.9,
+   "match": "usda_link"
+  },
+  "redleaf": {
+   "row": 176,
+   "description": "Lettuce, leaf, raw",
+   "samples": 35,
+   "iodine_mcg_per_100g": 1.1,
+   "match": "name"
+  },
+  "ricenoodle": {
+   "row": 232,
+   "description": "Pasta, rice noodles, cooked",
+   "samples": 3,
+   "iodine_mcg_per_100g": 0.9,
+   "match": "usda_link"
+  },
+  "rockfish": {
+   "row": 380,
+   "description": "Fish, rockfish, Pacific, mixed species, raw",
+   "samples": 3,
+   "iodine_mcg_per_100g": 14.0,
+   "match": "name"
+  },
+  "rye": {
+   "row": 337,
+   "description": "Bread, rye",
+   "samples": 7,
+   "iodine_mcg_per_100g": 0.6,
+   "match": "usda_link"
+  },
+  "salami_dry": {
+   "row": 188,
+   "description": "Salami, dry/hard",
+   "samples": 31,
+   "iodine_mcg_per_100g": 10.1,
+   "match": "usda_link"
+  },
+  "salmon_raw": {
+   "row": 496,
+   "description": "Fish, salmon, Atlantic, farmed, raw",
+   "samples": 8,
+   "iodine_mcg_per_100g": 3.2,
+   "match": "usda_link"
+  },
+  "salsa": {
+   "row": 177,
+   "description": "Salsa, tomato, bottled",
+   "samples": 10,
+   "iodine_mcg_per_100g": 1.6,
+   "match": "usda_link"
+  },
+  "saltines": {
+   "row": 51,
+   "description": "Crackers, saltine",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.3,
+   "match": "usda_link"
+  },
+  "sausage": {
+   "row": 28,
+   "description": "Sausage, pork, oven-cooked",
+   "samples": 35,
+   "iodine_mcg_per_100g": 4.2,
+   "match": "name"
+  },
+  "scallops_raw": {
+   "row": 394,
+   "description": "Mollusks, scallop, mixed species, raw",
+   "samples": 4,
+   "iodine_mcg_per_100g": 7.4,
+   "match": "usda_link"
+  },
+  "shreddedwheat": {
+   "row": 307,
+   "description": "Cereal, shredded wheat",
+   "samples": 7,
+   "iodine_mcg_per_100g": 0.1,
+   "match": "name"
+  },
+  "skim_calcium": {
+   "row": 23,
+   "description": "Milk, skim, fluid",
+   "samples": 59,
+   "iodine_mcg_per_100g": 34.2,
+   "match": "name"
+  },
+  "skim_solids": {
+   "row": 23,
+   "description": "Milk, skim, fluid",
+   "samples": 59,
+   "iodine_mcg_per_100g": 34.2,
+   "match": "name"
+  },
+  "snackcracker": {
+   "row": 136,
+   "description": "Crackers, butter-type",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.3,
+   "match": "usda_link"
+  },
+  "sockeye": {
+   "row": 495,
+   "description": "Fish, salmon, sockeye, wild, raw",
+   "samples": 8,
+   "iodine_mcg_per_100g": 18.3,
+   "match": "name"
+  },
+  "sockeye_can": {
+   "row": 384,
+   "description": "Fish, salmon, sockeye, canned, drained solids",
+   "samples": 1,
+   "iodine_mcg_per_100g": 22.0,
+   "match": "usda_link"
+  },
+  "sockeye_raw": {
+   "row": 382,
+   "description": "Fish, salmon, sockeye, raw",
+   "samples": 2,
+   "iodine_mcg_per_100g": 14.3,
+   "match": "usda_link"
+  },
+  "soymilk": {
+   "row": 213,
+   "description": "Beverage, soy, shelf stable",
+   "samples": 6,
+   "iodine_mcg_per_100g": 1.3,
+   "match": "name"
+  },
+  "soysauce": {
+   "row": 219,
+   "description": "Sauce, soy",
+   "samples": 3,
+   "iodine_mcg_per_100g": 0.5,
+   "match": "name"
+  },
+  "spinach": {
+   "row": 1,
+   "description": "Spinach, fresh/frozen, boiled",
+   "samples": 8,
+   "iodine_mcg_per_100g": 3.9,
+   "match": "usda_link"
+  },
+  "spinach_frozen": {
+   "row": 1,
+   "description": "Spinach, fresh/frozen, boiled",
+   "samples": 8,
+   "iodine_mcg_per_100g": 3.9,
+   "match": "name"
+  },
+  "spinach_raw": {
+   "row": 206,
+   "description": "Spinach, raw",
+   "samples": 27,
+   "iodine_mcg_per_100g": 6.7,
+   "match": "usda_link"
+  },
+  "sportsdrink": {
+   "row": 264,
+   "description": "Beverage, sports",
+   "samples": 3,
+   "iodine_mcg_per_100g": 0.0,
+   "match": "name"
+  },
+  "strawberry": {
+   "row": 61,
+   "description": "Strawberries, raw/frozen",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.3,
+   "match": "usda_link"
+  },
+  "strawberry_frozen": {
+   "row": 61,
+   "description": "Strawberries, raw/frozen",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.3,
+   "match": "name"
+  },
+  "sugar_white": {
+   "row": 95,
+   "description": "Sugar, white, granulated",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.0,
+   "match": "usda_link"
+  },
+  "sweetpot": {
+   "row": 195,
+   "description": "Sweet potato, baked, peel removed",
+   "samples": 28,
+   "iodine_mcg_per_100g": 1.5,
+   "match": "usda_link"
+  },
+  "sweetpot_can": {
+   "row": 325,
+   "description": "Sweet potato, canned",
+   "samples": 7,
+   "iodine_mcg_per_100g": 0.7,
+   "match": "name"
+  },
+  "sweetpot_mashed_can": {
+   "row": 325,
+   "description": "Sweet potato, canned",
+   "samples": 7,
+   "iodine_mcg_per_100g": 0.7,
+   "match": "usda_link"
+  },
+  "sweetsoursauce": {
+   "row": 12,
+   "description": "Sauce, sweet & sour, bottled",
+   "samples": 7,
+   "iodine_mcg_per_100g": 0.7,
+   "match": "usda_link"
+  },
+  "swordfish": {
+   "row": 385,
+   "description": "Fish, swordfish, raw",
+   "samples": 4,
+   "iodine_mcg_per_100g": 19.5,
+   "match": "name"
+  },
+  "tamari": {
+   "row": 219,
+   "description": "Sauce, soy",
+   "samples": 3,
+   "iodine_mcg_per_100g": 0.5,
+   "match": "usda_link"
+  },
+  "tenderloin": {
+   "row": 260,
+   "description": "Beef steak, loin/sirloin, broiled",
+   "samples": 34,
+   "iodine_mcg_per_100g": 4.7,
+   "match": "name"
+  },
+  "thighskinless": {
+   "row": 163,
+   "description": "Chicken thigh, oven-roasted (skin removed)",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.9,
+   "match": "usda_link"
+  },
+  "toast_white": {
+   "row": 46,
+   "description": "Bread, white, enriched, pre-sliced7",
+   "samples": 15,
+   "iodine_mcg_per_100g": 1.8,
+   "match": "name"
+  },
+  "tofu": {
+   "row": 458,
+   "description": "Tofu, firm, plain, drained solids",
+   "samples": 1,
+   "iodine_mcg_per_100g": 0.0,
+   "match": "name"
+  },
+  "tofu_nigari": {
+   "row": 458,
+   "description": "Tofu, firm, plain, drained solids",
+   "samples": 1,
+   "iodine_mcg_per_100g": 0.0,
+   "match": "usda_link"
+  },
+  "tomato": {
+   "row": 76,
+   "description": "Tomato, raw",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.2,
+   "match": "usda_link"
+  },
+  "tomatojuice": {
+   "row": 314,
+   "description": "Juice, tomato, bottled",
+   "samples": 7,
+   "iodine_mcg_per_100g": 1.1,
+   "match": "usda_link"
+  },
+  "tomatosauce": {
+   "row": 220,
+   "description": "Sauce, tomato, canned/bottled",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.9,
+   "match": "usda_link"
+  },
+  "tomatoveg_juice": {
+   "row": 226,
+   "description": "Juice, tomato-vegetable, bottled",
+   "samples": 3,
+   "iodine_mcg_per_100g": 0.8,
+   "match": "name"
+  },
+  "tortillachips": {
+   "row": 52,
+   "description": "Chips, corn/tortilla",
+   "samples": 10,
+   "iodine_mcg_per_100g": 1.8,
+   "match": "usda_link"
+  },
+  "tunawhite_water": {
+   "row": 166,
+   "description": "Fish, tuna, canned in water, drained",
+   "samples": 15,
+   "iodine_mcg_per_100g": 8.7,
+   "match": "name"
+  },
+  "turkbreast_meat_retail": {
+   "row": 30,
+   "description": "Turkey breast, oven-roasted",
+   "samples": 35,
+   "iodine_mcg_per_100g": 4.8,
+   "match": "name"
+  },
+  "turkbreast_skin_roast": {
+   "row": 30,
+   "description": "Turkey breast, oven-roasted",
+   "samples": 35,
+   "iodine_mcg_per_100g": 4.8,
+   "match": "usda_link"
+  },
+  "turnip": {
+   "row": 316,
+   "description": "Turnip, fresh/frozen, boiled",
+   "samples": 7,
+   "iodine_mcg_per_100g": 0.3,
+   "match": "name"
+  },
+  "turnip_frozen": {
+   "row": 316,
+   "description": "Turnip, fresh/frozen, boiled",
+   "samples": 7,
+   "iodine_mcg_per_100g": 0.3,
+   "match": "usda_link"
+  },
+  "vegjuice": {
+   "row": 226,
+   "description": "Juice, tomato-vegetable, bottled",
+   "samples": 3,
+   "iodine_mcg_per_100g": 0.8,
+   "match": "usda_link"
+  },
+  "walnut": {
+   "row": 201,
+   "description": "Walnuts, shelled",
+   "samples": 23,
+   "iodine_mcg_per_100g": 0.0,
+   "match": "usda_link"
+  },
+  "watermelon": {
+   "row": 57,
+   "description": "Watermelon, raw/frozen",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.1,
+   "match": "usda_link"
+  },
+  "whitebean_can": {
+   "row": 272,
+   "description": "Beans, white, canned, drained",
+   "samples": 3,
+   "iodine_mcg_per_100g": 0.9,
+   "match": "name"
+  },
+  "whitebread": {
+   "row": 46,
+   "description": "Bread, white, enriched, pre-sliced7",
+   "samples": 15,
+   "iodine_mcg_per_100g": 1.8,
+   "match": "name"
+  },
+  "whitemushroom_raw": {
+   "row": 141,
+   "description": "Mushrooms, raw",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.3,
+   "match": "usda_link"
+  },
+  "whitepasta": {
+   "row": 171,
+   "description": "Pasta, spaghetti, enriched, boiled",
+   "samples": 10,
+   "iodine_mcg_per_100g": 0.3,
+   "match": "usda_link"
+  },
+  "whiterice": {
+   "row": 40,
+   "description": "Rice, white, enriched, cooked",
+   "samples": 34,
+   "iodine_mcg_per_100g": 0.2,
+   "match": "name"
+  },
+  "whiterice_med": {
+   "row": 40,
+   "description": "Rice, white, enriched, cooked",
+   "samples": 34,
+   "iodine_mcg_per_100g": 0.2,
+   "match": "usda_link"
+  },
+  "wintersquash_baked": {
+   "row": 81,
+   "description": "Squash, winter (Hubbard or acorn), fresh/frozen, boiled",
+   "samples": 35,
+   "iodine_mcg_per_100g": 0.8,
+   "match": "usda_link"
+  },
+  "wwbread": {
+   "row": 48,
+   "description": "Bread, whole-wheat, commercially prepared8",
+   "samples": 21,
+   "iodine_mcg_per_100g": 1.9,
+   "match": "usda_link"
+  },
+  "wwpasta": {
+   "row": 233,
+   "description": "Pasta, whole wheat, cooked",
+   "samples": 3,
+   "iodine_mcg_per_100g": 0.0,
+   "match": "name"
+  },
+  "yellowsquash": {
+   "row": 332,
+   "description": "Squash, summer, fresh/frozen, boiled",
+   "samples": 8,
+   "iodine_mcg_per_100g": 0.3,
+   "match": "name"
+  },
+  "yogurt_fruit_lf": {
+   "row": 126,
+   "description": "Yogurt, fruit-flavored, lowfat",
+   "samples": 11,
+   "iodine_mcg_per_100g": 31.0,
+   "match": "name"
+  },
+  "yogurt_skim": {
+   "row": 490,
+   "description": "Yogurt, regular, plain, nonfat",
+   "samples": 8,
+   "iodine_mcg_per_100g": 58.9,
+   "match": "name"
+  },
+  "yogurt_vanilla_lf": {
+   "row": 222,
+   "description": "Yogurt, vanilla, lowfat",
+   "samples": 3,
+   "iodine_mcg_per_100g": 34.0,
+   "match": "usda_link"
+  },
+  "zucchini": {
+   "row": 205,
+   "description": "Squash, summer, zucchini, fresh/frozen, boiled",
+   "samples": 27,
+   "iodine_mcg_per_100g": 0.6,
+   "match": "name"
+  },
+  "zucchini_frozen": {
+   "row": 205,
+   "description": "Squash, summer, zucchini, fresh/frozen, boiled",
+   "samples": 27,
+   "iodine_mcg_per_100g": 0.6,
+   "match": "name"
+  }
+ }
+}
