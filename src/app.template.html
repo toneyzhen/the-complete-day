@@ -664,7 +664,22 @@ const MAXSERV = {iodizedsalt:3, brazil:2, liver:2, chickenliver:2, nori:5, oyste
   cloves:1, cinnamon:2, turmeric:2, groundginger:2, basildried:2, sage:2, oregano:2,
   rosemary:2, cumin:2, paprika:2, cayenne:2, blackpepper:2, nutmeg:1, garlicpowder:2, onionpowder:2,
   flaxoil:2, canolaoil:3, sunfloweroil:3, sesameoil:2, walnutoil:2, soybeanoil:3, peanutoil:3,
-  cornoil:3, grapeseedoil:3, lard:3, duckfat:3, schmaltz:3};
+  cornoil:3, grapeseedoil:3, lard:3, duckfat:3, schmaltz:3,
+  // USDA batch (1,500 foods): organ meats, oils and fats, spices, salty sauces
+  bf_tripe:2, bf_brain:2, bf_lungs:2, bf_spleen:2, bf_thymus:2, bf_pancreas:2, butteroil:3,
+  tamari:2, almondoil:3, hazelnutoil:3, safflowerhioleic:3, palmoil:3, ricebranoil:3,
+  cottonseedoil:3, wheatgermoil:3, codliveroil:1, turkeyfat:3, goosefat:3, baconfat:3,
+  margarine_tub:3, margarine_stick:3, margarine_light:3, butter_light:3, butter_margarine:3,
+  mayonnaise:2, mayo_light:2, mayo_olive:2, mayo_eggfree:2, ranch:2, italiandress:2,
+  sesamedress:2, coleslawdress:2, bbqsauce:2, tabasco:2, sriracha:2, salsa:2, salsaverde:2,
+  teriyaki:2, hoisin:2, worcestershire:2, enchiladasauce:2, cocktailsauce:1, sweetsoursauce:2,
+  plumsauce:2, peanutsauce:2, steaksauce:2, wasabi:2, allspice:2, bayleaf:2, cardamom:2,
+  chilipowder:2, currypowder:2, fennelseed:2, marjoram:2, tarragon:2, caraway2:2, mustardseed:2,
+  mustardoil:3, poppyseedoil:3, tomatochilisauce:2, celeryseed:2, saffron:2, poultryseasoning:2,
+  salmonoil:1, whitepepper:2, corianderseed:2, cuminseed:2, dillseed:2, fenugreek:2, mace:2,
+  aniseseed:2, pumpkinpiespice:2, savory:2, saltpork:2, lambheart:2, lambkidney:2, lambtongue:2,
+  turkeyliver:2, turkeyheart:2, liverwurst:2, pate_chickenliver:2, turkeygizzard:2,
+  roe_cooked:2, roe_raw:2, beefheart:2, beeftongue:2, gizzard:2, chickenheart:2};
 const SEASONING = new Set(["iodizedsalt"]);
 const countFoods = p => Object.keys(p).filter(k => !SEASONING.has(k)).length;
 const DEFAULT_MAXSERV = 3;
@@ -1205,6 +1220,12 @@ function suggest(p, poolKeys, sc, ul, tg){
     // Under a carb cap, a food that eats much of what's left of the budget crowds out every
     // later choice (keto days used to spend all 30 g on soybeans and edamame first)
     if (ul.netcarb) score *= Math.max(0.05, 1 - netCarbOf(f, f.serv) / Math.max(1, ul.netcarb - load.netcarb));
+    // A softer version for every upper limit: a heavily fortified cereal (33 mg iron per 100 g)
+    // left no iron room for the calorie top-up, so vegan and vegetarian days stalled near 60%
+    // kcal. The 1.5 power spares foods using a small share of the room (a linear discount cost
+    // 7-food days their dense picks); chosen by the 288-day sweep in tests/smoke.js.
+    for (const n in ul) if (n !== "netcarb")
+      score *= Math.max(0.1, 1 - (ulAmount(f, n, f.serv) / Math.max(1e-9, ul[n] - load[n])) ** 1.5);
     // disqualify anything that would breach an upper limit
     for (const n in ul) if (load[n] + ulAmount(f, n, f.serv) > ul[n]) score = -1;
     return {k, score, fixes: fixes.slice(0, 4), kcal: Math.round(f.n[IDX.kcal] * g)};

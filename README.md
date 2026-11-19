@@ -8,7 +8,7 @@ No install, no server, no account.
 
 ## What it does
 
-**Build a day.** Search 514 foods, add them by the serving (decimals allowed — 0.5 serving,
+**Build a day.** Search 1,500 foods, add them by the serving (decimals allowed — 0.5 serving,
 1.25 servings), and drag to reorder. The day is split into breakfast, lunch, dinner and snacks,
 with calories per meal; drag a food (or use the arrow keys) to move it between meals. The same
 food can appear in more than one meal: pick the meal next to the search box and add it again. A coverage
@@ -32,7 +32,9 @@ nutrients by how few foods in the allowed pool supply them, then tunes portions 
 respecting upper limits (preformed vitamin A, selenium, zinc, calcium, iron, sodium and others).
 Portions stay realistic: at most about two servings of any one food (less for potent foods like
 liver or spices) and at most two meat or fish mains a day, one for lunch and one for dinner
-(carnivore excepted). Under a carb cap it avoids spending the whole budget on one food.
+(carnivore excepted). It avoids spending most of what's left under any limit on one food, so a
+heavily fortified cereal can't use up the iron room that later foods need; under a carb cap the
+same applies to the carb budget.
 
 Once the nutrients are covered it tops calories up to your target, spreading the extra across
 the foods already in the day (trimming an iron- or calcium-heavy portion to make room if a limit
@@ -73,13 +75,19 @@ Calories are set by you. Some deliberate choices:
 
 ## The data
 
-`data/foods.json` holds 514 foods with 32 values each, per 100 g of the food as named
-(e.g. "Lentils, cooked" means boiled, unsalted).
+`data/foods.json` holds 1,500 foods with 32 values each, per 100 g of the food as named
+(e.g. "Lentils, cooked" means boiled, unsalted). Foods added from USDA carry their FoodData
+Central ID in an `fdc` field.
 
 - **Sources:** USDA FoodData Central (SR Legacy first) for whole foods; the USDA/FDA/ODS
   Iodine Database for iodine; the Japanese Standard Tables of Food Composition for toasted
   nori; product Nutrition Facts panels for fortified drinks (one widely sold US product
   each, so check your own carton).
+- **The 986 foods added in the expansion to 1,500** come straight from SR Legacy by ID: agents
+  chose the foods and wrote names, servings and tags, and a script copied the numbers. SR Legacy
+  has no iodine or molybdenum, so those read 0 for these foods (dairy, eggs and seafood are
+  under-credited for iodine). Mixed animal foods with fiber (flavored yogurt, egg noodles,
+  creamy dressings) were left out, because the validator rejects fiber in animal foods.
 - **Unknown trace values are recorded as 0**, not guessed. The app under-credits rather than
   over-credits, so a day that clears every target has margin in hand.
 - **Sodium is the exception**: it is filled in for every food, because a blank there would err
@@ -122,8 +130,7 @@ GitHub Actions runs all three on every push and pull request, and fails if the c
   fewer it rarely closes every target, and calories can stay under target.
 - A few days still can't meet every nutrient within the calorie target from the allowed foods,
   mostly at low targets (1,400–1,600 kcal). About 2% of a 2,880-day test sweep lands above 105%.
-- Raw reaches 24/28: its small food pool fills calcium early, which blocks the best sources of
-  fiber, vitamin A and choline.
+- Carnivore reaches 27/28: no animal food has fiber.
 - A saved day that uses one of your own foods loses that food when opened in another browser,
   unless it arrives through a share link or a backup file.
 

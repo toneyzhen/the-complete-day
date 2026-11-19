@@ -9,7 +9,8 @@ change it without breaking its rules.
 - `data/foods.json` — the database: `order` (32 nutrient keys), `meta` (labels/units/notes),
   `foods` (each: `k` key, `name`, `cat`, `cls` plant|dairy|egg|fish|meat, `serv` grams per
   serving, `sl` serving label, `tags` space-separated, `raw` 0|1, `n` values in `order`, per
-  100 g), `dri` targets by `sex:age`, `ul` upper limits, `softUl` advisory limits.
+  100 g, and `fdc`, the USDA FoodData Central ID, on foods added from 2026-11 on), `dri`
+  targets by `sex:age`, `ul` upper limits, `softUl` advisory limits.
 - `index.html` — generated. Never edit it by hand; edit src/ or data/ and rebuild. Commit it
   (it is what users open and what GitHub Pages would serve).
 
@@ -18,9 +19,9 @@ After any change:
 python3 scripts/validate.py && python3 build.py && node tests/smoke.js
 ```
 The smoke test needs Playwright (CI installs it; see `.github/workflows/ci.yml`). Calories count
-toward the 28, as in the builder. Expected results at 14 foods: 28/28 at 100–101% kcal using 9–13
-foods for every pattern except carnivore (~17, no route to fiber or vitamin C) and raw (24: its pool
-fills calcium early). Any `OVER` line, or calories above 105%, fails. It also sweeps every bias ×
+toward the 28, as in the builder. Expected results at 14 foods: 28/28 at 100–102% kcal using 8–12
+foods for every pattern except carnivore (27: no route to fiber). Any `OVER` line, or calories
+above 105%, fails. It also sweeps every bias ×
 pattern at 14 and 7 foods for three profiles and fails on any upper-limit breach, any portion past
 `capOf`, or a third meat/fish main; that sweep is what caught the rounding bugs, so extend it
 rather than trim it. Unit checks cover name cleaning, food validation, `knownOnly` (including
@@ -83,10 +84,15 @@ inherited names like `toString` from share links), the share-link encoding and m
 1. Solver pipeline after the main loop: `tune` → `trimKcal` → `swapLeaner` (only on days over
    104% kcal; fixed search size so results are deterministic) → `topUp` → `roundPortions`.
    About 2% of days still land above 105% kcal, mostly at 1,400–1,600 kcal targets.
-2. Raw (24/28) fills calcium early; picking with a look-ahead on nearly-full limits would help.
+2. `suggest` discounts a food by how much of the room left under each upper limit it would use
+   (exponent 1.5, tuned on the 288-day sweep: fully met 126 at 14 foods and 41 at 7, 1 day under
+   90% kcal, 8 over 105%). Without it, fortified cereals used up the iron room and vegan days
+   stalled near 60% kcal. Check those sweep numbers again after adding foods.
 3. Top-up picks the most energy-dense ordinary staple; it could choose by nutrient fit instead.
 4. `src/app.template.html` is ~1,900 lines. If the solver grows further, split the JS into
    files that `build.py` inlines, keeping the single-file output.
+5. New SR Legacy foods have iodine 0 (SR has none); filling iodine for dairy, eggs and seafood
+   from the USDA/FDA/ODS Iodine Database would credit them properly.
 
 The app is published with GitHub Pages from `main` (https://toneyzhen.github.io/the-complete-day/),
 so every push to `main` goes live; commit a rebuilt `index.html` with every src/data change.
