@@ -9,8 +9,10 @@ change it without breaking its rules.
 - `data/foods.json` — the database: `order` (32 nutrient keys), `meta` (labels/units/notes),
   `foods` (each: `k` key, `name`, `cat`, `cls` plant|dairy|egg|fish|meat, `serv` grams per
   serving, `sl` serving label, `tags` space-separated, `raw` 0|1, `n` values in `order`, per
-  100 g, and `fdc`, the USDA FoodData Central ID, on foods added from 2026-11 on), `dri`
-  targets by `sex:age`, `ul` upper limits, `softUl` advisory limits.
+  100 g, `common` 1 for an everyday food or 0 for an uncommon one, and `fdc`, the USDA
+  FoodData Central ID, wherever the values came from one SR Legacy entry), `dri` targets by
+  `sex:age`, `ul` upper limits, `softUl` advisory limits. No two foods may share an `fdc`:
+  that is how duplicates of a hand-corrected older food were caught.
 - `index.html` — generated. Never edit it by hand; edit src/ or data/ and rebuild. Commit it
   (it is what users open and what GitHub Pages would serve).
 
@@ -20,7 +22,8 @@ python3 scripts/validate.py && python3 build.py && node tests/smoke.js
 ```
 The smoke test needs Playwright (CI installs it; see `.github/workflows/ci.yml`). Calories count
 toward the 28, as in the builder. Expected results at 14 foods: 28/28 at 100–102% kcal using 8–12
-foods for every pattern except carnivore (27: no route to fiber). Any `OVER` line, or calories
+foods for every pattern except carnivore (~24: no route to fiber, and it leans on organ meats),
+and at most one uncommon food in each of those days (carnivore excepted). Any `OVER` line, or calories
 above 105%, fails. It also sweeps every bias ×
 pattern at 14 and 7 foods for three profiles and fails on any upper-limit breach, any portion past
 `capOf`, or a third meat/fish main; that sweep is what caught the rounding bugs, so extend it
@@ -91,8 +94,12 @@ inherited names like `toString` from share links), the share-link encoding and m
 3. Top-up picks the most energy-dense ordinary staple; it could choose by nutrient fit instead.
 4. `src/app.template.html` is ~1,900 lines. If the solver grows further, split the JS into
    files that `build.py` inlines, keeping the single-file output.
-5. New SR Legacy foods have iodine 0 (SR has none); filling iodine for dairy, eggs and seafood
-   from the USDA/FDA/ODS Iodine Database would credit them properly.
+5. `UNCOMMON_WEIGHT` (0.5) scales an uncommon food's score in `suggest`. Sweep, 1.0 vs 0.5:
+   uncommon foods per day 3.1 -> 0.3, fully met at 14 foods 125 -> 126, at 7 foods 48 -> 40,
+   days over 105% kcal 8 -> 10. 0.4 and 0.3 cost carnivore organ meats (21-23/28).
+6. Iodine: the Iodine Database (Release 4.0) is applied by its SR link, then by name for the
+   same food and form; only foods that read 0 were filled. Breads carry iodine from dough
+   conditioners, so vegan days may lean on breadcrumbs for it.
 
 The app is published with GitHub Pages from `main` (https://toneyzhen.github.io/the-complete-day/),
 so every push to `main` goes live; commit a rebuilt `index.html` with every src/data change.

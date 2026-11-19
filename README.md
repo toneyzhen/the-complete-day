@@ -34,7 +34,9 @@ Portions stay realistic: at most about two servings of any one food (less for po
 liver or spices) and at most two meat or fish mains a day, one for lunch and one for dinner
 (carnivore excepted). It avoids spending most of what's left under any limit on one food, so a
 heavily fortified cereal can't use up the iron room that later foods need; under a carb cap the
-same applies to the carb budget.
+same applies to the carb budget. It prefers everyday foods: about 600 of the 1,500 are marked
+uncommon (game meats, most organ meats, exotic fruit, specialty oils), and those only win when
+they close much more of a gap, so a default day reads like an ordinary shopping list.
 
 Once the nutrients are covered it tops calories up to your target, spreading the extra across
 the foods already in the day (trimming an iron- or calcium-heavy portion to make room if a limit
@@ -76,8 +78,10 @@ Calories are set by you. Some deliberate choices:
 ## The data
 
 `data/foods.json` holds 1,500 foods with 32 values each, per 100 g of the food as named
-(e.g. "Lentils, cooked" means boiled, unsalted). Foods added from USDA carry their FoodData
-Central ID in an `fdc` field.
+(e.g. "Lentils, cooked" means boiled, unsalted). 1,365 of them carry their USDA FoodData
+Central ID in an `fdc` field; the rest came from labels or other tables, or were corrected by hand
+far enough from the USDA entry that the ID would mislead. Each food also says whether it is an
+everyday food (`common`).
 
 - **Sources:** USDA FoodData Central (SR Legacy first) for whole foods; the USDA/FDA/ODS
   Iodine Database for iodine; the Japanese Standard Tables of Food Composition for toasted
@@ -85,9 +89,11 @@ Central ID in an `fdc` field.
   each, so check your own carton).
 - **The 986 foods added in the expansion to 1,500** come straight from SR Legacy by ID: agents
   chose the foods and wrote names, servings and tags, and a script copied the numbers. SR Legacy
-  has no iodine or molybdenum, so those read 0 for these foods (dairy, eggs and seafood are
-  under-credited for iodine). Mixed animal foods with fiber (flavored yogurt, egg noodles,
+  has no molybdenum, so that reads 0 for these foods. Mixed animal foods with fiber (flavored yogurt, egg noodles,
   creamy dressings) were left out, because the validator rejects fiber in animal foods.
+- **Iodine** comes from the USDA, FDA and ODS-NIH Iodine Database, Release 4.0 (2024): by its own
+  SR Legacy link where it has one, otherwise matched by name to the same food and form. 331 foods
+  have an iodine value; the rest read 0, which mostly matters for foods it never measured.
 - **Unknown trace values are recorded as 0**, not guessed. The app under-credits rather than
   over-credits, so a day that clears every target has margin in hand.
 - **Sodium is the exception**: it is filled in for every food, because a blank there would err
@@ -97,7 +103,8 @@ Central ID in an `fdc` field.
 ### How the data was checked
 
 1. Every food passes `scripts/validate.py`: the energy cross-check (Atwater), fiber ≤ carbohydrate,
-   no fiber in animal foods, no B12 in unfortified plants, no negatives, no duplicate keys.
+   no fiber in animal foods, no B12 in unfortified plants, no negatives, no duplicate keys, and no
+   USDA entry used by two foods.
 2. A full audit: eight reviewer agents each checked a batch against USDA values using the rules
    in [`data/audit/REVIEW_INSTRUCTIONS.md`](data/audit/REVIEW_INSTRUCTIONS.md). Their raw findings
    are in `data/audit/findings/`. Each finding was then reviewed by hand, and a second sourced pass

@@ -6,6 +6,7 @@
 - fiber <= carbohydrate; fiber only in plant foods
 - vitamin B12 not in unfortified plant foods (tempeh and miso carry traces)
 - no negative values; sodium present for every food that has calories
+- every food says whether it is an everyday food (common 0|1); no USDA entry (fdc) used twice
 """
 import json, pathlib, sys
 
@@ -23,6 +24,7 @@ for f in d["foods"]:
     if f["cls"] not in CLS: errs.append(f"{k}: unknown class {f['cls']}")
     if not f["serv"] > 0: errs.append(f"{k}: serving must be over 0 g")
     if f["raw"] not in (0, 1): errs.append(f"{k}: raw must be 0 or 1")
+    if f.get("common") not in (0, 1): errs.append(f"{k}: common (everyday food) must be 0 or 1")
     if len(f["n"]) != len(O): errs.append(f"{k}: expected {len(O)} values")
     if any(v < 0 for v in f["n"]): errs.append(f"{k}: negative value")
     if n["fiber"] > n["carb"] + 1e-9: errs.append(f"{k}: fiber > carbohydrate")
@@ -34,5 +36,7 @@ for f in d["foods"]:
         if not 0.62 <= r <= 1.45: errs.append(f"{k}: Atwater ratio {r:.2f}")
 keys = [f["k"] for f in d["foods"]]
 if len(keys) != len(set(keys)): errs.append("duplicate food keys")
+fdcs = [f["fdc"] for f in d["foods"] if "fdc" in f]
+for x in {x for x in fdcs if fdcs.count(x) > 1}: errs.append(f"USDA entry {x} used by more than one food")
 print("\n".join(errs) or f"OK: {len(d['foods'])} foods pass all checks")
 sys.exit(1 if errs else 0)

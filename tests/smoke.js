@@ -14,11 +14,16 @@ const DIETS = ["anything","pescatarian","vegetarian","vegan","paleo","whole30","
       const p = solveDay({diet, maxFoods: 14, style: "balanced", seed: null, avoid: new Set()});
       const e = evaluate(p, diet);
       return {met: 28 - e.short.length, short: e.short, over: e.over, foods: Object.keys(p).length,
-              kcalPct: Math.round(100 * e.kcal / targets().kcal)};
+              kcalPct: Math.round(100 * e.kcal / targets().kcal),
+              uncommon: Object.keys(p).filter(k => BY[k].common === 0)};
     }, diet);
     console.log(`${diet.padEnd(14)} ${r.met}/28  foods ${r.foods}  kcal ${r.kcalPct}%` +
+      (r.uncommon.length ? `  uncommon: ${r.uncommon.join(', ')}` : '') +
       (r.short.length ? `  short: ${r.short.join(', ')}` : '') + (r.over.length ? `  OVER: ${r.over}` : ''));
     if (r.over.length) errors.push(`${diet}: over an upper limit`);
+    // the solver prefers everyday foods (UNCOMMON_WEIGHT); before it, a default day held ~3
+    // uncommon ones (mamey sapote, cottonseed oil, goose egg). Carnivore needs organ meats.
+    if (diet !== "carnivore" && r.uncommon.length > 1) errors.push(`${diet}: ${r.uncommon.length} uncommon foods`);
     if (r.kcalPct > 105) errors.push(`${diet}: calories ${r.kcalPct}% of target`);
   }
   // Upper limits are a hard rule for every bias and profile, not just the default one.
